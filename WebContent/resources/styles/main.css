@@ -1,0 +1,8 @@
+body {
+  font-size: 16px; }
+
+a, a:visited, a:hover {
+  text-decoration: none; }
+
+a, a:visited {
+  color: blue; }
