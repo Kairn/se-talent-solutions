@@ -36,6 +36,14 @@ public class Employee {
 		this.email = email;
 	}
 
+	public Employee(String firstName, String lastName, String email, int upGroup) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.upGroup = upGroup;
+	}
+
 	public Employee(String firstName, String lastName, String email, int upGroup, int downGroup, int accessLevel) {
 		super();
 		this.firstName = firstName;

@@ -2,13 +2,19 @@ package com.revature.sets.dao;
 
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import org.apache.commons.lang3.RandomStringUtils;
 
 import com.revature.sets.model.Employee;
 import com.revature.sets.model.Request;
+import com.revature.sets.model.Resolution;
 import com.revature.sets.utility.UtilityManager;
 
 public class AssociateDaoImpl implements AssociateDao {
@@ -101,50 +107,213 @@ public class AssociateDaoImpl implements AssociateDao {
 
 	@Override
 	public List<Request> getRequestsByEmployeeId(int employeeId) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Request> requests = new ArrayList<>();
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "SELECT REQ.REQUEST_ID AS REQ_ID, REQ.EMPLOYEE_ID AS E_ID, REQ.REQUEST_DATE AS REQ_DATE, REQ.REASON, REQ.MESSAGE, REQ.AMOUNT, RES.RESOLUTION_ID AS RES_ID, RES.STATUS, RES.EMPLOYEE_ID AS M_ID, RES.RESOLUTION_DATE AS RES_DATE\r\n" + 
+				"FROM REQUEST REQ\r\n" + 
+				"LEFT JOIN RESOLUTION RES\r\n" + 
+				"ON REQ.REQUEST_ID = RES.REQUEST_ID\r\n" + 
+				"WHERE REQ.EMPLOYEE_ID = (\r\n" + 
+				"	SELECT EMPLOYEE_ID FROM EMPLOYEE\r\n" + 
+				"	WHERE EMPLOYEE_ID = ?\r\n" + 
+				")";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setInt(1, employeeId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				if (rs.getInt("RES_ID") == 0) {
+					requests.add(new Request(rs.getInt("REQ_ID"), rs.getInt("E_ID"), rs.getDate("REQ_DATE"), rs.getString("REASON"), rs.getString("MESSAGE"), rs.getDouble("AMOUNT")));
+				}
+				else {
+					Resolution resolution = new Resolution(rs.getInt("RES_ID"), rs.getInt("REQ_ID"), rs.getInt("STATUS"), rs.getInt("M_ID"), rs.getDate("RES_DATE"));
+					requests.add(new Request(rs.getInt("REQ_ID"), rs.getInt("E_ID"), rs.getDate("REQ_DATE"), rs.getString("REASON"), rs.getString("MESSAGE"), rs.getDouble("AMOUNT"), resolution));
+				}
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return requests;
+		
 	}
 
 	@Override
 	public int submitRequest(Request request) {
-		// TODO Auto-generated method stub
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "INSERT INTO REQUEST (EMPLOYEE_ID, REQUEST_DATE, REASON, MESSAGE, AMOUNT)\r\n" + 
+				"VALUES (?, ?, ?, ?, ?)";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setInt(1, request.getEmployeeId());
+			pstmt.setDate(2, new Date(Calendar.getInstance().getTimeInMillis()));
+			pstmt.setString(3, request.getReason());
+			pstmt.setString(4, request.getMessage());
+			pstmt.setDouble(5, request.getAmount());
+			return pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return 0;
+		
 	}
 
 	@Override
 	public int recallRequest(int requestId) {
-		// TODO Auto-generated method stub
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "DELETE FROM REQUEST\r\n" + 
+				"WHERE REQUEST_ID = ?";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setInt(1, requestId);
+			return pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return 0;
+		
 	}
 
 	@Override
 	public int updateInformation(int employeeId, String firstName, String lastName, String email) {
-		// TODO Auto-generated method stub
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "UPDATE EMPLOYEE\r\n" + 
+				"SET FIRSTNAME = ?, LASTNAME = ?, EMAIL = ?\r\n" + 
+				"WHERE EMPLOYEE_ID = ?";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setString(1, firstName);
+			pstmt.setString(2, lastName);
+			pstmt.setString(3, email);
+			pstmt.setInt(4, employeeId);
+			return pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return 0;
+		
 	}
 
 	@Override
 	public int changeCredentials(int employeeId, String oldPassword, String newUsername, String newPassword) {
-		// TODO Auto-generated method stub
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "UPDATE CREDENTIALS\r\n" + 
+				"SET USERNAME = ?, PASSWORD_HASH = ?\r\n" + 
+				"WHERE EMPLOYEE_ID = ? AND PASSWORD_HASH = ?";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setString(1, newUsername);
+			pstmt.setString(2, UtilityManager.digestSHA256(newPassword));
+			pstmt.setInt(3, employeeId);
+			pstmt.setString(4, UtilityManager.digestSHA256(oldPassword));
+			return pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return 0;
+		
 	}
 
 	@Override
 	public int attachFileToRequest(int requestId, String fileType, InputStream fileData) {
-		// TODO Auto-generated method stub
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "INSERT INTO IMAGEFILE (FILE_DATA, FILE_TYPE, REQUEST_ID)\r\n" + 
+				"VALUES (?, ?, ?)";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setBlob(1, fileData);
+			pstmt.setString(2, fileType);
+			pstmt.setInt(3, requestId);
+			return pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return 0;
+		
 	}
 
 	@Override
 	public byte[] getFileById(int fileId) {
-		// TODO Auto-generated method stub
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "SELECT FILE_DATA FROM IMAGEFILE\r\n" + 
+				"WHERE FILE_ID = ?";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setInt(1, fileId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return rs.getBytes("FILE_DATA");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return null;
+		
 	}
 
 	@Override
 	public int obtainNewCredentials(String username, String email) {
-		// TODO Auto-generated method stub
+		
+		final String newUsername = RandomStringUtils.random(8);
+		final String newPassword = RandomStringUtils.random(12);
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "UPDATE CREDENTIALS\r\n" + 
+				"SET USERNAME = ?, PASSWORD_HASH = ?\r\n" + 
+				"WHERE USERNAME = ? AND EMPLOYEE_ID = (\r\n" + 
+				"	SELECT EMPLOYEE_ID FROM EMPLOYEE\r\n" + 
+				"	WHERE EMAIL = ?\r\n" + 
+				")";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setString(1, newUsername);
+			pstmt.setString(2, newPassword);
+			pstmt.setString(3, username);
+			pstmt.setString(4, email);
+			
+			if (pstmt.executeUpdate() > 0) {
+				final String subject = "IMPORTANT: YOUR NEW SETS CREDENTIALS!";
+				final String content = String.format("YOUR NEW USERNAME: %s%nYOUR NEW PASSWORD: %s%n", newUsername, newPassword);
+				UtilityManager.sendEmail(email, subject, content);
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		return 0;
+		
 	}
 
 }

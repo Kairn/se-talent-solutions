@@ -11,7 +11,7 @@ public interface ManagerDao {
 	int addEmployee(Employee newEmployee);
 	List<Request> getPendingRequestsByManagerId(int managerId);
 	List<Request> getResolvedRequestsAsManager();
-	int approveRequest(int requestId);
-	int denyRequest(int requestId);
+	int approveRequest(int requestId, int managerId);
+	int denyRequest(int requestId, int managerId);
 
 }

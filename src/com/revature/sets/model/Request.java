@@ -10,6 +10,7 @@ public class Request {
 	private String reason;
 	private String message;
 	private double amount;
+	private Resolution resolution;
 	
 	public Request(int requestId) {
 		super();
@@ -41,6 +42,18 @@ public class Request {
 		this.reason = reason;
 		this.message = message;
 		this.amount = amount;
+	}
+
+	public Request(int requestId, int employeeId, Date requestDate, String reason, String message, double amount,
+			Resolution resolution) {
+		super();
+		this.requestId = requestId;
+		this.employeeId = employeeId;
+		this.requestDate = requestDate;
+		this.reason = reason;
+		this.message = message;
+		this.amount = amount;
+		this.resolution = resolution;
 	}
 
 	public int getRequestId() {
@@ -89,6 +102,14 @@ public class Request {
 
 	public void setAmount(double amount) {
 		this.amount = amount;
+	}
+
+	public Resolution getResolution() {
+		return resolution;
+	}
+
+	public void setResolution(Resolution resolution) {
+		this.resolution = resolution;
 	}
 
 	@Override

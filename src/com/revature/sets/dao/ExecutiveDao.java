@@ -8,7 +8,7 @@ import com.revature.sets.model.Request;
 public interface ExecutiveDao {
 	
 	List<Employee> getEmployeesAsExecutive();
-	List<Request> getPendingRequestsAsExecutive();
+	List<Request> getRequestsAsExecutive();
 	int changeEmployeeRole(int employeeId, int newUpGroup, int newDownGroup, int newAccessLevel);
 	int deleteEmployee(int employeeId);
 
