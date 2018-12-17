@@ -1,13 +1,39 @@
+$theme-colors: (
+  "primary": #325D88,
+  "secondary": #8E8C84,
+  "success": #93C54B,
+  "info": #29ABE0,
+  "warning": #F47C3C,
+  "danger": #d9534f,
+
+  "mat-red": #f44336,
+  "mat-pink": #e91e63,
+  "mat-purple": #9c27b0,
+  "mat-deep-purple": #673ab7,
+  "mat-indigo": #3f51b5,
+  "mat-blue": #2196f3,
+  "mat-light-blue": #03a9f4,
+  "mat-cyan": #00bcd4,
+  "mat-teal": #009688,
+  "mat-green": #4caf50,
+  "mat-light-gren": #8bc34a,
+  "mat-lime": #cddc39,
+  "mat-yellow": #ffeb3b,
+  "mat-amber": #ffc107,
+  "mat-orange": #ff9800,
+  "mat-deep-orange": #ff5722,
+  "mat-brown": #795548,
+  "mat-grey": #9e9e9e,
+  "mat-blue-grey": #607d8b
+);
+
 body {
 	font-size: 16px;
+	font-family: 'Comfortaa', 'Exo 2', 'Fira Sans', 'Ruda', 'Titillium Web', Arial, Helvetica, sans-serif
 }
 
 a, a:visited, a:hover {
-	text-decoration: none;
-}
-
-a, a:visited {
-	color: blue;
+	text-decoration: none !important;
 }
 
 .hide {
@@ -17,3 +43,5 @@ a, a:visited {
 .show {
 	display: initial;
 }
+
+@import "../libraries/scss/bootstrap";
