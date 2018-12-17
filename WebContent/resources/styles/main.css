@@ -6,3 +6,9 @@ a, a:visited, a:hover {
 
 a, a:visited {
   color: blue; }
+
+.hide {
+  display: none; }
+
+.show {
+  display: initial; }

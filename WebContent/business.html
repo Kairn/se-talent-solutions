@@ -1,12 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>SETS Business</title>
+  <!--Style Sheets-->
+  <!--Bootstrap CSS-->
+  <link rel="stylesheet" href="resources/libraries/css/bootstrap.css">
+  <!--Custom CSS-->
+  <link rel="stylesheet" href="resources/styles/main.css">
 </head>
+
 <body>
-  <h1>This is SETS employee page</h1>
+  <section class="jumbotron">
+    <h1>This is SETS employee page</h1>
+  </section>
+  <section id="login-section" class="container hide">
+    <form>
+      <fieldset>
+        Username<input type="text" name="username" id="username" required>
+      </fieldset>
+      <fieldset>
+        Password<input type="password" name="password" id="password" required>
+      </fieldset>
+      <fieldset>
+        <input id="submit-login" type="submit" value="Login" class="btn btn-primary">
+      </fieldset>
+      <div id="invalid-credentials" class="text-danger hide">Invalid Credentials</div>
+    </form>
+  </section>
+  <section id="employee-section" class="container hide">
+    <h1>Welcome to Employee Home</h1>
+    <div class="row">
+      <div id="firstName" class="col-sm-12"></div>
+      <div id="lastName" class="col-sm-12"></div>
+      <div id="email" class="col-sm-12"></div>
+      <div id="accessLevel" class="col-sm-12"></div>
+    </div>
+    <button id="manage" class="btn btn-secondary hide">Manage Employees</button>
+    <button id="request" class="btn btn-secondary">View Reimbursement Requests</button>
+    <button id="resolve" class="btn btn-secondary hide">Resolve Requests</button>
+    <div>
+      <form action="/se-talent-solutions/logout" method="post">
+        <input type="submit" value="Logout" class="btn btn-warning">
+      </form>
+    </div>
+  </section>
+  <!--Scripts-->
+  <!--jQuery-->
+  <script src="resources/libraries/js/jquery-3.3.1.js"></script>
+  <!--Bootstrap JS-->
+  <script src="resources/libraries/js/bootstrap.bundle.js"></script>
+  <!--Custom JS-->
+  <script src="resources/scripts/utilities.js"></script>
+  <script src="resources/scripts/business.js"></script>
 </body>
+
 </html>

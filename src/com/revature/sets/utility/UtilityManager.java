@@ -1,5 +1,6 @@
 package com.revature.sets.utility;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
@@ -16,6 +17,9 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class UtilityManager {
 
@@ -96,6 +100,45 @@ public class UtilityManager {
 
 		return new String(digest);
 
+	}
+	
+	// Convert a POJO to a JSON string
+	public static String toJsonStringJackson(Object pojo) {
+		
+		ObjectMapper jacksonMapper = new ObjectMapper();
+		try {
+			return jacksonMapper.writeValueAsString(pojo);
+		}
+		catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+		
+	}
+	
+	// Consume a Http request body and turn it into a string
+	public static String readRequest(BufferedReader br) {
+		
+		StringBuilder requestBody = new StringBuilder("");
+		String buffer = null;
+		
+		try {
+			while ((buffer = br.readLine()) != null) {
+				requestBody.append(buffer);
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if (requestBody.length() == 0) {
+			return null;
+		}
+		else {
+			return new String(requestBody);
+		}
+		
 	}
 
 }
