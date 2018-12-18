@@ -6,6 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>SETS Business</title>
+  <!--Fonts-->
+  <!--Font Awesome-->
+  <link rel="stylesheet" href="resources/libraries/css/all.css">
+  <!--Google Fonts-->
+  <link href='https://fonts.googleapis.com/css?family=Titillium Web' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Condiment' rel='stylesheet'>
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+  <!--Favicon-->
+  <link rel="shortcut icon" href="resources/images/favicon.png" type="image/x-icon">
   <!--Style Sheets-->
   <!--Bootstrap CSS-->
   <link rel="stylesheet" href="resources/libraries/css/bootstrap.css">
@@ -17,8 +28,9 @@
   <section class="jumbotron">
     <h1>This is SETS employee page</h1>
   </section>
+  <!--Login Section-->
   <section id="login-section" class="container hide">
-    <form>
+    <form id="login-form">
       <fieldset>
         Username<input type="text" name="username" id="username" required>
       </fieldset>
@@ -26,11 +38,12 @@
         Password<input type="password" name="password" id="password" required>
       </fieldset>
       <fieldset>
-        <input id="submit-login" type="submit" value="Login" class="btn btn-primary">
+        <input type="submit" value="Login" class="btn btn-primary">
       </fieldset>
       <div id="invalid-credentials" class="text-danger hide">Invalid Credentials</div>
     </form>
   </section>
+  <!--Employee Section-->
   <section id="employee-section" class="container hide">
     <h1>Welcome to Employee Home</h1>
     <div class="row">
@@ -39,23 +52,37 @@
       <div id="email" class="col-sm-12"></div>
       <div id="accessLevel" class="col-sm-12"></div>
     </div>
-    <button id="manage" class="btn btn-secondary hide">Manage Employees</button>
-    <button id="request" class="btn btn-secondary">View Reimbursement Requests</button>
-    <button id="resolve" class="btn btn-secondary hide">Resolve Requests</button>
+    <span id="manage" class="hide"><button class="btn btn-secondary">Manage Employees</button></span>
+    <span id="request"><button class="btn btn-secondary">View Reimbursement Requests</button></span>
+    <span id="resolve" class="hide"><button class="btn btn-secondary">Resolve Requests</button></span>
     <div>
+      <button id="update" class="btn btn-dark">Update Information</button>
+      <!--Logout Part-->
       <form action="/se-talent-solutions/logout" method="post">
         <input type="submit" value="Logout" class="btn btn-warning">
       </form>
     </div>
+    <br>
+    <!--Update Part-->
+    <form id="update-form" class="hide">
+      <div>First Name<input type="text" name="newFirstName" id="newFirstName" required></div>
+      <div>Last Name<input type="text" name="newLastName" id="newLastName" required></div>
+      <div>Email<input type="text" name="newEmail" id="newEmail" required></div>
+      <input class="btn btn-warning" type="submit" value="Update">
+      <div id="update-success" class="text-success hide">Success</div>
+      <div id="update-failure" class="text-danger hide">Unable to update, perhaps the email is already registered</div>
+    </form>
   </section>
   <!--Scripts-->
-  <!--jQuery-->
-  <script src="resources/libraries/js/jquery-3.3.1.js"></script>
-  <!--Bootstrap JS-->
-  <script src="resources/libraries/js/bootstrap.bundle.js"></script>
-  <!--Custom JS-->
-  <script src="resources/scripts/utilities.js"></script>
-  <script src="resources/scripts/business.js"></script>
+  <div>
+    <!--jQuery-->
+    <script src="resources/libraries/js/jquery-3.3.1.js"></script>
+    <!--Bootstrap JS-->
+    <script src="resources/libraries/js/bootstrap.bundle.js"></script>
+    <!--Custom JS-->
+    <script src="resources/scripts/utilities.js"></script>
+    <script src="resources/scripts/business.js"></script>
+  </div>
 </body>
 
 </html>

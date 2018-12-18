@@ -13,7 +13,7 @@ public class PostService {
 		super();
 	}
 	
-	public String fetchUserJsonWithCredentials(String jsonString) {
+	public String fetchEmployeeJsonWithCredentials(String jsonString) {
 		
 		AssociateDao ad = new AssociateDaoImpl();
 		
@@ -21,12 +21,39 @@ public class PostService {
 		String username = jo.getString("username");
 		String password = jo.getString("password");
 		
+		if (username.isEmpty() || password.isEmpty()) {
+			return null;
+		}
+		
 		Employee employee = ad.getEmployeeByCredentials(username, password);
 		if (employee != null) {
 			return UtilityManager.toJsonStringJackson(employee);
 		}
 		else {
 			return null;
+		}
+		
+	}
+	
+	public boolean updateEmployeeInformation(int employeeId, String jsonString) {
+		
+		AssociateDao ad = new AssociateDaoImpl();
+		
+		JSONObject jo = new JSONObject(jsonString);
+		String newFirstName = jo.getString("newFirstName");
+		String newLastName = jo.getString("newLastName");
+		String newEmail = jo.getString("newEmail");
+		
+		if (newFirstName.isEmpty() || newLastName.isEmpty() || newEmail.isEmpty()) {
+			return false;
+		}
+		else {
+			if (ad.updateInformation(employeeId, newFirstName, newLastName, newEmail) != 0) {
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 		
 	}

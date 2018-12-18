@@ -48,6 +48,14 @@ public class AssociateDaoImpl implements AssociateDao {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		return employee;
 		
@@ -74,6 +82,14 @@ public class AssociateDaoImpl implements AssociateDao {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		return employee;
 		
@@ -99,6 +115,14 @@ public class AssociateDaoImpl implements AssociateDao {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return employee;
@@ -138,6 +162,14 @@ public class AssociateDaoImpl implements AssociateDao {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		return requests;
 		
@@ -162,6 +194,14 @@ public class AssociateDaoImpl implements AssociateDao {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		return 0;
 		
@@ -181,6 +221,14 @@ public class AssociateDaoImpl implements AssociateDao {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return 0;
@@ -206,6 +254,14 @@ public class AssociateDaoImpl implements AssociateDao {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		return 0;
 		
@@ -230,6 +286,14 @@ public class AssociateDaoImpl implements AssociateDao {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
 		return 0;
 		
@@ -251,6 +315,14 @@ public class AssociateDaoImpl implements AssociateDao {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return 0;
@@ -275,6 +347,14 @@ public class AssociateDaoImpl implements AssociateDao {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return null;
@@ -310,6 +390,14 @@ public class AssociateDaoImpl implements AssociateDao {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return 0;

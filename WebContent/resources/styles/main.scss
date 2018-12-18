@@ -28,12 +28,12 @@ $theme-colors: (
 );
 
 body {
-	font-size: 16px;
-	font-family: 'Comfortaa', 'Exo 2', 'Fira Sans', 'Ruda', 'Titillium Web', Arial, Helvetica, sans-serif
+  font-size: 16px;
+  font-family: 'Comfortaa', cursive;
 }
 
 a, a:visited, a:hover {
-	text-decoration: none !important;
+	text-decoration: none;
 }
 
 .hide {
@@ -42,6 +42,11 @@ a, a:visited, a:hover {
 
 .show {
 	display: initial;
+}
+
+#logo-text {
+  font-size: 40px;
+  color: black;
 }
 
 @import "../libraries/scss/bootstrap";

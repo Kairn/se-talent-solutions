@@ -10,7 +10,7 @@ const loginWithSession = function() {
 	.catch(function(error) {
 		console.log(error);
 	});
-}
+};
 
 // Submit login form to login with credentials
 const loginWithCredentials = function() {
@@ -27,7 +27,7 @@ const loginWithCredentials = function() {
 	.catch(function(error) {
 		console.log(error);
 	});
-}
+};
 
 // Display employee information based on fetch response
 const showEmployee = function(data) {
@@ -48,17 +48,61 @@ const showEmployee = function(data) {
 		$("#lastName").text(employee["lastName"]);
 		$("#email").text(employee["email"]);
 		$("#accessLevel").text(employee["accessLevel"]);
+		// Update the update form
+		$("#newFirstName").val(employee["firstName"]);
+		$("#newLastName").val(employee["lastName"]);
+		$("#newEmail").val(employee["email"]);
 		if (parseInt(employee["accessLevel"]) > 1) {
 			$("#manage").removeClass("hide");
 			$("#resolve").removeClass("hide");
 		}
+		else {
+			$("#manage").addClass("hide");
+			$("#resolve").addClass("hide");
+		}
 	}
-}
+};
+
+// Send an request to update the employee's information
+const updateEmployeeInformation = function() {
+	var newInformation = {};
+	newInformation["newFirstName"] = $("#newFirstName").val().trim();
+	newInformation["newLastName"] = $("#newLastName").val().trim();
+	newInformation["newEmail"] = $("#newEmail").val().trim();
+	fetch(URL_WRAPPER("update"), POST_HEADER_WRAPPER(newInformation))
+	.then(function(response) {
+		return response.json();
+	})
+	.then(function(data) {
+		if (parseInt(data["status"]) == 200) {
+			$("#update-success").slideDown(2000).delay(2000, function() {
+				location.reload();
+			});
+		}
+		else {
+			$("#update-failure").slideDown(2000).delay(2000).slideUp(1000);
+		}
+	})
+	.catch(function(error) {
+		console.log(error);
+	})
+};
 
 $(function() {
+	// Try to login with a valid session
 	loginWithSession();
-	$("#submit-login").on("click", function(e) {
+	// Login with credentials
+	$("#login-form").on("submit", function(e) {
 		e.preventDefault();
 		loginWithCredentials();
+	})
+	// When employee wants to update their information
+	$("#update").on("click", function() {
+		$("#update-form").removeClass("hide");
+	})
+	// When employee confirms an update
+	$("#update-form").on("submit", function(e) {
+		e.preventDefault();
+		updateEmployeeInformation();
 	})
 });

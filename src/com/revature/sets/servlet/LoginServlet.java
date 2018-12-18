@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
 		if (session != null) {
 			String employeeId = session.getAttribute("employeeId").toString();
 			if (employeeId != null) {
-				emp = gs.fetchUserJsonWithSession(employeeId);
+				emp = gs.fetchEmployeeJsonWithSession(employeeId);
 			}
 		}
 		
@@ -70,7 +70,7 @@ public class LoginServlet extends HttpServlet {
 		
 		String requestBody = UtilityManager.readRequest(request.getReader());
 		if (requestBody != null) {
-			emp = ps.fetchUserJsonWithCredentials(requestBody);
+			emp = ps.fetchEmployeeJsonWithCredentials(requestBody);
 		}
 		
 		if (emp != null) {

@@ -11,7 +11,7 @@ public class GetService {
 		super();
 	}
 	
-	public String fetchUserJsonWithSession(String idString) {
+	public String fetchEmployeeJsonWithSession(String idString) {
 		
 		AssociateDao ad = new AssociateDaoImpl();
 		Employee employee = ad.getEmployeeById(Integer.parseInt(idString));
