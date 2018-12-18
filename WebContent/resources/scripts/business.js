@@ -120,6 +120,28 @@ const changeEmployeeCredentials = function() {
 	}
 }
 
+// Send a request to receive new credentials if the employee forgets their password
+const obtainNewCredentials = function() {
+	var employeeInformation = {};
+	employeeInformation["username"] = $("#rusername").val().trim();
+	employeeInformation["email"] = $("#remail").val().trim();
+	fetch(URL_WRAPPER("recover"), POST_HEADER_WRAPPER(employeeInformation))
+	.then(function(response) {
+		return response.json();
+	})
+	.then(function(data) {
+		if(parseInt(data["status"]) == 200) {
+			$("#recover-success").slideDown(2000).delay(2000).slideUp(1000);
+		}
+		else {
+			$("#invalid-information").slideDown(2000).delay(2000).slideUp(1000);
+		}
+	})
+	.catch(function(error) {
+		console.log(error);
+	})
+}
+
 $(function() {
 	// Try to login with a valid session
 	loginWithSession();
@@ -145,5 +167,10 @@ $(function() {
 	$("#security-form").on("submit", function(e) {
 		e.preventDefault();
 		changeEmployeeCredentials();
+	})
+	// When employee tries to recover their credentials
+	$("#recover-form").on("submit", function(e) {
+		e.preventDefault();
+		obtainNewCredentials();
 	})
 });

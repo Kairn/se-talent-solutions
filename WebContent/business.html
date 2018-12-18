@@ -42,6 +42,15 @@
       </fieldset>
       <div id="invalid-credentials" class="text-danger hide">Invalid Credentials</div>
     </form>
+    <br>
+    <h3>Forgot Password? Use Username and Email to Recover</h3>
+    <form id="recover-form">
+      <div>Username<input type="text" name="rusername" id="rusername" required></div>
+      <div>Your Email<input type="text" name="remail" id="remail" required></div>
+      <input type="submit" value="Recover" class="btn btn-danger">
+      <div id="invalid-information" class="text-danger hide">Invalid Information</div>
+      <div id="recover-success" class="text-success hide">Success, new credentials have been sent to your email address</div>
+    </form>
   </section>
   <!--Employee Section-->
   <section id="employee-section" class="container hide">
@@ -79,7 +88,7 @@
       <div>New Username<input type="text" name="newUsername" id="newUsername" required></div>
       <div>New Password<input type="password" name="newPassword1" id="newPassword1" required></div>
       <div>Confirm Password<input type="password" name="newPassword2" id="newPassword2" required></div>
-      <input type="submit" value="Confirm">
+      <input type="submit" value="Confirm" class="btn btn-warning">
       <div id="password-mismatch" class="hide text-danger">The passwords do not match</div>
       <div id="security-error" class="hide text-danger">An error occurred, perhaps the password is incorrect</div>
       <div id="password-changed" class="hide text-success">Your password has been changed</div>

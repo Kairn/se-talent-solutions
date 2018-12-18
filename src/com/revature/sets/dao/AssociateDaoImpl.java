@@ -364,8 +364,8 @@ public class AssociateDaoImpl implements AssociateDao {
 	@Override
 	public int obtainNewCredentials(String username, String email) {
 		
-		final String newUsername = RandomStringUtils.random(8);
-		final String newPassword = RandomStringUtils.random(12);
+		final String newUsername = RandomStringUtils.randomAlphanumeric(8);
+		final String newPassword = RandomStringUtils.randomAlphanumeric(12);
 		
 		Connection conn = UtilityManager.getConnection();
 		String sqlStmt = "UPDATE CREDENTIALS\r\n" + 
@@ -378,7 +378,7 @@ public class AssociateDaoImpl implements AssociateDao {
 		try {
 			pstmt = conn.prepareStatement(sqlStmt);
 			pstmt.setString(1, newUsername);
-			pstmt.setString(2, newPassword);
+			pstmt.setString(2, UtilityManager.digestSHA256(newPassword));
 			pstmt.setString(3, username);
 			pstmt.setString(4, email);
 			
@@ -386,6 +386,7 @@ public class AssociateDaoImpl implements AssociateDao {
 				final String subject = "IMPORTANT: YOUR NEW SETS CREDENTIALS!";
 				final String content = String.format("YOUR NEW USERNAME: %s%nYOUR NEW PASSWORD: %s%n", newUsername, newPassword);
 				UtilityManager.sendEmail(email, subject, content);
+				return 1;
 			}
 		}
 		catch (SQLException e) {

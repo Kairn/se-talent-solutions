@@ -84,5 +84,27 @@ public class PostService {
 		}
 		
 	}
+	
+	public boolean obtainNewEmployeeCredentials(String jsonString) {
+		
+		AssociateDao ad = new AssociateDaoImpl();
+		
+		JSONObject jo = new JSONObject(jsonString);
+		String username = jo.getString("username");
+		String email = jo.getString("email");
+		
+		if (username.isEmpty() || email.isEmpty()) {
+			return false;
+		}
+		else {
+			if (ad.obtainNewCredentials(username, email) != 0) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+	}
 
 }
