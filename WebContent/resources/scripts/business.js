@@ -88,6 +88,38 @@ const updateEmployeeInformation = function() {
 	})
 };
 
+// Send an request to change the employee's credentials
+const changeEmployeeCredentials = function() {
+	var newCredentials = {};
+	newCredentials["oldPassword"] = $("#oldPassword").val().trim();
+	newCredentials["newUsername"] = $("#newUsername").val().trim();
+	newCredentials["newPassword1"] = $("#newPassword1").val().trim();
+	newCredentials["newPassword2"] = $("#newPassword2").val().trim();
+	if (newCredentials["newPassword1"] !== newCredentials["newPassword2"]) {
+		$("#password-mismatch").removeClass("hide");
+	}
+	else {
+		$("#password-mismatch").addClass("hide");
+		fetch(URL_WRAPPER("security"), POST_HEADER_WRAPPER(newCredentials))
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(data) {
+			if (parseInt(data["status"]) == 200) {
+				$("#password-changed").slideDown(2000).delay(2000, function() {
+					location.reload();
+				})
+			}
+			else {
+				$("#security-error").slideDown(2000).delay(1000).slideUp(1000);
+			}
+		})
+		.catch(function(error) {
+			console.log(error);
+		})
+	}
+}
+
 $(function() {
 	// Try to login with a valid session
 	loginWithSession();
@@ -104,5 +136,14 @@ $(function() {
 	$("#update-form").on("submit", function(e) {
 		e.preventDefault();
 		updateEmployeeInformation();
+	})
+	// When employee wants to change their credentials
+	$("#security").on("click", function() {
+		$("#security-form").slideDown();
+	})
+	// When employee confirms password change
+	$("#security-form").on("submit", function(e) {
+		e.preventDefault();
+		changeEmployeeCredentials();
 	})
 });

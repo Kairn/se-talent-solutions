@@ -57,6 +57,7 @@
     <span id="resolve" class="hide"><button class="btn btn-secondary">Resolve Requests</button></span>
     <div>
       <button id="update" class="btn btn-dark">Update Information</button>
+      <button id="security" class="btn btn-dark">Change Password</button>
       <!--Logout Part-->
       <form action="/se-talent-solutions/logout" method="post">
         <input type="submit" value="Logout" class="btn btn-warning">
@@ -71,6 +72,17 @@
       <input class="btn btn-warning" type="submit" value="Update">
       <div id="update-success" class="text-success hide">Success</div>
       <div id="update-failure" class="text-danger hide">Unable to update, perhaps the email is already registered</div>
+    </form>
+    <!--Security Part-->
+    <form id="security-form" class="hide">
+      <div>Old Password<input type="password" name="oldPassword" id="oldPassword" required></div>
+      <div>New Username<input type="text" name="newUsername" id="newUsername" required></div>
+      <div>New Password<input type="password" name="newPassword1" id="newPassword1" required></div>
+      <div>Confirm Password<input type="password" name="newPassword2" id="newPassword2" required></div>
+      <input type="submit" value="Confirm">
+      <div id="password-mismatch" class="hide text-danger">The passwords do not match</div>
+      <div id="security-error" class="hide text-danger">An error occurred, perhaps the password is incorrect</div>
+      <div id="password-changed" class="hide text-success">Your password has been changed</div>
     </form>
   </section>
   <!--Scripts-->

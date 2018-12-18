@@ -79,6 +79,9 @@ public class LoginServlet extends HttpServlet {
 			JSONObject empJson = new JSONObject(emp);
 			HttpSession session = request.getSession(true);
 			session.setAttribute("employeeId", empJson.get("employeeId"));
+			session.setAttribute("upGroup", empJson.getInt("upGroup"));
+			session.setAttribute("downGroup", empJson.getInt("downGroup"));
+			session.setAttribute("accessLevel", empJson.getInt("accessLevel"));
 			session.setMaxInactiveInterval(600);
 		}
 		else {

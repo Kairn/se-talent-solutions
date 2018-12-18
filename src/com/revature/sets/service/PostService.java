@@ -57,5 +57,32 @@ public class PostService {
 		}
 		
 	}
+	
+	public boolean changeEmployeeCredentials(int employeeId, String jsonString) {
+		
+		AssociateDao ad = new AssociateDaoImpl();
+		
+		JSONObject jo = new JSONObject(jsonString);
+		String oldPassword = jo.getString("oldPassword");
+		String newUsername = jo.getString("newUsername");
+		String newPassword1 = jo.getString("newPassword1");
+		String newPassword2 = jo.getString("newPassword2");
+		
+		if (oldPassword.isEmpty() || newPassword1.isEmpty() || newPassword2.isEmpty()) {
+			return false;
+		}
+		else if (!newPassword1.equals(newPassword2)) {
+			return false;
+		}
+		else {
+			if (ad.changeCredentials(employeeId, oldPassword, newUsername, newPassword1) != 0) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+	}
 
 }
