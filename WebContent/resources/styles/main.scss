@@ -49,4 +49,16 @@ a, a:visited, a:hover {
   color: black;
 }
 
+#success-message, #error-message {
+  position: fixed;
+  width: 50%;
+  height: 30px;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  color: white;
+  font-weight: 600;
+  font-size: 20px;
+}
+
 @import "../libraries/scss/bootstrap";

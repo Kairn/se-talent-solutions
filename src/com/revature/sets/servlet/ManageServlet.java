@@ -8,24 +8,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
-
 import com.revature.sets.model.RestfulResponse;
 import com.revature.sets.service.GetService;
-import com.revature.sets.service.PostService;
 import com.revature.sets.utility.UtilityManager;
 
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class ManageServlet
  */
-@WebServlet({ "/LoginServlet", "/login" })
-public class LoginServlet extends HttpServlet {
+@WebServlet({ "/ManageServlet", "/manage" })
+public class ManageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public LoginServlet() {
+	public ManageServlet() {
 		super();
 	}
 
@@ -37,17 +34,22 @@ public class LoginServlet extends HttpServlet {
 		GetService gs = new GetService();
 		RestfulResponse rres = new RestfulResponse();
 		int status = 0;
-		String emp = null;
+		String emps = null;
 		
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			try {
 				String employeeId = session.getAttribute("employeeId").toString();
-				if (employeeId != null) {
-					emp = gs.fetchEmployeeJsonWithSession(employeeId);
+				String accessLevel = session.getAttribute("accessLevel").toString();
+				if (Integer.parseInt(accessLevel) > 2) {
+					emps = gs.fetchJuniorEmployeesAsExecutive();
+					status = 1;
+				}
+				else if (Integer.parseInt(accessLevel) == 2) {
+					emps = gs.fetchJuniorEmployeesAsManager(employeeId);
 				}
 				else {
-					status = 440;
+					status = 401;
 				}
 			}
 			catch (NumberFormatException ne) {
@@ -57,15 +59,23 @@ public class LoginServlet extends HttpServlet {
 				status = 440;
 			}
 		}
+		else {
+			status = 440;
+		}
 		
-		if (emp != null) {
-			status = 200;
-			rres.setContent(emp);
+		if (emps != null) {
+			if (emps.isEmpty()) {
+				status = 404;
+			}
+			else {
+				status += 200;
+				rres.setContent(emps);
+			}
 		}
 		else {
-			status = 404;
+			status = 400;
 		}
-		
+
 		rres.setStatus(status);
 		response.setContentType("application/json");
 		response.getWriter().write(UtilityManager.toJsonStringJackson(rres));
@@ -78,38 +88,23 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//
+	}
 
-		PostService ps = new PostService();
-		RestfulResponse rres = new RestfulResponse();
-		int status = 0;
-		String emp = null;
+	/**
+	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
+	 */
+	protected void doPut(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		//
+	}
 
-		String requestBody = UtilityManager.readRequest(request.getReader());
-		if (requestBody != null) {
-			emp = ps.fetchEmployeeJsonWithCredentials(requestBody);
-		}
-		else {
-			status = 400;
-		}
-
-		if (emp != null) {
-			status = 200;
-			rres.setContent(emp);
-			JSONObject empJson = new JSONObject(emp);
-			HttpSession session = request.getSession(true);
-			session.setAttribute("employeeId", empJson.get("employeeId"));
-			session.setAttribute("upGroup", empJson.getInt("upGroup"));
-			session.setAttribute("downGroup", empJson.getInt("downGroup"));
-			session.setAttribute("accessLevel", empJson.getInt("accessLevel"));
-			session.setMaxInactiveInterval(600);
-		} else {
-			status = 401;
-		}
-
-		rres.setStatus(status);
-		response.setContentType("application/json");
-		response.getWriter().write(UtilityManager.toJsonStringJackson(rres));
-
+	/**
+	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
+	 */
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		//
 	}
 
 }

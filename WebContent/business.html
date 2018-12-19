@@ -25,6 +25,9 @@
 </head>
 
 <body>
+  <!--Popup Message-->
+  <div id="success-message" class="bg-success hide"></div>
+  <div id="error-message" class="bg-danger hide"></div>
   <section class="jumbotron">
     <h1>This is SETS employee page</h1>
   </section>
@@ -48,13 +51,11 @@
       <div>Username<input type="text" name="rusername" id="rusername" required></div>
       <div>Your Email<input type="text" name="remail" id="remail" required></div>
       <input type="submit" value="Recover" class="btn btn-danger">
-      <div id="invalid-information" class="text-danger hide">Invalid Information</div>
-      <div id="recover-success" class="text-success hide">Success, new credentials have been sent to your email address</div>
     </form>
   </section>
   <!--Employee Section-->
   <section id="employee-section" class="container hide">
-    <h1>Welcome to Employee Home</h1>
+    <h1 class="text-center">Welcome to Employee Home</h1>
     <div class="row">
       <div id="firstName" class="col-sm-12"></div>
       <div id="lastName" class="col-sm-12"></div>
@@ -66,9 +67,9 @@
     <span id="resolve" class="hide"><button class="btn btn-secondary">Resolve Requests</button></span>
     <div>
       <button id="update" class="btn btn-dark">Update Information</button>
-      <button id="security" class="btn btn-dark">Change Password</button>
+      <button id="security" class="btn btn-dark">Change Credentials</button>
       <!--Logout Part-->
-      <form action="/se-talent-solutions/logout" method="post">
+      <form action="logout" method="post">
         <input type="submit" value="Logout" class="btn btn-warning">
       </form>
     </div>
@@ -79,8 +80,6 @@
       <div>Last Name<input type="text" name="newLastName" id="newLastName" required></div>
       <div>Email<input type="text" name="newEmail" id="newEmail" required></div>
       <input class="btn btn-warning" type="submit" value="Update">
-      <div id="update-success" class="text-success hide">Success</div>
-      <div id="update-failure" class="text-danger hide">Unable to update, perhaps the email is already registered</div>
     </form>
     <!--Security Part-->
     <form id="security-form" class="hide">
@@ -90,8 +89,51 @@
       <div>Confirm Password<input type="password" name="newPassword2" id="newPassword2" required></div>
       <input type="submit" value="Confirm" class="btn btn-warning">
       <div id="password-mismatch" class="hide text-danger">The passwords do not match</div>
-      <div id="security-error" class="hide text-danger">An error occurred, perhaps the password is incorrect</div>
-      <div id="password-changed" class="hide text-success">Your password has been changed</div>
+    </form>
+  </section>
+  <br>
+  <!--Lower Level Employee Section-->
+  <section id="lower-employee-section" class="hide">
+    <!--Employee Information Part-->
+    <h3 class="text-center">Employee Management</h3>
+    <table id="employee-table" style="margin: auto;">
+      <thead>
+        <tr>
+          <th>Employee ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Up Group</th>
+          <th>Down Group</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="employee-information"></tbody>
+    </table>
+    <div><button id="register" class="btn dark">Register New Employee</button></div>
+    <br>
+    <div><button id="change-role" class="btn dark hide">Change Employee Role</button></div>
+    <br>
+    <!--Registration Part-->
+    <form action="manage" method="post" class="hide">
+      <h3>Register a new employee under your management</h3>
+      <div>First Name<input type="text" name="regFirstName" id="regFirstName" required></div>
+      <div>Last Name<input type="text" name="regLastName" id="regLastName" required></div>
+      <div>Email<input type="text" name="regEmail" id="regEmail" required></div>
+      <div>Up Group<input type="number" name="regUpGroup" id="regUpGroup" required></div>
+      <fieldset>
+        <input type="submit" value="Register">
+      </fieldset>
+    </form>
+    <br>
+    <!--Change Role Part-->
+    <form class="hide">
+      <div>Employee ID<input type="number" name="changeEmployeeId" id="changeEmployeeId" required min="1000"></div>
+      <div>Up Group<input type="number" name="changeUpGroup" id="changeUpGroup" required min="100" max="999"></div>
+      <div>Down Group<input type="number" name="changeDownGroup" id="changeDownGroup" required min="100" max="999"></div>
+      <div>Access Level<select name="changeAccessLevel" id="changeAccessLevel">
+        <option value="1">1: Associate</option>
+        <option value="2">2: Manager</option>
+      </select></div>
     </form>
   </section>
   <!--Scripts-->

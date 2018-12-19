@@ -18,13 +18,13 @@ import com.revature.sets.utility.UtilityManager;
 @WebServlet({ "/UpdateServlet", "/update" })
 public class UpdateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public UpdateServlet() {
-        super();
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public UpdateServlet() {
+		super();
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -33,22 +33,29 @@ public class UpdateServlet extends HttpServlet {
 		
 		PostService ps = new PostService();
 		RestfulResponse rres = new RestfulResponse();
-		boolean success = false;
+		int status = 0;
 		
 		HttpSession session = request.getSession(false);
-		int employeeId = Integer.parseInt(session.getAttribute("employeeId").toString());
-		String requestBody = UtilityManager.readRequest(request.getReader());
-		if (requestBody != null) {
-			success = ps.updateEmployeeInformation(employeeId, requestBody);
+		try {
+			int employeeId = Integer.parseInt(session.getAttribute("employeeId").toString());
+			String requestBody = UtilityManager.readRequest(request.getReader());
+			if (requestBody != null) {
+				if (ps.updateEmployeeInformation(employeeId, requestBody)) {
+					status = 200;
+				}
+				else {
+					status = 404;
+				}
+			}
+			else {
+				status = 400;
+			}
+		}
+		catch (Exception e) {
+			status = 440;
 		}
 		
-		if (success) {
-			rres.setStatus(200);
-		}
-		else {
-			rres.setStatus(400);
-		}
-		
+		rres.setStatus(status);
 		response.setContentType("application/json");
 		response.getWriter().write(UtilityManager.toJsonStringJackson(rres));
 		

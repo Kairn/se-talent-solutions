@@ -1,44 +1,61 @@
+// Display transaction message
+const displayMessage = function (success, message, reload) {
+	var $target;
+	if (success) {
+		$target = $("#success-message");
+	}
+	else {
+		$target = $("#error-message");
+	}
+	$target.html(message);
+	$target.slideDown(1000).delay(3000).slideUp(1000, function () {
+		if (reload) {
+			location.reload();
+		}
+	})
+};
+
 // Login with an active session
-const loginWithSession = function() {
-	fetch(URL_WRAPPER("login"), GET_HEADER_JSON)
-	.then(function(response) {
-		return response.json();
-	})
-	.then(function(data) {
-		showEmployee(data);
-	})
-	.catch(function(error) {
-		console.log(error);
-	});
+const loginWithSession = function () {
+	fetch("login", GET_HEADER_JSON)
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			showEmployee(data);
+		})
+		.catch(function (error) {
+			console.log(error);
+		});
 };
 
 // Submit login form to login with credentials
-const loginWithCredentials = function() {
+const loginWithCredentials = function () {
 	var credentials = {};
 	credentials["username"] = $("#username").val().trim();
 	credentials["password"] = $("#password").val().trim();
-	fetch(URL_WRAPPER("login"), POST_HEADER_WRAPPER(credentials))
-	.then(function(response) {
-		return response.json();
-	})
-	.then(function(data) {
-		showEmployee(data);
-	})
-	.catch(function(error) {
-		console.log(error);
-	});
+	fetch("login", POST_HEADER_WRAPPER(credentials))
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			showEmployee(data);
+		})
+		.catch(function (error) {
+			console.log(error);
+		});
 };
 
 // Display employee information based on fetch response
-const showEmployee = function(data) {
+const showEmployee = function (data) {
 	if (parseInt(data["status"]) == 404) {
 		$("#employee-section").addClass("hide");
 		$("#login-section").removeClass("hide");
 	}
-	else if (parseInt(data["status"]) == 405) {
+	else if (parseInt(data["status"]) == 400 || parseInt(data["status"]) == 401) {
 		$("#employee-section").addClass("hide");
 		$("#login-section").removeClass("hide");
-		$("#invalid-credentials").slideDown(1000).delay(1000).slideUp(1000);
+		displayMessage(false, "Error: Invalid Credentials", false);
 	}
 	else if (parseInt(data["status"]) == 200) {
 		var employee = JSON.parse(data["content"]);
@@ -64,32 +81,33 @@ const showEmployee = function(data) {
 };
 
 // Send an request to update the employee's information
-const updateEmployeeInformation = function() {
+const updateEmployeeInformation = function () {
 	var newInformation = {};
 	newInformation["newFirstName"] = $("#newFirstName").val().trim();
 	newInformation["newLastName"] = $("#newLastName").val().trim();
 	newInformation["newEmail"] = $("#newEmail").val().trim();
-	fetch(URL_WRAPPER("update"), POST_HEADER_WRAPPER(newInformation))
-	.then(function(response) {
-		return response.json();
-	})
-	.then(function(data) {
-		if (parseInt(data["status"]) == 200) {
-			$("#update-success").slideDown(2000).delay(2000, function() {
-				location.reload();
-			});
-		}
-		else {
-			$("#update-failure").slideDown(2000).delay(2000).slideUp(1000);
-		}
-	})
-	.catch(function(error) {
-		console.log(error);
-	})
+	fetch("update", POST_HEADER_WRAPPER(newInformation))
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (parseInt(data["status"]) == 200) {
+				displayMessage(true, "Success: Information Updated", true);
+			}
+			else if (parseInt(data["status"]) == 440) {
+				displayMessage(false, "Error: Invalid Session or Session Expired", true);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Information", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
 };
 
 // Send an request to change the employee's credentials
-const changeEmployeeCredentials = function() {
+const changeEmployeeCredentials = function () {
 	var newCredentials = {};
 	newCredentials["oldPassword"] = $("#oldPassword").val().trim();
 	newCredentials["newUsername"] = $("#newUsername").val().trim();
@@ -100,77 +118,152 @@ const changeEmployeeCredentials = function() {
 	}
 	else {
 		$("#password-mismatch").addClass("hide");
-		fetch(URL_WRAPPER("security"), POST_HEADER_WRAPPER(newCredentials))
-		.then(function(response) {
-			return response.json();
-		})
-		.then(function(data) {
-			if (parseInt(data["status"]) == 200) {
-				$("#password-changed").slideDown(2000).delay(2000, function() {
-					location.reload();
-				})
-			}
-			else {
-				$("#security-error").slideDown(2000).delay(1000).slideUp(1000);
-			}
-		})
-		.catch(function(error) {
-			console.log(error);
-		})
+		fetch("security", POST_HEADER_WRAPPER(newCredentials))
+			.then(function (response) {
+				return response.json();
+			})
+			.then(function (data) {
+				if (parseInt(data["status"]) == 200) {
+					displayMessage(true, "Success: Your Credentials Have Been Changed", true);
+				}
+				else if (parseInt(data["status"]) == 440) {
+					displayMessage(false, "Error: Invalid Session or Session Expired", true);
+				}
+				else {
+					displayMessage(false, "Error: Invalid Credentials or Information", false);
+				}
+			})
+			.catch(function (error) {
+				console.log(error);
+			})
 	}
-}
+};
 
 // Send a request to receive new credentials if the employee forgets their password
-const obtainNewCredentials = function() {
+const obtainNewCredentials = function () {
 	var employeeInformation = {};
 	employeeInformation["username"] = $("#rusername").val().trim();
 	employeeInformation["email"] = $("#remail").val().trim();
-	fetch(URL_WRAPPER("recover"), POST_HEADER_WRAPPER(employeeInformation))
-	.then(function(response) {
-		return response.json();
-	})
-	.then(function(data) {
-		if(parseInt(data["status"]) == 200) {
-			$("#recover-success").slideDown(2000).delay(2000).slideUp(1000);
+	fetch("recover", POST_HEADER_WRAPPER(employeeInformation))
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (parseInt(data["status"]) == 200) {
+				displayMessage(true, "Success: New Credentials Have Been Sent to Your Email", false);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Information", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
+
+// Send a request to fetch all employees that a high level person manages
+const getJuniorEmployees = function () {
+	fetch("manage", GET_HEADER_JSON)
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (parseInt(data["status"]) == 200) {
+				showJuniorEmployees(JSON.parse(data["content"]), false);
+			}
+			else if (parseInt(data["status"]) == 201) {
+				showJuniorEmployees(JSON.parse(data["content"]), true);
+			}
+			else if (parseInt(data["status"]) == 404) {
+				$("#employee-table").html("<h3>You are not managing anyone</h3>");
+				$("#lower-employee-section").slideDown(1000);
+			}
+			else if (parseInt(data["status"]) == 440) {
+				displayMessage(false, "Error: Invalid Session or Session Expired", true);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Request", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
+
+// Display all junior employee information
+const showJuniorEmployees = function (data, exe) {
+	$empInfo = $("#employee-information");
+	data.sort((a, b) => parseInt(a["accessLevel"]) - parseInt(b["accessLevel"]));
+	for (let i in data) {
+		$newEmpRow = $("<tr></tr>");
+		$employeeId = $("<td></td>");
+		$firstName = $("<td></td>");
+		$lastName = $("<td></td>");
+		$upGroup = $("<td></td>");
+		$downGroup = $("<td></td>");
+		$action = $("<td></td>");
+		$button = $("<button>Fire</button>");
+		$button.addClass("btn").addClass("btn-warning");
+		$action.append($button);
+		$newEmpRow.append($employeeId).append($firstName).append($lastName).append($upGroup).append($downGroup).append($action);
+		// Load information
+		$employeeId.html(data[i]["employeeId"]);
+		$firstName.html(data[i]["firstName"]);
+		$lastName.html(data[i]["lastName"]);
+		if (parseInt(data[i]["upGroup"]) == -1) {
+			$upGroup.html("None");
 		}
 		else {
-			$("#invalid-information").slideDown(2000).delay(2000).slideUp(1000);
+			$upGroup.html(data[i]["upGroup"]);
 		}
-	})
-	.catch(function(error) {
-		console.log(error);
-	})
-}
+		if (parseInt(data[i]["downGroup"]) == -1) {
+			$downGroup.html("None");
+		}
+		else {
+			$downGroup.html(data[i]["downGroup"]);
+		}
+		$button.attr("data-id", data[i]["employeeId"]);
+		if (!exe) {
+			$button.addClass("disabled");
+		}
+		$empInfo.prepend($newEmpRow);
+	}
+	$("#lower-employee-section").slideDown(3000);
+};
 
-$(function() {
+$(function () {
 	// Try to login with a valid session
 	loginWithSession();
 	// Login with credentials
-	$("#login-form").on("submit", function(e) {
+	$("#login-form").on("submit", function (e) {
 		e.preventDefault();
 		loginWithCredentials();
 	})
 	// When employee wants to update their information
-	$("#update").on("click", function() {
+	$("#update").on("click", function () {
 		$("#update-form").removeClass("hide");
 	})
 	// When employee confirms an update
-	$("#update-form").on("submit", function(e) {
+	$("#update-form").on("submit", function (e) {
 		e.preventDefault();
 		updateEmployeeInformation();
 	})
 	// When employee wants to change their credentials
-	$("#security").on("click", function() {
+	$("#security").on("click", function () {
 		$("#security-form").slideDown();
 	})
 	// When employee confirms password change
-	$("#security-form").on("submit", function(e) {
+	$("#security-form").on("submit", function (e) {
 		e.preventDefault();
 		changeEmployeeCredentials();
 	})
 	// When employee tries to recover their credentials
-	$("#recover-form").on("submit", function(e) {
+	$("#recover-form").on("submit", function (e) {
 		e.preventDefault();
 		obtainNewCredentials();
+	})
+	// When a manager level or up tries to get employee information
+	$("#manage").on("click", function () {
+		getJuniorEmployees();
 	})
 });

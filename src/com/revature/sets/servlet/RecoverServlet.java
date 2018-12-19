@@ -32,20 +32,22 @@ public class RecoverServlet extends HttpServlet {
 		
 		PostService ps = new PostService();
 		RestfulResponse rres = new RestfulResponse();
-		boolean success = false;
+		int status = 0;
 
 		String requestBody = UtilityManager.readRequest(request.getReader());
 		if (requestBody != null) {
-			success = ps.obtainNewEmployeeCredentials(requestBody);
-		}
-		
-		if (success) {
-			rres.setStatus(200);
+			if (ps.obtainNewEmployeeCredentials(requestBody)) {
+				status = 200;
+			}
+			else {
+				status = 401;
+			}
 		}
 		else {
-			rres.setStatus(400);
+			status = 400;
 		}
 		
+		rres.setStatus(status);
 		response.setContentType("application/json");
 		response.getWriter().write(UtilityManager.toJsonStringJackson(rres));
 		
