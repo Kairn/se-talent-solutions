@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import com.revature.sets.model.RestfulResponse;
 import com.revature.sets.service.GetService;
+import com.revature.sets.service.PostService;
 import com.revature.sets.utility.UtilityManager;
 
 /**
@@ -55,7 +56,7 @@ public class ManageServlet extends HttpServlet {
 			catch (NumberFormatException ne) {
 				status = 400;
 			}
-			catch (Exception e) {
+			catch (RuntimeException e) {
 				status = 440;
 			}
 		}
@@ -88,7 +89,43 @@ public class ManageServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//
+		
+		PostService ps = new PostService();
+		RestfulResponse rres = new RestfulResponse();
+		int status = 0;
+		
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			try {
+				int accessLevel = Integer.parseInt(session.getAttribute("accessLevel").toString());
+				String requestBody = UtilityManager.readRequest(request.getReader());
+				if (requestBody != null && accessLevel > 2) {
+					if (ps.registerNewEmployee(requestBody)) {
+						status = 200;
+					}
+					else {
+						status = 404;
+					}
+				}
+				else {
+					status = 400;
+				}
+			}
+			catch (NumberFormatException ne) {
+				status = 401;
+			}
+			catch (RuntimeException e) {
+				status = 440;
+			}
+		}
+		else {
+			status = 440;
+		}
+
+		rres.setStatus(status);
+		response.setContentType("application/json");
+		response.getWriter().write(UtilityManager.toJsonStringJackson(rres));
+		
 	}
 
 	/**

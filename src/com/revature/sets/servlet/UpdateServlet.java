@@ -36,22 +36,27 @@ public class UpdateServlet extends HttpServlet {
 		int status = 0;
 		
 		HttpSession session = request.getSession(false);
-		try {
-			int employeeId = Integer.parseInt(session.getAttribute("employeeId").toString());
-			String requestBody = UtilityManager.readRequest(request.getReader());
-			if (requestBody != null) {
-				if (ps.updateEmployeeInformation(employeeId, requestBody)) {
-					status = 200;
+		if (session != null) {
+			try {
+				int employeeId = Integer.parseInt(session.getAttribute("employeeId").toString());
+				String requestBody = UtilityManager.readRequest(request.getReader());
+				if (requestBody != null) {
+					if (ps.updateEmployeeInformation(employeeId, requestBody)) {
+						status = 200;
+					}
+					else {
+						status = 404;
+					}
 				}
 				else {
-					status = 404;
+					status = 400;
 				}
 			}
-			else {
-				status = 400;
+			catch (RuntimeException e) {
+				status = 440;
 			}
 		}
-		catch (Exception e) {
+		else {
 			status = 440;
 		}
 		

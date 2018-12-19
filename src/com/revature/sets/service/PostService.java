@@ -1,9 +1,12 @@
 package com.revature.sets.service;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.revature.sets.dao.AssociateDao;
 import com.revature.sets.dao.AssociateDaoImpl;
+import com.revature.sets.dao.ManagerDao;
+import com.revature.sets.dao.ManagerDaoImpl;
 import com.revature.sets.model.Employee;
 import com.revature.sets.utility.UtilityManager;
 
@@ -105,6 +108,35 @@ public class PostService {
 			}
 		}
 		
+	}
+	
+	public boolean registerNewEmployee(String jsonString) {
+		
+		ManagerDao md = new ManagerDaoImpl();
+		
+		JSONObject jo = new JSONObject(jsonString);
+		try {
+			String firstName = jo.getString("firstName");
+			String lastName = jo.getString("lastName");
+			String email = jo.getString("email");
+			int upGroup = jo.getInt("upGroup");
+			
+			if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || upGroup < 100) {
+				return false;
+			}
+			else {
+				Employee employee = new Employee(firstName, lastName, email, upGroup);
+				if (md.addEmployee(employee) == 0) {
+					return false;
+				}
+				else {
+					return true;
+				}
+			}
+		}
+		catch (JSONException e) {
+			return false;
+		}
 	}
 
 }

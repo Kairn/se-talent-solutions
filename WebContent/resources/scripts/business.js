@@ -231,6 +231,33 @@ const showJuniorEmployees = function (data, exe) {
 	$("#lower-employee-section").slideDown(3000);
 };
 
+// Send an request to register a new employee
+const registerEmployee = function () {
+	var regEmployee = {};
+	regEmployee["firstName"] = $("#regFirstName").val().trim();
+	regEmployee["lastName"] = $("#regLastName").val().trim();
+	regEmployee["email"] = $("#regEmail").val().trim();
+	regEmployee["upGroup"] = $("#regUpGroup").val().trim();
+	fetch("manage", POST_HEADER_WRAPPER(regEmployee))
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (data["status"] == 200) {
+				displayMessage(true, "Success: New Employee Registered", true);
+			}
+			else if (data["status"] == 440) {
+				displayMessage(false, "Error: Invalid Session or Session Expired", true);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Request", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
+
 $(function () {
 	// Try to login with a valid session
 	loginWithSession();
@@ -265,5 +292,14 @@ $(function () {
 	// When a manager level or up tries to get employee information
 	$("#manage").on("click", function () {
 		getJuniorEmployees();
+	})
+	// When a manager toggle registration form
+	$("#register").on("click", function () {
+		$("#register-form").slideDown(1000);
+	})
+	// When a manager level or up tries to register a new junior employee
+	$("#register-form").on("submit", function (e) {
+		e.preventDefault();
+		registerEmployee();
 	})
 });

@@ -2,7 +2,7 @@
 const APP_NAME = "se-talent-solutions";
 
 // API Endpoint
-const URL_WRAPPER = function(endpoint) {
+const URL_WRAPPER = function (endpoint) {
 	return "/" + APP_NAME + "/" + endpoint;
 };
 
@@ -14,10 +14,10 @@ const GET_HEADER = {
 // Get JSON
 const GET_HEADER_JSON = {
 	method: "GET",
-	headers: {Accept: "application/json"}
+	headers: { Accept: "application/json" }
 };
 // Post JSON
-const POST_HEADER_WRAPPER = function(data) {
+const POST_HEADER_WRAPPER = function (data) {
 	var header = {
 		method: "POST",
 		headers: {
@@ -28,7 +28,7 @@ const POST_HEADER_WRAPPER = function(data) {
 	return header;
 };
 // Put JSON
-const PUT_HEADER_WRAPPER = function(data) {
+const PUT_HEADER_WRAPPER = function (data) {
 	var header = {
 		method: "PUT",
 		headers: {
@@ -39,7 +39,7 @@ const PUT_HEADER_WRAPPER = function(data) {
 	return header;
 };
 // Delete JSON
-const DELETE_HEADER_WRAPPER = function(data) {
+const DELETE_HEADER_WRAPPER = function (data) {
 	var header = {
 		method: "DELETE",
 		headers: {

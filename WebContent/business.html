@@ -49,7 +49,7 @@
     <h3>Forgot Password? Use Username and Email to Recover</h3>
     <form id="recover-form">
       <div>Username<input type="text" name="rusername" id="rusername" required></div>
-      <div>Your Email<input type="text" name="remail" id="remail" required></div>
+      <div>Your Email<input type="email" name="remail" id="remail" required></div>
       <input type="submit" value="Recover" class="btn btn-danger">
     </form>
   </section>
@@ -78,7 +78,7 @@
     <form id="update-form" class="hide">
       <div>First Name<input type="text" name="newFirstName" id="newFirstName" required></div>
       <div>Last Name<input type="text" name="newLastName" id="newLastName" required></div>
-      <div>Email<input type="text" name="newEmail" id="newEmail" required></div>
+      <div>Email<input type="email" name="newEmail" id="newEmail" required></div>
       <input class="btn btn-warning" type="submit" value="Update">
     </form>
     <!--Security Part-->
@@ -114,11 +114,11 @@
     <div><button id="change-role" class="btn dark hide">Change Employee Role</button></div>
     <br>
     <!--Registration Part-->
-    <form action="manage" method="post" class="hide">
+    <form id="register-form" action="manage" method="post" class="hide">
       <h3>Register a new employee under your management</h3>
       <div>First Name<input type="text" name="regFirstName" id="regFirstName" required></div>
       <div>Last Name<input type="text" name="regLastName" id="regLastName" required></div>
-      <div>Email<input type="text" name="regEmail" id="regEmail" required></div>
+      <div>Email<input type="email" name="regEmail" id="regEmail" required></div>
       <div>Up Group<input type="number" name="regUpGroup" id="regUpGroup" required></div>
       <fieldset>
         <input type="submit" value="Register">
