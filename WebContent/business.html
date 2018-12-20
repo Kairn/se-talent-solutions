@@ -109,9 +109,9 @@
       </thead>
       <tbody id="employee-information"></tbody>
     </table>
-    <div><button id="register" class="btn dark">Register New Employee</button></div>
+    <div><button id="register" class="btn btn-dark">Register New Employee</button></div>
     <br>
-    <div><button id="change-role" class="btn dark hide">Change Employee Role</button></div>
+    <div class="hide"><button id="change-role" class="btn btn-dark">Change Employee Role</button></div>
     <br>
     <!--Registration Part-->
     <form id="register-form" action="manage" method="post" class="hide">
@@ -138,6 +138,30 @@
       <div><input type="submit" value="Confirm" class="btn btn-warning"></div>
     </form>
   </section>
+  <!--Own Request Section-->
+  <section id="own-request-section" class="container hide">
+    <h3>Your Reimbursement Requests</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Details</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="own-request-body"></tbody>
+    </table>
+    <br>
+    <div><button id="new-request" class="btn btn-info">New Request</button></div>
+    <div><button id="new-file" class="btn btn-info">Attach File</button></div>
+  </section>
+  <!--Resolve Section-->
+  <section id="resolve-section" class="container hide"></section>
+  <!--Inspect Request Section-->
+  <section id="inspect-section" class="container hide"></section>
   <!--Scripts-->
   <div>
     <!--jQuery-->

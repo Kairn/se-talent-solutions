@@ -9,6 +9,7 @@ import com.revature.sets.dao.ExecutiveDaoImpl;
 import com.revature.sets.dao.ManagerDao;
 import com.revature.sets.dao.ManagerDaoImpl;
 import com.revature.sets.model.Employee;
+import com.revature.sets.model.Request;
 import com.revature.sets.utility.UtilityManager;
 
 public class GetService {
@@ -63,6 +64,25 @@ public class GetService {
 			}
 			else {
 				return UtilityManager.toJsonStringJackson(employees);
+			}
+		}
+		else {
+			return null;
+		}
+		
+	}
+	
+	public String fetchRequestsAsEmployee(String idString) {
+		
+		AssociateDao ad = new AssociateDaoImpl();
+		
+		List<Request> requests = ad.getRequestsByEmployeeId(Integer.parseInt(idString));
+		if (requests != null) {
+			if (requests.isEmpty()) {
+				return new String("");
+			}
+			else {
+				return UtilityManager.toJsonStringJackson(requests);
 			}
 		}
 		else {
