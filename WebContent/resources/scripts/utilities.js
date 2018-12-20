@@ -27,6 +27,13 @@ const POST_HEADER_WRAPPER = function (data) {
 	};
 	return header;
 };
+// Post Form Data with File
+const POST_HEADER_FORM_WRAPPER = function (formData) {
+	var header = {
+		method: "POST",
+		body: formData
+	}
+};
 // Put JSON
 const PUT_HEADER_WRAPPER = function (data) {
 	var header = {

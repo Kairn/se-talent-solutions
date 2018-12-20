@@ -131,10 +131,10 @@
       <div>Up Group<input type="number" name="changeUpGroup" id="changeUpGroup" required min="-1" max="999"></div>
       <div>Down Group<input type="number" name="changeDownGroup" id="changeDownGroup" required min="-1" max="999"></div>
       <div>Access Level<select name="changeAccessLevel" id="changeAccessLevel" required>
-        <option value="" selected>Choose One</option>
-        <option value="1">1: Associate</option>
-        <option value="2">2: Manager</option>
-      </select></div>
+          <option value="" selected>Choose One</option>
+          <option value="1">1: Associate</option>
+          <option value="2">2: Manager</option>
+        </select></div>
       <div><input type="submit" value="Confirm" class="btn btn-warning"></div>
     </form>
   </section>
@@ -147,6 +147,7 @@
           <th>ID</th>
           <th>Date</th>
           <th>Reason</th>
+          <th>Amount</th>
           <th>Status</th>
           <th>Details</th>
           <th>Action</th>
@@ -157,6 +158,21 @@
     <br>
     <div><button id="new-request" class="btn btn-info">New Request</button></div>
     <div><button id="new-file" class="btn btn-info">Attach File</button></div>
+    <br>
+    <!--Submit Request Part-->
+    <form id="submit-request-form" class="hide">
+      <div>Reason<input type="text" name="reason" id="reason" required></div>
+      <div>Explanation<textarea name="message" id="message" cols="30" rows="6"></textarea></div>
+      <div>Amount $<input type="number" name="amount" id="amount" step="0.01" min="1" required></div>
+      <div><input type="submit" value="Submit Request" class="btn btn-primary"></div>
+    </form>
+    <br>
+    <!--Upload File Part-->
+    <form id="upload-form" class="hide" enctype="multipart/form-data">
+      <div>Request ID<input type="number" name="requestId" id="requestId" required></div>
+      <div>Upload File<input type="file" name="file" id="file" required></div>
+      <div><input type="submit" value="Upload File" class="btn btn-mat-purple"></div>
+    </form>
   </section>
   <!--Resolve Section-->
   <section id="resolve-section" class="container hide"></section>

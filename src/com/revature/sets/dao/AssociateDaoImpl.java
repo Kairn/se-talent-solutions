@@ -176,6 +176,43 @@ public class AssociateDaoImpl implements AssociateDao {
 	}
 
 	@Override
+	public Request getPendingRequestByEmployeeAndRequestId(int employeeId, int requestId) {
+		
+		Request request = null;
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "SELECT * FROM REQUEST\r\n" + 
+				"WHERE EMPLOYEE_ID = ? AND REQUEST_ID = ? AND REQUEST_ID NOT IN (\r\n" + 
+				"	SELECT REQUEST_ID FROM RESOLUTION\r\n" + 
+				")";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setInt(1, employeeId);
+			pstmt.setInt(2, requestId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				request = new Request(requestId, employeeId, rs.getDate("REQUEST_DATE"), rs.getString("REASON"), rs.getString("MESSAGE"), rs.getDouble("AMOUNT"));
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return request;
+		
+	}
+
+	@Override
 	public int submitRequest(Request request) {
 		
 		Connection conn = UtilityManager.getConnection();

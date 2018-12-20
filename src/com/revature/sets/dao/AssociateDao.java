@@ -12,6 +12,7 @@ public interface AssociateDao {
 	Employee getEmployeeById(int employeeId);
 	Employee getEmployeeByEmail(String email);
 	List<Request> getRequestsByEmployeeId(int employeeId);
+	Request getPendingRequestByEmployeeAndRequestId(int employeeId, int requestId);
 	int submitRequest(Request request);
 	int recallRequest(int requestId);
 	int updateInformation(int employeeId, String firstName, String lastName, String email);

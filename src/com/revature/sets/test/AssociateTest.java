@@ -59,6 +59,16 @@ public class AssociateTest {
 		final Request expected = new Request(1);
 		assertEquals(expected, ad.getRequestsByEmployeeId(1001).get(0));
 	}
+	
+	@Test
+	public void testGetPendingRequestByEmployeeAndRequestId() {
+		assertEquals(1000, (int)ad.getPendingRequestByEmployeeAndRequestId(1001, 1).getAmount());
+	}
+	
+	@Test
+	public void testGetPendingRequestByEmployeeAndRequestIdNull() {
+		assertNull(ad.getPendingRequestByEmployeeAndRequestId(1017, 1));
+	}
 
 	@Test
 	public void testChangeCredentialsInvalid() {

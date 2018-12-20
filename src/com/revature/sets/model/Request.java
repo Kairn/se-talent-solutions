@@ -25,6 +25,14 @@ public class Request {
 		this.amount = amount;
 	}
 
+	public Request(int employeeId, String reason, String message, double amount) {
+		super();
+		this.employeeId = employeeId;
+		this.reason = reason;
+		this.message = message;
+		this.amount = amount;
+	}
+
 	public Request(int employeeId, Date requestDate, String reason, String message, double amount) {
 		super();
 		this.employeeId = employeeId;

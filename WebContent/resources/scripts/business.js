@@ -195,6 +195,7 @@ const getJuniorEmployees = function () {
 // Display all junior employee information
 const showJuniorEmployees = function (data, exe) {
 	var $empInfo = $("#employee-information");
+	$empInfo.empty();
 	data.sort((a, b) => parseInt(a["accessLevel"]) - parseInt(b["accessLevel"]));
 	for (let i in data) {
 		let $newEmpRow = $("<tr></tr>");
@@ -346,12 +347,14 @@ const getOwnRequests = function () {
 // Populate the submitted request table 
 const showOwnRequests = function (data) {
 	var $reqInfo = $("#own-request-body");
+	$reqInfo.empty();
 	data.sort((a, b) => parseInt(a["requestId"]) - parseInt(b["requestId"]));
 	for (let i in data) {
 		let $newReqRow = $("<tr></tr>");
 		let $reqId = $("<td></td>");
 		let $date = $("<td></td>");
 		let $reason = $("<td></td>");
+		let $amount = $("<td></td>");
 		let $status = $("<td></td>");
 		let $detail = $("<td></td>");
 		let $action = $("<td></td>");
@@ -364,6 +367,7 @@ const showOwnRequests = function (data) {
 		$recall.attr("data-id", requestId).addClass("btn").addClass("btn-danger").addClass("recall");
 		$date.html(data[i]["requestDate"]);
 		$reason.html(data[i]["reason"]);
+		$amount.html("$" + parseFloat(data[i]["amount"]).toFixed(2));
 		if (data[i]["resolution"] == null) {
 			$status.html("Pending");
 		}
@@ -379,7 +383,7 @@ const showOwnRequests = function (data) {
 		// Attach elements
 		$detail.append($view);
 		$action.append($recall);
-		$newReqRow.append($reqId).append($date).append($reason).append($status).append($detail).append($action);
+		$newReqRow.append($reqId).append($date).append($reason).append($amount).append($status).append($detail).append($action);
 		$reqInfo.append($newReqRow);
 	}
 	$(".view").popover({
@@ -388,6 +392,32 @@ const showOwnRequests = function (data) {
 	// Add event listener to buttons
 	$reqInfo.closest("section").slideDown(2000);
 }
+
+// Submit a new reimbursement request
+const submitNewRequest = function () {
+	var reqContent = {};
+	reqContent["reason"] = $("#reason").val().trim();
+	reqContent["message"] = $("#message").val().trim();
+	reqContent["amount"] = parseFloat($("#amount").val().trim());
+	fetch("reimbursement", POST_HEADER_WRAPPER(reqContent))
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (data["status"] == 200) {
+				displayMessage(true, "Success: New Request Submitted", true);
+			}
+			else if (data["status"] == 440) {
+				displayMessage(false, "Error: Invalid Session or Session Expired", true);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Request", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
 
 $(function () {
 	// Try to login with a valid session
@@ -445,5 +475,18 @@ $(function () {
 	// When an employee wants to view his reimbursement requests
 	$("#request").on("click", function () {
 		getOwnRequests();
+	})
+	// When an employee wants to submit a new request
+	$("#new-request").on("click", function () {
+		$("#submit-request-form").slideDown(1000);
+	})
+	// When an employee wants to upload a file to a request
+	$("#new-file").on("click", function () {
+		$("#upload-form").slideDown(1000);
+	})
+	// When an employee confirms a request submission
+	$("#submit-request-form").on("submit", function (e) {
+		e.preventDefault();
+		submitNewRequest();
 	})
 });

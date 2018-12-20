@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import com.revature.sets.model.RestfulResponse;
 import com.revature.sets.service.GetService;
+import com.revature.sets.service.PostService;
 import com.revature.sets.utility.UtilityManager;
 
 /**
@@ -76,8 +77,38 @@ public class ReimbursementServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		PostService ps = new PostService();
+		RestfulResponse rres = new RestfulResponse();
+		int status = 0;
+		
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			try {
+				int employeeId = Integer.parseInt(session.getAttribute("employeeId").toString());
+				String requestBody = UtilityManager.readRequest(request.getReader());
+				if (ps.submitNewRequest(employeeId, requestBody)) {
+					status = 200;
+				}
+				else {
+					status = 404;
+				}
+			}
+			catch (NumberFormatException ne) {
+				status = 400;
+			}
+			catch (RuntimeException e) {
+				status = 440;
+			}
+		}
+		else {
+			status = 440;
+		}
+
+		rres.setStatus(status);
+		response.setContentType("application/json");
+		response.getWriter().write(UtilityManager.toJsonStringJackson(rres));
+		
 	}
 
 	/**
