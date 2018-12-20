@@ -203,7 +203,7 @@ const showJuniorEmployees = function (data, exe) {
 		$downGroup = $("<td></td>");
 		$action = $("<td></td>");
 		$button = $("<button>Fire</button>");
-		$button.addClass("btn").addClass("btn-warning");
+		$button.addClass("btn").addClass("btn-warning").addClass("fire");
 		$action.append($button);
 		$newEmpRow.append($employeeId).append($firstName).append($lastName).append($upGroup).append($downGroup).append($action);
 		// Load information
@@ -229,6 +229,10 @@ const showJuniorEmployees = function (data, exe) {
 		$empInfo.prepend($newEmpRow);
 	}
 	$("#lower-employee-section").slideDown(3000);
+	// When an executive fires an employee
+	$(".fire").on("click", function () {
+		fireEmployee(parseInt($(this).attr("data-id")));
+	})
 };
 
 // Send an request to register a new employee
@@ -245,6 +249,57 @@ const registerEmployee = function () {
 		.then(function (data) {
 			if (data["status"] == 200) {
 				displayMessage(true, "Success: New Employee Registered", true);
+			}
+			else if (data["status"] == 440) {
+				displayMessage(false, "Error: Invalid Session or Session Expired", true);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Request", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
+
+// Send a put request to change the role of an employee
+const changeEmployeeRole = function () {
+	var newRole = {};
+	newRole["employeeId"] = $("#changeEmployeeId").val();
+	newRole["upGroup"] = $("#changeUpGroup").val();
+	newRole["downGroup"] = $("#changeDownGroup").val();
+	newRole["accessLevel"] = $("#changeAccessLevel").val();
+	fetch("manage", PUT_HEADER_WRAPPER(newRole))
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (data["status"] == 200) {
+				displayMessage(true, "Success: Employee Role Changed", true);
+			}
+			else if (data["status"] == 440) {
+				displayMessage(false, "Error: Invalid Session or Session Expired", true);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Request", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
+
+// Send a delete request to fire an employee
+const fireEmployee = function (id) {
+	var firing = {};
+	firing["employeeId"] = id;
+	fetch("manage", DELETE_HEADER_WRAPPER(firing))
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (data["status"] == 200) {
+				displayMessage(true, "Success: Employee Fired", true);
 			}
 			else if (data["status"] == 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
@@ -301,5 +356,14 @@ $(function () {
 	$("#register-form").on("submit", function (e) {
 		e.preventDefault();
 		registerEmployee();
+	})
+	// When an executive wants to change the role of an employee
+	$("#change-role").on("click", function () {
+		$("#change-role-form").slideDown(1000);
+	})
+	// When an executive confirms a role change
+	$("#change-role-form").on("submit", function (e) {
+		e.preventDefault();
+		changeEmployeeRole();
 	})
 });

@@ -43,7 +43,6 @@
       <fieldset>
         <input type="submit" value="Login" class="btn btn-primary">
       </fieldset>
-      <div id="invalid-credentials" class="text-danger hide">Invalid Credentials</div>
     </form>
     <br>
     <h3>Forgot Password? Use Username and Email to Recover</h3>
@@ -62,9 +61,10 @@
       <div id="email" class="col-sm-12"></div>
       <div id="accessLevel" class="col-sm-12"></div>
     </div>
-    <span id="manage" class="hide"><button class="btn btn-secondary">Manage Employees</button></span>
-    <span id="request"><button class="btn btn-secondary">View Reimbursement Requests</button></span>
-    <span id="resolve" class="hide"><button class="btn btn-secondary">Resolve Requests</button></span>
+    <div id="manage" class="hide"><button class="btn btn-secondary">Manage Employees</button></div>
+    <div id="request"><button class="btn btn-secondary">View Reimbursement Requests</button></div>
+    <div id="resolve" class="hide"><button class="btn btn-danger">Resolve Requests</button></div>
+    <div id="inspect" class="hide"><button class="btn btn-info">View Resolved Requests</button></div>
     <div>
       <button id="update" class="btn btn-dark">Update Information</button>
       <button id="security" class="btn btn-dark">Change Credentials</button>
@@ -126,14 +126,16 @@
     </form>
     <br>
     <!--Change Role Part-->
-    <form class="hide">
+    <form id="change-role-form" class="hide">
       <div>Employee ID<input type="number" name="changeEmployeeId" id="changeEmployeeId" required min="1000"></div>
-      <div>Up Group<input type="number" name="changeUpGroup" id="changeUpGroup" required min="100" max="999"></div>
-      <div>Down Group<input type="number" name="changeDownGroup" id="changeDownGroup" required min="100" max="999"></div>
-      <div>Access Level<select name="changeAccessLevel" id="changeAccessLevel">
+      <div>Up Group<input type="number" name="changeUpGroup" id="changeUpGroup" required min="-1" max="999"></div>
+      <div>Down Group<input type="number" name="changeDownGroup" id="changeDownGroup" required min="-1" max="999"></div>
+      <div>Access Level<select name="changeAccessLevel" id="changeAccessLevel" required>
+        <option value="" selected>Choose One</option>
         <option value="1">1: Associate</option>
         <option value="2">2: Manager</option>
       </select></div>
+      <div><input type="submit" value="Confirm" class="btn btn-warning"></div>
     </form>
   </section>
   <!--Scripts-->
