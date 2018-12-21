@@ -237,6 +237,9 @@ const showJuniorEmployees = function (data, exe) {
 	$("#lower-employee-section").slideDown(3000);
 	// When an executive fires an employee
 	$(".fire").on("click", function () {
+		if ($(this).hasClass("disabled")) {
+			return;
+		}
 		fireEmployee(parseInt($(this).attr("data-id")));
 	})
 };
@@ -360,7 +363,7 @@ const showOwnRequests = function (data) {
 		let $action = $("<td></td>");
 		let $view = $("<button>View</button>");
 		let $recall = $("<button>Recall</button>");
-		// load information
+		// Load information
 		let requestId = parseInt(data[i]["requestId"]);
 		$reqId.html(requestId);
 		$view.attr("data-id", requestId).addClass("btn").addClass("btn-primary").addClass("view");
@@ -389,9 +392,12 @@ const showOwnRequests = function (data) {
 	$(".view").popover({
 		container: "body"
 	});
-	// Add event listener to buttons
 	$reqInfo.closest("section").slideDown(2000);
+	// Add event listeners to buttons
 	$(".recall").on("click", function () {
+		if ($(this).hasClass("disabled")) {
+			return;
+		}
 		recallReimbursementRequest(parseInt($(this).attr("data-id")));
 	})
 };
@@ -444,6 +450,78 @@ const recallReimbursementRequest = function (id) {
 		.catch(function (error) {
 			console.log(error);
 		})
+};
+
+// Fetch all pending requests submitted under a manager
+const fetchJuniorPendingRequests = function () {
+	fetch("resolve", GET_HEADER_JSON)
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (data["status"] == 200) {
+				showPendingRequests(JSON.parse(data["content"]));
+			}
+			else if (data["status"] == 404) {
+				$("#pending-table").closest("table").html("<h3>You have no pending request to resolve</h3>");
+				$("#resolve-section").slideDown(1000);
+			}
+			else if (data["status"] == 401) {
+				displayMessage(false, "Error: Unauthorized Access", false);
+			}
+			else if (data["status"] == 440) {
+				displayMessage(false, "Error: Invalid Session or Session Expired", true);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Request", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
+
+// Display all pending requests to be resolved
+const showPendingRequests = function (data) {
+	$pendInfo = $("#pending-table");
+	$pendInfo.empty();
+	data.sort((a, b) => parseInt(a["requestId"]) - parseInt(b["requestId"]));
+	for (let i in data) {
+		let $newReqRow = $("<tr></tr>");
+		let $reqId = $("<td></td>");
+		let $empId = $("<td></td>");
+		let $empName = $("<td></td>");
+		let $date = $("<td></td>");
+		let $reason = $("<td></td>");
+		let $amount = $("<td></td>");
+		let $detail = $("<td></td>");
+		let $action = $("<td></td>");
+		let $view = $("<button>View</button>");
+		let $approve = $("<button>Approve</button>");
+		let $deny = $("<button>Deny</button>");
+		// Load information
+		let requestId = parseInt(data[i]["requestId"]);
+		$reqId.html(requestId);
+		$view.attr("data-id", requestId).addClass("btn").addClass("btn-primary").addClass("view");
+		$approve.attr("data-id", requestId).addClass("btn").addClass("btn-success").addClass("resolve");
+		$deny.attr("data-id", requestId).addClass("btn").addClass("btn-danger").addClass("resolve");
+		$empId.html(data[i]["employeeId"]);
+		$empName.html(data[i]["employeeName"]);
+		$date.html(data[i]["requestDate"]);
+		$reason.html(data[i]["reason"]);
+		$amount.html("$" + parseFloat(data[i]["amount"]).toFixed(2));
+		$view.attr("data-toggle", "popover").attr("title", "Explanation").attr("data-content", data[i]["message"]);
+		// Attach elements
+		$detail.append($view);
+		$action.append($approve).append($deny);
+		$newReqRow.append($reqId).append($empId).append($empName).append($date).append($reason).append($amount).append($detail).append($action);
+		$pendInfo.append($newReqRow);
+		$(".view").popover({
+			container: "body"
+		});
+		$("#resolve-section").slideDown(2000);
+		// Add event listeners
+	}
 };
 
 $(function () {
@@ -515,5 +593,9 @@ $(function () {
 	$("#submit-request-form").on("submit", function (e) {
 		e.preventDefault();
 		submitNewRequest();
+	})
+	// When a manager level or up wants to resolve requests
+	$("#resolve").on("click", function () {
+		fetchJuniorPendingRequests();
 	})
 });

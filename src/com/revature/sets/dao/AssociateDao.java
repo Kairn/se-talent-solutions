@@ -11,6 +11,7 @@ public interface AssociateDao {
 	Employee getEmployeeByCredentials(String username, String password);
 	Employee getEmployeeById(int employeeId);
 	Employee getEmployeeByEmail(String email);
+	String getFullNameByEmployeeId(int employeeId);
 	List<Request> getRequestsByEmployeeId(int employeeId);
 	Request getPendingRequestByEmployeeAndRequestId(int employeeId, int requestId);
 	int submitRequest(Request request);

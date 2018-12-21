@@ -6,6 +6,7 @@ public class Request {
 	
 	private int requestId;
 	private int employeeId;
+	private String employeeName;
 	private Date requestDate;
 	private String reason;
 	private String message;
@@ -64,6 +65,31 @@ public class Request {
 		this.resolution = resolution;
 	}
 
+	public Request(int requestId, int employeeId, String employeeName, Date requestDate, String reason, String message,
+			double amount) {
+		super();
+		this.requestId = requestId;
+		this.employeeId = employeeId;
+		this.employeeName = employeeName;
+		this.requestDate = requestDate;
+		this.reason = reason;
+		this.message = message;
+		this.amount = amount;
+	}
+
+	public Request(int requestId, int employeeId, String employeeName, Date requestDate, String reason, String message,
+			double amount, Resolution resolution) {
+		super();
+		this.requestId = requestId;
+		this.employeeId = employeeId;
+		this.employeeName = employeeName;
+		this.requestDate = requestDate;
+		this.reason = reason;
+		this.message = message;
+		this.amount = amount;
+		this.resolution = resolution;
+	}
+
 	public int getRequestId() {
 		return requestId;
 	}
@@ -78,6 +104,14 @@ public class Request {
 
 	public void setEmployeeId(int employeeId) {
 		this.employeeId = employeeId;
+	}
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
 	}
 
 	public Date getRequestDate() {

@@ -90,5 +90,36 @@ public class GetService {
 		}
 		
 	}
+	
+	public String fetchPendingRequestsToBeResolved(int employeeId, int accessLevel) {
+		
+		AssociateDao ad = new AssociateDaoImpl();
+		ManagerDao md = new ManagerDaoImpl();
+		ExecutiveDao ed = new ExecutiveDaoImpl();
+		
+		List<Request> requests = null;
+		if (accessLevel == 2) {
+			requests = md.getPendingRequestsByManagerId(employeeId);
+		}
+		else if (accessLevel == 3) {
+			requests = ed.getRequestsAsExecutive();
+			requests.removeIf(r -> r.getResolution() != null);
+			requests.removeIf(r -> r.getEmployeeId() == employeeId);
+		}
+		else {
+			return null;
+		}
+		
+		if (requests.isEmpty()) {
+			return new String("");
+		}
+		else {
+			for (Request r: requests) {
+				r.setEmployeeName(ad.getFullNameByEmployeeId(r.getEmployeeId()));
+			}
+			return UtilityManager.toJsonStringJackson(requests);
+		}
+		
+	}
 
 }

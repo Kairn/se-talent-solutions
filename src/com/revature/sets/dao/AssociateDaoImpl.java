@@ -130,6 +130,40 @@ public class AssociateDaoImpl implements AssociateDao {
 	}
 
 	@Override
+	public String getFullNameByEmployeeId(int employeeId) {
+		
+		String employeeName = null;
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "SELECT FIRSTNAME, LASTNAME FROM EMPLOYEE\r\n" + 
+				"WHERE EMPLOYEE_ID = ?";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setInt(1, employeeId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				employeeName = (new String(rs.getString("FIRSTNAME"))).concat(" ").concat(rs.getString("LASTNAME"));
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return employeeName;
+		
+	}
+
+	@Override
 	public List<Request> getRequestsByEmployeeId(int employeeId) {
 		
 		List<Request> requests = new ArrayList<>();

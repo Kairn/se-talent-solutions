@@ -144,8 +144,8 @@
     <table>
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Date</th>
+          <th>Request ID</th>
+          <th>Date Submitted</th>
           <th>Reason</th>
           <th>Amount</th>
           <th>Status</th>
@@ -174,8 +174,27 @@
       <div><input type="submit" value="Upload File" class="btn btn-mat-purple"></div>
     </form>
   </section>
+  <br>
   <!--Resolve Section-->
-  <section id="resolve-section" class="container hide"></section>
+  <section id="resolve-section" class="container hide">
+    <h3>Pending Requests Need to be Resolved</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Request ID</th>
+          <th>Employee ID</th>
+          <th>Employee Name</th>
+          <th>Date</th>
+          <th>Reason</th>
+          <th>Amount</th>
+          <th>Details</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="pending-table"></tbody>
+    </table>
+  </section>
+  <br>
   <!--Inspect Request Section-->
   <section id="inspect-section" class="container hide"></section>
   <!--Scripts-->

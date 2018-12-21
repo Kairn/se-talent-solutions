@@ -8,6 +8,7 @@ public class Resolution {
 	private int requestId;
 	private int status;
 	private int employeeId;
+	private String employeeName;
 	private Date resolutionDate;
 	
 	public Resolution(int resolutionId) {
@@ -20,6 +21,21 @@ public class Resolution {
 		this.requestId = requestId;
 		this.status = status;
 		this.employeeId = employeeId;
+		this.resolutionDate = resolutionDate;
+	}
+
+	public Resolution(int status, String employeeName, Date resolutionDate) {
+		super();
+		this.status = status;
+		this.employeeName = employeeName;
+		this.resolutionDate = resolutionDate;
+	}
+
+	public Resolution(int status, int employeeId, String employeeName, Date resolutionDate) {
+		super();
+		this.status = status;
+		this.employeeId = employeeId;
+		this.employeeName = employeeName;
 		this.resolutionDate = resolutionDate;
 	}
 
@@ -62,6 +78,14 @@ public class Resolution {
 
 	public void setEmployeeId(int employeeId) {
 		this.employeeId = employeeId;
+	}
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
 	}
 
 	public Date getResolutionDate() {

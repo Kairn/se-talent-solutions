@@ -51,8 +51,10 @@ public class PostService {
 		try {
 			JSONObject jo = new JSONObject(jsonString);
 			String newFirstName = jo.getString("newFirstName");
+			newFirstName = newFirstName.substring(0, 1).toUpperCase().concat((newFirstName.substring(1)));
 			String newLastName = jo.getString("newLastName");
-			String newEmail = jo.getString("newEmail");
+			newLastName = newLastName.substring(0, 1).toUpperCase().concat((newLastName.substring(1)));
+			String newEmail = jo.getString("newEmail").toLowerCase();
 			
 			if (newFirstName.isEmpty() || newLastName.isEmpty() || newEmail.isEmpty()) {
 				return false;
@@ -111,7 +113,7 @@ public class PostService {
 		try {
 			JSONObject jo = new JSONObject(jsonString);
 			String username = jo.getString("username");
-			String email = jo.getString("email");
+			String email = jo.getString("email").toLowerCase();
 			
 			if (username.isEmpty() || email.isEmpty()) {
 				return false;
@@ -138,8 +140,10 @@ public class PostService {
 		try {
 			JSONObject jo = new JSONObject(jsonString);
 			String firstName = jo.getString("firstName");
+			firstName = firstName.substring(0, 1).toUpperCase().concat((firstName.substring(1)));
 			String lastName = jo.getString("lastName");
-			String email = jo.getString("email");
+			lastName = lastName.substring(0, 1).toUpperCase().concat((lastName.substring(1)));
+			String email = jo.getString("email").toLowerCase();
 			int upGroup = jo.getInt("upGroup");
 			
 			if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || upGroup < 100) {

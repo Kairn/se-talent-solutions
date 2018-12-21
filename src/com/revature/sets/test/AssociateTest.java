@@ -53,7 +53,17 @@ public class AssociateTest {
 	public void testGetEmployeeByEmailLastName() {
 		assertEquals("Hodge", ad.getEmployeeByEmail("mccauley.hodge@mailinator.com").getLastName());
 	}
+	
+	@Test
+	public void testGetFullNameByEmployeeIdOne() {
+		assertEquals("Krystian Marii", ad.getFullNameByEmployeeId(1005));
+	}
 
+	@Test
+	public void testGetFullNameByEmployeeIdTwo() {
+		assertEquals("Lauren Stern", ad.getFullNameByEmployeeId(1006));
+	}
+	
 	@Test
 	public void testGetRequestsByEmployeeId() {
 		final Request expected = new Request(1);
