@@ -50,9 +50,6 @@ public class LoginServlet extends HttpServlet {
 					status = 440;
 				}
 			}
-			catch (NumberFormatException ne) {
-				status = 400;
-			}
 			catch (RuntimeException e) {
 				status = 440;
 			}

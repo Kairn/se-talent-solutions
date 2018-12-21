@@ -16,8 +16,8 @@ public class PutService {
 		
 		ExecutiveDao ed = new ExecutiveDaoImpl();
 		
-		JSONObject jo = new JSONObject(jsonString);
 		try {
+			JSONObject jo = new JSONObject(jsonString);
 			int employeeId = jo.getInt("employeeId");
 			int upGroup = jo.getInt("upGroup");
 			int downGroup = jo.getInt("downGroup");

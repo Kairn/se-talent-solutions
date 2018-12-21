@@ -55,9 +55,6 @@ public class ManageServlet extends HttpServlet {
 					status = 401;
 				}
 			}
-			catch (NumberFormatException ne) {
-				status = 400;
-			}
 			catch (RuntimeException e) {
 				status = 440;
 			}
@@ -101,7 +98,7 @@ public class ManageServlet extends HttpServlet {
 			try {
 				int accessLevel = Integer.parseInt(session.getAttribute("accessLevel").toString());
 				String requestBody = UtilityManager.readRequest(request.getReader());
-				if (accessLevel > 2 && requestBody != null) {
+				if (accessLevel > 1 && requestBody != null) {
 					if (ps.registerNewEmployee(requestBody)) {
 						status = 200;
 					}
@@ -112,9 +109,6 @@ public class ManageServlet extends HttpServlet {
 				else {
 					status = 400;
 				}
-			}
-			catch (NumberFormatException ne) {
-				status = 401;
 			}
 			catch (RuntimeException e) {
 				status = 440;
@@ -157,9 +151,6 @@ public class ManageServlet extends HttpServlet {
 					status = 400;
 				}
 			}
-			catch (NumberFormatException ne) {
-				status = 401;
-			}
 			catch (RuntimeException e) {
 				status = 440;
 			}
@@ -200,9 +191,6 @@ public class ManageServlet extends HttpServlet {
 				else {
 					status = 400;
 				}
-			}
-			catch (NumberFormatException ne) {
-				status = 401;
 			}
 			catch (RuntimeException e) {
 				status = 440;

@@ -391,7 +391,10 @@ const showOwnRequests = function (data) {
 	});
 	// Add event listener to buttons
 	$reqInfo.closest("section").slideDown(2000);
-}
+	$(".recall").on("click", function () {
+		recallReimbursementRequest(parseInt($(this).attr("data-id")));
+	})
+};
 
 // Submit a new reimbursement request
 const submitNewRequest = function () {
@@ -406,6 +409,30 @@ const submitNewRequest = function () {
 		.then(function (data) {
 			if (data["status"] == 200) {
 				displayMessage(true, "Success: New Request Submitted", true);
+			}
+			else if (data["status"] == 440) {
+				displayMessage(false, "Error: Invalid Session or Session Expired", true);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Request", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
+
+// Send a delete request to recall a reimbursement request
+const recallReimbursementRequest = function (id) {
+	var recalling = {};
+	recalling["requestId"] = parseInt(id);
+	fetch("reimbursement", DELETE_HEADER_WRAPPER(recalling))
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (data["status"] == 200) {
+				displayMessage(true, "Success: Reimbursement Request Recalled", true);
 			}
 			else if (data["status"] == 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
