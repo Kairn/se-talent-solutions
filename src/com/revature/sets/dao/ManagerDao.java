@@ -15,5 +15,6 @@ public interface ManagerDao {
 	List<Request> getResolvedRequestsAsManager();
 	int approveRequest(int requestId, int managerId);
 	int denyRequest(int requestId, int managerId);
+	String getEmployeeEmailByRequestId(int requestId);
 
 }

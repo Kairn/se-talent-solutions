@@ -284,4 +284,41 @@ public class ManagerDaoImpl implements ManagerDao {
 
 	}
 
+	@Override
+	public String getEmployeeEmailByRequestId(int requestId) {
+		
+		String email = null;
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "SELECT EMAIL FROM EMPLOYEE\r\n" + 
+				"WHERE EMPLOYEE_ID = (\r\n" + 
+				"	SELECT EMPLOYEE_ID FROM REQUEST\r\n" + 
+				"	WHERE REQUEST_ID = ?\r\n" + 
+				")";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setInt(1, requestId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				email = rs.getString("EMAIL");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return email;
+		
+	}
+
 }

@@ -521,7 +521,43 @@ const showPendingRequests = function (data) {
 		});
 		$("#resolve-section").slideDown(2000);
 		// Add event listeners
+		$(".resolve").on("click", function () {
+			if ($(this).hasClass("btn-success")) {
+				resolveReimbursementRequest($(this).attr("data-id"), "approve");
+			}
+			else {
+				resolveReimbursementRequest($(this).attr("data-id"), "deny");
+			}
+		})
 	}
+};
+
+// Send a put request to resolve an reimbursement
+const resolveReimbursementRequest = function (requestId, action) {
+	var acting = {};
+	acting["requestId"] = parseInt(requestId);
+	acting["action"] = action;
+	fetch("resolve", PUT_HEADER_WRAPPER(acting))
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (data["status"] == 200) {
+				displayMessage(true, "Success: Reimbursement Request Resolved", true);
+			}
+			else if (data["status"] == 401) {
+				displayMessage(false, "Error: Unauthorized Access", false);
+			}
+			else if (data["status"] == 440) {
+				displayMessage(false, "Error: Invalid Session or Session Expired", true);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Request", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
 };
 
 $(function () {

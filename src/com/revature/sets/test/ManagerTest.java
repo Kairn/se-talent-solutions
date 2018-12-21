@@ -62,5 +62,10 @@ public class ManagerTest {
 		list.removeIf(r -> r.getRequestId() != 10);
 		assertEquals("Sales", list.get(0).getReason());
 	}
+	
+	@Test
+	public void testGetEmployeeEmailByRequestId() {
+		assertEquals("karam.huffman@mailinator.com", md.getEmployeeEmailByRequestId(8));
+	}
 
 }

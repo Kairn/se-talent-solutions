@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import com.revature.sets.model.RestfulResponse;
 import com.revature.sets.service.GetService;
+import com.revature.sets.service.PutService;
 import com.revature.sets.utility.UtilityManager;
 
 /**
@@ -79,7 +80,41 @@ public class ResolveServlet extends HttpServlet {
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
+		PutService ps = new PutService();
+		RestfulResponse rres = new RestfulResponse();
+		int status = 0;
+		
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			try {
+				int employeeId = Integer.parseInt(session.getAttribute("employeeId").toString());
+				int accessLevel = Integer.parseInt(session.getAttribute("accessLevel").toString());
+				String requestBody = UtilityManager.readRequest(request.getReader());
+				if (accessLevel > 1 && requestBody != null) {
+					if (ps.resolvePendingRequest(employeeId, accessLevel, requestBody)) {
+						status = 200;
+					}
+					else {
+						status = 400;
+					}
+				}
+				else {
+					status = 401;
+				}
+			}
+			catch (RuntimeException e) {
+				status = 440;
+			}
+		}
+		else {
+			status = 440;
+		}
+
+		rres.setStatus(status);
+		response.setContentType("application/json");
+		response.getWriter().write(UtilityManager.toJsonStringJackson(rres));
+		
 	}
 
 }
