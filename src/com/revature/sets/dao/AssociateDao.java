@@ -21,5 +21,6 @@ public interface AssociateDao {
 	int attachFileToRequest(int requestId, String fileType, InputStream fileData);
 	byte[] getFileById(int fileId);
 	int obtainNewCredentials(String username, String email);
+	int getRequestIdByFileId(int fileId);
 
 }

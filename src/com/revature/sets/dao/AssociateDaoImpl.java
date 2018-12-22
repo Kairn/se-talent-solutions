@@ -476,4 +476,36 @@ public class AssociateDaoImpl implements AssociateDao {
 		
 	}
 
+	@Override
+	public int getRequestIdByFileId(int fileId) {
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "SELECT REQUEST_ID FROM IMAGEFILE\r\n" + 
+				"WHERE FILE_ID = ?";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setInt(1, fileId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return rs.getInt("REQUEST_ID");
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return 0;
+		
+	}
+
 }

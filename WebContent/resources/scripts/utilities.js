@@ -11,11 +11,13 @@ const URL_WRAPPER = function (endpoint) {
 const GET_HEADER = {
 	method: "GET"
 };
+
 // Get JSON
 const GET_HEADER_JSON = {
 	method: "GET",
 	headers: { Accept: "application/json" }
 };
+
 // Post JSON
 const POST_HEADER_WRAPPER = function (data) {
 	var header = {
@@ -27,13 +29,17 @@ const POST_HEADER_WRAPPER = function (data) {
 	};
 	return header;
 };
+
 // Post Form Data with File
-const POST_HEADER_FORM_WRAPPER = function (formData) {
+const POST_HEADER_FORM_WRAPPER = function (form) {
+	var formData = new FormData(form);
 	var header = {
 		method: "POST",
 		body: formData
-	}
+	};
+	return header;
 };
+
 // Put JSON
 const PUT_HEADER_WRAPPER = function (data) {
 	var header = {
@@ -45,6 +51,7 @@ const PUT_HEADER_WRAPPER = function (data) {
 	};
 	return header;
 };
+
 // Delete JSON
 const DELETE_HEADER_WRAPPER = function (data) {
 	var header = {

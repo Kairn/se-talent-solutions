@@ -1,5 +1,7 @@
 package com.revature.sets.service;
 
+import java.io.InputStream;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -191,6 +193,19 @@ public class PostService {
 		}
 		catch (JSONException e) {
 			return false;
+		}
+		
+	}
+	
+	public boolean uploadImageFileToRequest(int requestId, String imageType, InputStream image) {
+		
+		AssociateDao ad= new AssociateDaoImpl();
+		
+		if (ad.attachFileToRequest(requestId, imageType, image) == 0) {
+			return false;
+		}
+		else {
+			return true;
 		}
 		
 	}

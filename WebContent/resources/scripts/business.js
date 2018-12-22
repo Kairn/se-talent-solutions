@@ -560,6 +560,32 @@ const resolveReimbursementRequest = function (requestId, action) {
 		})
 };
 
+// Send the file form data to the servlet
+const uploadImageFile = function () {
+	fetch("file", POST_HEADER_FORM_WRAPPER(document.querySelector("#upload-form")))
+		.then(function (response) {
+			console.log(response);
+			return response.json();
+		})
+		.then(function (data) {
+			if (data["status"] == 200) {
+				displayMessage(true, "Success: File Uploaded", true);
+			}
+			else if (data["status"] == 401) {
+				displayMessage(false, "Error: Unauthorized Access", false);
+			}
+			else if (data["status"] == 440) {
+				displayMessage(false, "Error: Invalid Session or Session Expired", true);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Request", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
+
 $(function () {
 	// Try to login with a valid session
 	loginWithSession();
@@ -633,5 +659,10 @@ $(function () {
 	// When a manager level or up wants to resolve requests
 	$("#resolve").on("click", function () {
 		fetchJuniorPendingRequests();
+	})
+	// When an employee uploads a file
+	$("#upload-form").on("submit", function (e) {
+		e.preventDefault();
+		uploadImageFile();
 	})
 });
