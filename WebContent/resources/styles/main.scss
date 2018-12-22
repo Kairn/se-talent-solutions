@@ -1,48 +1,52 @@
 $theme-colors: (
-  "primary": #325D88,
-  "secondary": #8E8C84,
-  "success": #93C54B,
-  "info": #29ABE0,
-  "warning": #F47C3C,
-  "danger": #d9534f,
-
-  "mat-red": #f44336,
-  "mat-pink": #e91e63,
-  "mat-purple": #9c27b0,
-  "mat-deep-purple": #673ab7,
-  "mat-indigo": #3f51b5,
-  "mat-blue": #2196f3,
-  "mat-light-blue": #03a9f4,
-  "mat-cyan": #00bcd4,
-  "mat-teal": #009688,
-  "mat-green": #4caf50,
-  "mat-light-gren": #8bc34a,
-  "mat-lime": #cddc39,
-  "mat-yellow": #ffeb3b,
-  "mat-amber": #ffc107,
-  "mat-orange": #ff9800,
-  "mat-deep-orange": #ff5722,
-  "mat-brown": #795548,
-  "mat-grey": #9e9e9e,
-  "mat-blue-grey": #607d8b
+	"primary": #325d88,
+	"secondary": #8e8c84,
+	"success": #93c54b,
+	"info": #29abe0,
+	"warning": #f47c3c,
+	"danger": #d9534f,
+	"black": #000000,
+	"mat-red": #f44336,
+	"mat-pink": #e91e63,
+	"mat-pink-d4": #880e4f,
+	"mat-pink-a4": #c51162,
+	"mat-purple": #9c27b0,
+	"mat-deep-purple": #673ab7,
+	"mat-indigo": #3f51b5,
+	"mat-blue": #2196f3,
+	"mat-light-blue": #03a9f4,
+	"mat-cyan": #00bcd4,
+	"mat-teal": #009688,
+	"mat-green": #4caf50,
+	"mat-light-gren": #8bc34a,
+	"mat-lime": #cddc39,
+	"mat-yellow": #ffeb3b,
+	"mat-amber": #ffc107,
+	"mat-orange": #ff9800,
+	"mat-deep-orange": #ff5722,
+	"mat-brown": #795548,
+	"mat-grey": #9e9e9e,
+	"mat-blue-grey": #607d8b
 );
 
 body {
-  font-size: 16px;
-  font-family: 'Comfortaa', cursive;
+	font-size: 16px;
+	font-family: "Comfortaa", cursive;
 }
 
-a, a:visited, a:hover {
+a,
+a:visited,
+a:hover {
 	text-decoration: none;
 }
 
 aside {
-  width: 20%;
-  height: 50%;
-  position: fixed;
-  top: 50%;
-  right: 0;
-  transform: translate(0, -50%);
+	width: 20%;
+	height: 50%;
+	position: fixed;
+	top: 50%;
+	right: 0;
+	transform: translate(0, -50%);
 }
 
 .hide {
@@ -53,21 +57,17 @@ aside {
 	display: initial;
 }
 
-#logo-text {
-  font-size: 40px;
-  color: black;
-}
-
-#success-message, #error-message {
-  position: fixed;
-  width: 50%;
-  height: 30px;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, 0);
-  color: white;
-  font-weight: 600;
-  font-size: 20px;
+#success-message,
+#error-message {
+	position: fixed;
+	width: 50%;
+	height: 30px;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%, 0);
+	color: white;
+	font-weight: 600;
+	font-size: 20px;
 }
 
 @import "../libraries/scss/bootstrap";
