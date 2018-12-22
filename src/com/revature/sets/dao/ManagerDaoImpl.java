@@ -271,14 +271,6 @@ public class ManagerDaoImpl implements ManagerDao {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		finally {
-			try {
-				conn.close();
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
 
 		return 0;
 

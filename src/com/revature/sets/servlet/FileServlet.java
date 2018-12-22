@@ -80,7 +80,7 @@ public class FileServlet extends HttpServlet {
 							int fileId = Integer.parseInt(params[2]);
 							
 							if (as.hasAccessToViewFile(employeeId, accessLevel, fileId)) {
-								byte[] imageData = gs.getFileData(fileId);
+								byte[] imageData = gs.fetchFileData(fileId);
 								if (imageData != null) {
 									response.setContentType(getServletContext().getMimeType(imageName));
 									response.setContentLength(imageData.length);
@@ -183,7 +183,6 @@ public class FileServlet extends HttpServlet {
 					}
 				} catch (FileUploadException e) {
 					status = 400;
-					e.printStackTrace();
 				}
 			}
 			catch (RuntimeException e) {

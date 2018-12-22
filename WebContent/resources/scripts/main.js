@@ -645,6 +645,69 @@ const fetchImageFile = function (type, id) {
 		})
 };
 
+// Fetch all resolved requests for a manager level or up
+const getResolvedRequests = function () {
+	fetch("inspect", GET_HEADER_JSON)
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (parseInt(data["status"]) === 200) {
+				showRequestsWithResolution(JSON.parse(data["content"]));
+			}
+			else if ((parseInt(data["status"])) === 404) {
+				$("#inspect-view").closest("table").html("<h3>No Requests to Show</h3>");
+				$("#inspect-section").slideDown(1000);
+			}
+			else if (data["status"] == 401) {
+				displayMessage(false, "Error: Unauthorized Access", false);
+			}
+			else if (data["status"] == 440) {
+				displayMessage(false, "Error: Invalid Session or Session Expired", true);
+			}
+			else {
+				displayMessage(false, "Error: Invalid Request", false);
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
+
+// Populate inspect table body
+const showRequestsWithResolution = function (data) {
+	$inspectTableBody = $("#inspect-view");
+	$inspectTableBody.empty();
+	for (let i in data) {
+		$newInsRow = $("<tr></tr>");
+		$empId = $("<td></td>");
+		$empName = $("<td></td>");
+		$reason = $("<td></td>");
+		$sDate = $("<td></td>");
+		$amount = $("<td></td>");
+		$status = $("<td></td>");
+		$manName = $("<td></td>");
+		$rDate = $("<td></td>");
+		// Bind data
+		$empId.html(data[i]["employeeId"]);
+		$empName.html(data[i]["employeeName"]);
+		$reason.html(data[i]["reason"]);
+		$sDate.html(data[i]["requestDate"]);
+		$amount.html("$" + parseFloat(data[i]["amount"]).toFixed(2));
+		if (parseInt(data[i]["resolution"]["status"]) === -1) {
+			$status.html("Denied").addClass("text-danger");
+		}
+		else {
+			$status.html("Approved").addClass("text-success");
+		}
+		$manName.html(data[i]["resolution"]["employeeName"]);
+		$rDate.html(data[i]["resolution"]["resolutionDate"]);
+		$newInsRow.append($empId).append($empName).append($reason).append($sDate).append($amount).append($status).append($manName).append($rDate);
+		$inspectTableBody.append($newInsRow);
+	}
+	$("#inspect-section").slideDown(2500);
+};
+
 $(function () {
 	// Try to login with a valid session
 	loginWithSession();
@@ -724,4 +787,8 @@ $(function () {
 		e.preventDefault();
 		uploadImageFile();
 	});
+	// When a manager wants to view resolved requests
+	$("#inspect").on("click", function () {
+		getResolvedRequests();
+	})
 });

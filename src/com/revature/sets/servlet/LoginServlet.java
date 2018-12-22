@@ -98,7 +98,8 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("downGroup", empJson.getInt("downGroup"));
 				session.setAttribute("accessLevel", empJson.getInt("accessLevel"));
 				session.setMaxInactiveInterval(600);
-			} else {
+			}
+			else {
 				status = 401;
 			}
 		}
