@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.revature.sets.model.Employee;
+import com.revature.sets.model.FileMeta;
 import com.revature.sets.model.Request;
 import com.revature.sets.model.Resolution;
 import com.revature.sets.utility.UtilityManager;
@@ -429,6 +430,40 @@ public class AssociateDaoImpl implements AssociateDao {
 		}
 		
 		return null;
+		
+	}
+
+	@Override
+	public List<FileMeta> getFilesByRequestId(int requestId) {
+		
+		List<FileMeta> files = new ArrayList<>();
+		
+		Connection conn = UtilityManager.getConnection();
+		String sqlStmt = "SELECT FILE_ID, FILE_TYPE FROM IMAGEFILE\r\n" + 
+				"WHERE REQUEST_ID = ?";
+		PreparedStatement pstmt;
+		try {
+			pstmt = conn.prepareStatement(sqlStmt);
+			pstmt.setInt(1, requestId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				files.add(new FileMeta(rs.getInt("FILE_ID"), rs.getString("FILE_TYPE")));
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				conn.close();
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return files;
 		
 	}
 

@@ -43,6 +43,19 @@ public class ReimbursementServlet extends HttpServlet {
 			try {
 				String employeeId = session.getAttribute("employeeId").toString();
 				reqs = gs.fetchRequestsAsEmployee(employeeId);
+
+				if (reqs != null) {
+					if (reqs.isEmpty()) {
+						status = 404;
+					}
+					else {
+						status = 200;
+						rres.setContent(reqs);
+					}
+				}
+				else {
+					status = 400;
+				}
 			}
 			catch (RuntimeException e) {
 				status = 440;
@@ -50,19 +63,6 @@ public class ReimbursementServlet extends HttpServlet {
 		}
 		else {
 			status = 440;
-		}
-		
-		if (reqs != null) {
-			if (reqs.isEmpty()) {
-				status = 404;
-			}
-			else {
-				status = 200;
-				rres.setContent(reqs);
-			}
-		}
-		else {
-			status = 400;
 		}
 		
 		rres.setStatus(status);

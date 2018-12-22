@@ -63,3 +63,8 @@ const DELETE_HEADER_WRAPPER = function (data) {
 	};
 	return header;
 };
+
+// File Url Maker
+const FILE_URL_WRAPPER = function (type, id) {
+	return "image/" + type + id;
+}

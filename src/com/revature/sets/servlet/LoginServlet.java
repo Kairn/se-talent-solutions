@@ -45,6 +45,14 @@ public class LoginServlet extends HttpServlet {
 				String employeeId = session.getAttribute("employeeId").toString();
 				if (employeeId != null) {
 					emp = gs.fetchEmployeeJsonWithSession(employeeId);
+					
+					if (emp != null) {
+						status = 200;
+						rres.setContent(emp);
+					}
+					else {
+						status = 404;
+					}
 				}
 				else {
 					status = 440;
@@ -54,13 +62,8 @@ public class LoginServlet extends HttpServlet {
 				status = 440;
 			}
 		}
-		
-		if (emp != null) {
-			status = 200;
-			rres.setContent(emp);
-		}
 		else {
-			status = 404;
+			status = 440;
 		}
 		
 		rres.setStatus(status);
@@ -84,23 +87,23 @@ public class LoginServlet extends HttpServlet {
 		String requestBody = UtilityManager.readRequest(request.getReader());
 		if (requestBody != null) {
 			emp = ps.fetchEmployeeJsonWithCredentials(requestBody);
+
+			if (emp != null) {
+				status = 200;
+				rres.setContent(emp);
+				JSONObject empJson = new JSONObject(emp);
+				HttpSession session = request.getSession(true);
+				session.setAttribute("employeeId", empJson.get("employeeId"));
+				session.setAttribute("upGroup", empJson.getInt("upGroup"));
+				session.setAttribute("downGroup", empJson.getInt("downGroup"));
+				session.setAttribute("accessLevel", empJson.getInt("accessLevel"));
+				session.setMaxInactiveInterval(600);
+			} else {
+				status = 401;
+			}
 		}
 		else {
 			status = 400;
-		}
-
-		if (emp != null) {
-			status = 200;
-			rres.setContent(emp);
-			JSONObject empJson = new JSONObject(emp);
-			HttpSession session = request.getSession(true);
-			session.setAttribute("employeeId", empJson.get("employeeId"));
-			session.setAttribute("upGroup", empJson.getInt("upGroup"));
-			session.setAttribute("downGroup", empJson.getInt("downGroup"));
-			session.setAttribute("accessLevel", empJson.getInt("accessLevel"));
-			session.setMaxInactiveInterval(600);
-		} else {
-			status = 401;
 		}
 
 		rres.setStatus(status);

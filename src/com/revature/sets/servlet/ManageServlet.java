@@ -47,9 +47,35 @@ public class ManageServlet extends HttpServlet {
 				if (Integer.parseInt(accessLevel) > 2) {
 					emps = gs.fetchJuniorEmployeesAsExecutive();
 					status = 1;
+					
+					if (emps != null) {
+						if (emps.isEmpty()) {
+							status = 404;
+						}
+						else {
+							status += 200;
+							rres.setContent(emps);
+						}
+					}
+					else {
+						status = 400;
+					}
 				}
 				else if (Integer.parseInt(accessLevel) == 2) {
 					emps = gs.fetchJuniorEmployeesAsManager(employeeId);
+					
+					if (emps != null) {
+						if (emps.isEmpty()) {
+							status = 404;
+						}
+						else {
+							status += 200;
+							rres.setContent(emps);
+						}
+					}
+					else {
+						status = 400;
+					}
 				}
 				else {
 					status = 401;
@@ -61,19 +87,6 @@ public class ManageServlet extends HttpServlet {
 		}
 		else {
 			status = 440;
-		}
-		
-		if (emps != null) {
-			if (emps.isEmpty()) {
-				status = 404;
-			}
-			else {
-				status += 200;
-				rres.setContent(emps);
-			}
-		}
-		else {
-			status = 400;
 		}
 
 		rres.setStatus(status);

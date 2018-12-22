@@ -5,6 +5,14 @@ body {
 a, a:visited, a:hover {
   text-decoration: none; }
 
+aside {
+  width: 20%;
+  height: 50%;
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translate(0, -50%); }
+
 .hide {
   display: none; }
 

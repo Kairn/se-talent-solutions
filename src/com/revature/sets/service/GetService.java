@@ -9,6 +9,7 @@ import com.revature.sets.dao.ExecutiveDaoImpl;
 import com.revature.sets.dao.ManagerDao;
 import com.revature.sets.dao.ManagerDaoImpl;
 import com.revature.sets.model.Employee;
+import com.revature.sets.model.FileMeta;
 import com.revature.sets.model.Request;
 import com.revature.sets.utility.UtilityManager;
 
@@ -77,6 +78,7 @@ public class GetService {
 		AssociateDao ad = new AssociateDaoImpl();
 		
 		List<Request> requests = ad.getRequestsByEmployeeId(Integer.parseInt(idString));
+		
 		if (requests != null) {
 			if (requests.isEmpty()) {
 				return new String("");
@@ -98,6 +100,7 @@ public class GetService {
 		ExecutiveDao ed = new ExecutiveDaoImpl();
 		
 		List<Request> requests = null;
+		
 		if (accessLevel == 2) {
 			requests = md.getPendingRequestsByManagerId(employeeId);
 		}
@@ -119,6 +122,34 @@ public class GetService {
 			}
 			return UtilityManager.toJsonStringJackson(requests);
 		}
+		
+	}
+	
+	public String fetchFilesAttachedToRequest(int requestId) {
+		
+		AssociateDao ad = new AssociateDaoImpl();
+		
+		List<FileMeta> files = ad.getFilesByRequestId(requestId);
+		
+		if (files != null) {
+			if (files.isEmpty()) {
+				return new String("");
+			}
+			else {
+				return UtilityManager.toJsonStringJackson(files);
+			}
+		}
+		else {
+			return null;
+		}
+		
+	}
+	
+	public byte[] getFileData(int fileId) {
+		
+		AssociateDao ad = new AssociateDaoImpl();
+		
+		return ad.getFileById(fileId);
 		
 	}
 

@@ -32,18 +32,48 @@ public class AuthorizationTest {
 	}
 
 	@Test
-	public void testIsOwnRequest() {
-		fail("Not yet implemented");
+	public void testIsOwnRequestOne() {
+		assertTrue(as.isOwnRequest(1023, 9));
+	}
+	
+	@Test
+	public void testIsOwnRequestTwo() {
+		assertFalse(as.isOwnRequest(1083, 45));
+	}
+	
+	@Test
+	public void testIsOwnRequestThree() {
+		assertTrue(as.isOwnRequest(1024, 10));
 	}
 
 	@Test
-	public void testHasAccessToViewRequest() {
-		fail("Not yet implemented");
+	public void testHasAccessToViewRequestOne() {
+		assertTrue(as.hasAccessToViewRequest(1001, 3, 2));
+	}
+	
+	@Test
+	public void testHasAccessToViewRequestTwo() {
+		assertTrue(as.hasAccessToViewRequest(1007, 2, 64));
+	}
+	
+	@Test
+	public void testHasAccessToViewRequestThree() {
+		assertFalse(as.hasAccessToViewRequest(1016, 1, 68));
 	}
 
 	@Test
-	public void testHasAccessToViewFile() {
-		fail("Not yet implemented");
+	public void testHasAccessToViewFileOne() {
+		assertFalse(as.hasAccessToViewFile(1025, 1, 21));
 	}
 
+	@Test
+	public void testHasAccessToViewFileTwo() {
+		assertTrue(as.hasAccessToViewFile(1008, 2, 46));
+	}
+
+	@Test
+	public void testHasAccessToViewFileThree() {
+		assertFalse(as.hasAccessToViewFile(1083, 1, 81));
+	}
+	
 }

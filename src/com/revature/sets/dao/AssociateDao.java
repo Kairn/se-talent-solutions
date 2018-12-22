@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import com.revature.sets.model.Employee;
+import com.revature.sets.model.FileMeta;
 import com.revature.sets.model.Request;
 
 public interface AssociateDao {
@@ -20,6 +21,7 @@ public interface AssociateDao {
 	int changeCredentials(int employeeId, String oldPassword, String newUsername, String newPassword);
 	int attachFileToRequest(int requestId, String fileType, InputStream fileData);
 	byte[] getFileById(int fileId);
+	List<FileMeta> getFilesByRequestId(int requestId);
 	int obtainNewCredentials(String username, String email);
 	int getRequestIdByFileId(int fileId);
 

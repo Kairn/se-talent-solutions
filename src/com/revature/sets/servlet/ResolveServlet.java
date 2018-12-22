@@ -44,6 +44,19 @@ public class ResolveServlet extends HttpServlet {
 				int accessLevel = Integer.parseInt(session.getAttribute("accessLevel").toString());
 				if (accessLevel > 1) {
 					reqs = gs.fetchPendingRequestsToBeResolved(employeeId, accessLevel);
+					
+					if (reqs != null) {
+						if (reqs.isEmpty()) {
+							status = 404;
+						}
+						else {
+							status = 200;
+							rres.setContent(reqs);
+						}
+					}
+					else {
+						status = 400;
+					}
 				}
 				else {
 					status = 401;
@@ -57,19 +70,6 @@ public class ResolveServlet extends HttpServlet {
 			status = 440;
 		}
 		
-		if (reqs != null) {
-			if (reqs.isEmpty()) {
-				status = 404;
-			}
-			else {
-				status = 200;
-				rres.setContent(reqs);
-			}
-		}
-		else {
-			status = 400;
-		}
-
 		rres.setStatus(status);
 		response.setContentType("application/json");
 		response.getWriter().write(UtilityManager.toJsonStringJackson(rres));

@@ -19,13 +19,14 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.revature.sets.model.RestfulResponse;
 import com.revature.sets.service.AuthorizationService;
+import com.revature.sets.service.GetService;
 import com.revature.sets.service.PostService;
 import com.revature.sets.utility.UtilityManager;
 
 /**
  * Servlet implementation class FileServlet
  */
-@WebServlet({ "/FileServlet", "/file" })
+@WebServlet({ "/FileServlet", "/file", "/image/*" })
 public class FileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -40,8 +41,86 @@ public class FileServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		AuthorizationService as = new AuthorizationService();
+		GetService gs = new GetService();
+		RestfulResponse rres = new RestfulResponse();
+		int status = 0;
+		String files = null;
+		
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			try {
+				int employeeId = Integer.parseInt(session.getAttribute("employeeId").toString());
+				int accessLevel = Integer.parseInt(session.getAttribute("accessLevel").toString());
+				String requestString = request.getPathInfo().substring(1);
+				
+				if (requestString != null && !requestString.isEmpty()) {
+					if (requestString.charAt(0) == 'r') {
+						int id = Integer.parseInt(requestString.substring(1));
+						if (as.hasAccessToViewRequest(employeeId, accessLevel, id)) {
+							files = gs.fetchFilesAttachedToRequest(id);
+							
+							if (files != null && !files.isEmpty()) {
+								status = 200;
+								rres.setContent(files);
+							}
+							else {
+								status = 404;
+							}
+						}
+						else {
+							status = 401;
+						}
+					}
+					else if (requestString.charAt(0) == 'i') {
+						try {
+							String[] params = requestString.split("_");
+							String imageName = "image." + params[1];
+							int fileId = Integer.parseInt(params[2]);
+							
+							if (as.hasAccessToViewFile(employeeId, accessLevel, fileId)) {
+								byte[] imageData = gs.getFileData(fileId);
+								if (imageData != null) {
+									response.setContentType(getServletContext().getMimeType(imageName));
+									response.setContentLength(imageData.length);
+									response.getOutputStream().write(imageData);
+									return;
+								}
+								else {
+									status = 404;
+								}
+							}
+							else {
+								status = 401;
+							}
+						}
+						catch (RuntimeException e) {
+							e.printStackTrace();
+							status = 400;
+						}
+					}
+					else {
+						status = 400;
+					}
+				}
+				else {
+					status = 400;
+				}
+			}
+			catch (RuntimeException e) {
+				e.printStackTrace();
+				status = 440;
+			}
+		}
+		else {
+			status = 440;
+		}
+
+		rres.setStatus(status);
+		response.setContentType("application/json");
+		response.getWriter().write(UtilityManager.toJsonStringJackson(rres));
+		
 	}
 
 	/**

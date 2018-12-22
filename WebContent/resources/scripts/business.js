@@ -48,11 +48,7 @@ const loginWithCredentials = function () {
 
 // Display employee information based on fetch response
 const showEmployee = function (data) {
-	if (parseInt(data["status"]) == 404) {
-		$("#employee-section").addClass("hide");
-		$("#login-section").removeClass("hide");
-	}
-	else if (parseInt(data["status"]) == 400 || parseInt(data["status"]) == 401) {
+	if (parseInt(data["status"]) == 400 || parseInt(data["status"]) == 401) {
 		$("#employee-section").addClass("hide");
 		$("#login-section").removeClass("hide");
 		displayMessage(false, "Error: Invalid Credentials", false);
@@ -79,6 +75,10 @@ const showEmployee = function (data) {
 			$("#resolve").addClass("hide");
 			$("#inspect").addClass("hide");
 		}
+	}
+	else {
+		$("#employee-section").addClass("hide");
+		$("#login-section").removeClass("hide");
 	}
 };
 
@@ -383,6 +383,7 @@ const showOwnRequests = function (data) {
 			$recall.addClass("disabled");
 		}
 		$view.attr("data-toggle", "popover").attr("title", "Explanation").attr("data-content", data[i]["message"]);
+		$view.attr("data-trigger", "hover").attr("data-id", requestId);
 		// Attach elements
 		$detail.append($view);
 		$action.append($recall);
@@ -394,6 +395,9 @@ const showOwnRequests = function (data) {
 	});
 	$reqInfo.closest("section").slideDown(2000);
 	// Add event listeners to buttons
+	$(".view").on("click", function () {
+		getAttachedFiles(parseInt($(this).attr("data-id")));
+	});
 	$(".recall").on("click", function () {
 		if ($(this).hasClass("disabled")) {
 			return;
@@ -511,6 +515,7 @@ const showPendingRequests = function (data) {
 		$reason.html(data[i]["reason"]);
 		$amount.html("$" + parseFloat(data[i]["amount"]).toFixed(2));
 		$view.attr("data-toggle", "popover").attr("title", "Explanation").attr("data-content", data[i]["message"]);
+		$view.attr("data-trigger", "hover").attr("data-id", requestId);
 		// Attach elements
 		$detail.append($view);
 		$action.append($approve).append($deny);
@@ -521,6 +526,9 @@ const showPendingRequests = function (data) {
 		});
 		$("#resolve-section").slideDown(2000);
 		// Add event listeners
+		$(".view").on("click", function () {
+			getAttachedFiles(parseInt($(this).attr("data-id")));
+		});
 		$(".resolve").on("click", function () {
 			if ($(this).hasClass("btn-success")) {
 				resolveReimbursementRequest($(this).attr("data-id"), "approve");
@@ -528,7 +536,7 @@ const showPendingRequests = function (data) {
 			else {
 				resolveReimbursementRequest($(this).attr("data-id"), "deny");
 			}
-		})
+		});
 	}
 };
 
@@ -586,6 +594,57 @@ const uploadImageFile = function () {
 		})
 };
 
+// Get a list of available files of a request
+const getAttachedFiles = function (id) {
+	fetch(FILE_URL_WRAPPER("r", id), GET_HEADER_JSON)
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			if (data["status"] == 200) {
+				showFilesList(JSON.parse(data["content"]));
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
+
+// Populate the files panel
+const showFilesList = function (data) {
+	$fileUl = $("#file-panel").find("ul");
+	$fileUl.empty();
+	for (let i in data) {
+		fileId = parseInt(data[i]["fileId"]);
+		$newLi = $("<li></li>");
+		$newBtn = $("<button></button>");
+		$newBtn.html("File# " + fileId).addClass("btn").addClass("btn-info").addClass("image");
+		$newBtn.attr("data-id", fileId).attr("data-type", data[i]["fileType"]);
+		$newBtn.attr("type", "button").attr("data-toggle", "modal").attr("data-target", "#image-view");
+		$newLi.append($newBtn);
+		$fileUl.append($newLi);
+	}
+	$fileUl.closest("aside").slideDown(1000);
+	// Add event listeners
+	$(".image").on("click", function () {
+		fetchImageFile($(this).attr("data-type"), $(this).attr("data-id"));
+	})
+};
+
+// Fetch the image file of a given id
+const fetchImageFile = function (type, id) {
+	fetch(FILE_URL_WRAPPER("i_" + type + "_", id), GET_HEADER)
+		.then(function (response) {
+			return response.blob();
+		})
+		.then(function (blob) {
+			$("#image-spot").attr("src", URL.createObjectURL(blob));
+		})
+		.catch(function (error) {
+			console.log(error);
+		})
+};
+
 $(function () {
 	// Try to login with a valid session
 	loginWithSession();
@@ -593,76 +652,76 @@ $(function () {
 	$("#login-form").on("submit", function (e) {
 		e.preventDefault();
 		loginWithCredentials();
-	})
+	});
 	// When employee wants to update their information
 	$("#update").on("click", function () {
 		$("#update-form").removeClass("hide");
-	})
+	});
 	// When employee confirms an update
 	$("#update-form").on("submit", function (e) {
 		e.preventDefault();
 		updateEmployeeInformation();
-	})
+	});
 	// When employee wants to change their credentials
 	$("#security").on("click", function () {
 		$("#security-form").slideDown();
-	})
+	});
 	// When employee confirms password change
 	$("#security-form").on("submit", function (e) {
 		e.preventDefault();
 		changeEmployeeCredentials();
-	})
+	});
 	// When employee tries to recover their credentials
 	$("#recover-form").on("submit", function (e) {
 		e.preventDefault();
 		obtainNewCredentials();
-	})
+	});
 	// When a manager level or up tries to get employee information
 	$("#manage").on("click", function () {
 		getJuniorEmployees();
-	})
+	});
 	// When a manager toggle registration form
 	$("#register").on("click", function () {
 		$("#register-form").slideDown(1000);
-	})
+	});
 	// When a manager level or up tries to register a new junior employee
 	$("#register-form").on("submit", function (e) {
 		e.preventDefault();
 		registerEmployee();
-	})
+	});
 	// When an executive wants to change the role of an employee
 	$("#change-role").on("click", function () {
 		$("#change-role-form").slideDown(1000);
-	})
+	});
 	// When an executive confirms a role change
 	$("#change-role-form").on("submit", function (e) {
 		e.preventDefault();
 		changeEmployeeRole();
-	})
+	});
 	// When an employee wants to view his reimbursement requests
 	$("#request").on("click", function () {
 		getOwnRequests();
-	})
+	});
 	// When an employee wants to submit a new request
 	$("#new-request").on("click", function () {
 		$("#submit-request-form").slideDown(1000);
-	})
+	});
 	// When an employee wants to upload a file to a request
 	$("#new-file").on("click", function () {
 		$("#upload-form").slideDown(1000);
-	})
+	});
 	// When an employee confirms a request submission
 	$("#submit-request-form").on("submit", function (e) {
 		e.preventDefault();
 		submitNewRequest();
-	})
+	});
 	// When a manager level or up wants to resolve requests
 	$("#resolve").on("click", function () {
 		fetchJuniorPendingRequests();
-	})
+	});
 	// When an employee uploads a file
 	$("#upload-form").on("submit", function (e) {
 		e.preventDefault();
 		uploadImageFile();
-	})
+	});
 });
