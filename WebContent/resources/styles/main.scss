@@ -7,6 +7,7 @@ $theme-colors: (
 	"danger": #d9534f,
 	"black": #000000,
 	"mat-red": #f44336,
+	"mat-red-d4": #b71c1c,
 	"mat-pink": #e91e63,
 	"mat-pink-d4": #880e4f,
 	"mat-pink-a4": #c51162,
@@ -42,12 +43,21 @@ a:hover {
 }
 
 aside {
-	width: 20%;
-	height: 50%;
+	width: 10%;
 	position: fixed;
-	top: 50%;
 	right: 0;
-	transform: translate(0, -50%);
+	top: 0;
+	ul {
+		list-style: none;
+		li {
+			margin: 20px 0;
+			float: right;
+			clear: both;
+		}
+	}
+	#panel-close {
+		border-radius: 50%;
+	}
 }
 
 .hide {
@@ -187,6 +197,9 @@ aside {
 		float: right;
 		min-width: 160px;
 	}
+	.btn.btn-modal {
+		min-width: 100px;
+	}
 	.profile-row.row {
 		font-size: 20px;
 		margin: 15px 0;
@@ -200,6 +213,32 @@ aside {
 		font-size: 24px;
 		font-family: "Titillium Web";
 	}
+}
+
+#employee-table {
+	.btn.fire {
+		min-width: 100px;
+	}
+}
+
+#reimbursement-table {
+	button.btn.view,
+	button.btn.recall {
+		min-width: 100px;
+	}
+}
+
+#pending-table {
+	button.btn.view,
+	button.btn.resolve {
+		min-width: 100px;
+	}
+}
+
+#image-spot {
+	display: block;
+	margin: auto;
+	max-width: 100%;
 }
 
 @import "../libraries/scss/bootstrap";

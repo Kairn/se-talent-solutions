@@ -23,6 +23,8 @@
   <link rel="stylesheet" href="resources/libraries/css/bootstrap.css">
   <!--CoreUI CSS-->
   <link rel="stylesheet" href="resources/libraries/css/coreui.css">
+  <!--MDB Datatables-->
+  <link rel="stylesheet" href="resources/libraries/css/datatables.css">
   <!--Custom CSS-->
   <link rel="stylesheet" href="resources/styles/main.css">
 </head>
@@ -155,35 +157,37 @@
     <h3><i class="fas fa-user-alt"></i><span class="space-10"></span>Your Profile</h3>
     <br>
     <!--Employee Profile-->
-    <div class="row profile-row">
-      <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-fingerprint"></i> <span class="space-5"></span>
-        Employee ID:</div>
-      <div id="employeeId" class="col-lg-9 col-md-12 profile-col">1000</div>
-    </div>
-    <div class="row profile-row">
-      <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-envelope"></i> <span class="space-5"></span>
-        Email:</div>
-      <div id="email" class="col-lg-9 col-md-12 profile-col">john.doe@mailinator.com</div>
-    </div>
-    <div class="row profile-row">
-      <div class="col-lg-3 col-md-6 profile-col"><i class="far fa-address-card"></i> <span class="space-5"></span>
-        Role:</div>
-      <div id="role" class="col-lg-6 col-md-12 profile-col">Associate</div>
-    </div>
-    <div class="row profile-row">
-      <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-arrow-up"></i> <span class="space-5"></span>
-        Up Group:</div>
-      <div id="upGroup" class="col-lg-6 col-md-12 profile-col">101</div>
-    </div>
-    <div class="row profile-row">
-      <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-arrow-down"></i> <span class="space-5"></span>
-        Down Group:</div>
-      <div id="downGroup" class="col-lg-6 col-md-12 profile-col">None</div>
-    </div>
-    <div class="row profile-row">
-      <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-unlock-alt"></i> <span class="space-5"></span>
-        Access Level:</div>
-      <div id="accessLevel" class="col-lg-6 col-md-12 profile-col">1</div>
+    <div>
+      <div class="row profile-row">
+        <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-fingerprint"></i> <span class="space-5"></span>
+          Employee ID:</div>
+        <div id="employeeId" class="col-lg-9 col-md-12 profile-col">1000</div>
+      </div>
+      <div class="row profile-row">
+        <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-envelope"></i> <span class="space-5"></span>
+          Email:</div>
+        <div id="email" class="col-lg-9 col-md-12 profile-col">john.doe@mailinator.com</div>
+      </div>
+      <div class="row profile-row">
+        <div class="col-lg-3 col-md-6 profile-col"><i class="far fa-address-card"></i> <span class="space-5"></span>
+          Role:</div>
+        <div id="role" class="col-lg-6 col-md-12 profile-col">Associate</div>
+      </div>
+      <div class="row profile-row">
+        <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-arrow-up"></i> <span class="space-5"></span>
+          Up Group:</div>
+        <div id="upGroup" class="col-lg-6 col-md-12 profile-col">101</div>
+      </div>
+      <div class="row profile-row">
+        <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-arrow-down"></i> <span class="space-5"></span>
+          Down Group:</div>
+        <div id="downGroup" class="col-lg-6 col-md-12 profile-col">None</div>
+      </div>
+      <div class="row profile-row">
+        <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-unlock-alt"></i> <span class="space-5"></span>
+          Access Level:</div>
+        <div id="accessLevel" class="col-lg-6 col-md-12 profile-col">1</div>
+      </div>
     </div>
     <div class="gap-20"></div>
     <!--Employee Buttons-->
@@ -265,7 +269,93 @@
             class="space-5"></span> Reimbursement Requests</button></div>
     </div>
     <div class="gap-20"></div>
-    <!--Reimbursement Table-->
+    <!--Reimbursement Request-->
+    <div id="reimbursement-request" class="hide">
+      <h2 class="text-center"><i class="fas fa-money-check-alt"></i><span class="space-5"></span> Your Reimbursement
+        Requests</h2>
+      <br>
+      <!--Reimbursement Table-->
+      <table id="reimbursement-table" class="table table-striped">
+        <thead class="bg-mat-teal text-white">
+          <tr>
+            <th>Request ID</th>
+            <th>Date Submitted</th>
+            <th>Reason</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Details</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="request-body-self"></tbody>
+      </table>
+      <br>
+      <!--Reimbursement Actions-->
+      <div><button id="new-request" class="btn btn-mat-green float-right"><i class="fas fa-plus"></i><span class="space-3"></span>
+          Create New Expense</button></div>
+      <br style="clear: both">
+      <div class="gap-15"></div>
+      <div><button id="new-file" class="btn btn-mat-blue float-right hide"><i class="fas fa-cloud-upload-alt"></i><span
+            class="space-3"></span> Upload A File</button></div>
+      <br style="clear: both">
+      <!--New Request Form-->
+      <form id="submit-request-form" class="mx-auto hide">
+        <div class="gap-20"></div>
+        <h3 class="text-center">New Reimbursement Request</h3>
+        <br>
+        <div class="form-group row">
+          <label for="reason" class="col-lg-3 col-md-12 col-form-label">Reason</label>
+          <div class="col-lg-9 col-md-12">
+            <input type="text" class="form-control" name="reason" id="reason" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="message" class="col-lg-3 col-md-12 col-form-label">Explanation</label>
+          <div class="col-lg-9 col-md-12">
+            <textarea class="form-control" name="message" id="message" rows="6"></textarea>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="amount" class="col-lg-3 col-md-12 col-form-label">Amount $</label>
+          <div class="col-lg-9 col-md-12">
+            <input type="number" class="form-control" name="amount" id="amount" required min="1" step="0.01">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-mat-green btn-form">Submit</button>
+          </div>
+        </div>
+      </form>
+      <!--Attach File Form-->
+      <form id="upload-form" class="mx-auto was-validated hide">
+        <div class="gap-20"></div>
+        <h3 class="text-center">Upload Receipt or Other File</h3>
+        <br>
+        <div class="form-group row">
+          <label for="requestId" class="col-lg-3 col-md-12 col-form-label">Request ID</label>
+          <div class="col-lg-9 col-md-12">
+            <input type="number" class="form-control" name="requestId" id="requestId" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-3 col-md-12"></div>
+          <div class="col-lg-9 col-md-12">
+            <div id="file-input" class="custom-file">
+              <input type="file" class="custom-file-input form-control" name="file" id="file" required>
+              <label class="custom-file-label" for="file">File</label>
+              <div class="invalid-feedback">You must choose a file</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-mat-blue btn-form">Upload</button>
+          </div>
+        </div>
+      </form>
+      <div class="gap-20"></div>
+    </div>
     <!--Manage Employee Button-->
     <div class="btn-group-man hide">
       <div class="row">
@@ -274,165 +364,206 @@
       </div>
       <div class="gap-20"></div>
     </div>
-    <!--Employee Table-->
+    <!--Manage Employee-->
+    <div id="manage-employee" class="hide">
+      <h2 class="text-center"><i class="fas fa-chalkboard"></i><span class="space-5"></span> Manage Employees</h2>
+      <br>
+      <!--Employee Table-->
+      <table id="employee-table" class="table table-striped">
+        <thead class="bg-mat-indigo text-white">
+          <tr>
+            <th>Employee ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Up Group</th>
+            <th>Down Group</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="employee-information"></tbody>
+        <tfoot>
+          <div class="modal fade" id="fire-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Confirm Firing</h5>
+                </div>
+                <div class="modal-body">Are Your Sure?</div>
+                <div class="modal-footer">
+                  <button style="width: 100px;" type="button" class="btn btn-secondary btn-modal" data-dismiss="modal">No</button>
+                  <button id="confirm-fire" type="button" class="btn btn-danger btn-modal" data-dismiss="modal">Yes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tfoot>
+      </table>
+      <br>
+      <!--Manager Actions-->
+      <div><button id="register" class="btn btn-primary float-right"><i class="fas fa-signature"></i><span class="space-3"></span>
+          Register Employee</button></div>
+      <br style="clear: both">
+      <div class="gap-15"></div>
+      <div><button id="change-role" class="btn btn-mat-purple float-right hide"><i class="fas fa-exchange-alt"></i><span
+            class="space-3"></span> Change Employee Role</button></div>
+      <br style="clear: both">
+      <!--Register Form-->
+      <form id="register-form" class="mx-auto hide">
+        <div class="gap-20"></div>
+        <h3 class="text-center">Employee Registration</h3>
+        <br>
+        <div class="form-group row">
+          <label for="regFirstName" class="col-lg-3 col-md-12 col-form-label">First Name</label>
+          <div class="col-lg-9 col-md-12">
+            <input type="text" class="form-control" name="regFirstName" id="regFirstName" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="regLastName" class="col-lg-3 col-md-12 col-form-label">Last Name</label>
+          <div class="col-lg-9 col-md-12">
+            <input type="text" class="form-control" name="regLastName" id="regLastName" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="regEmail" class="col-lg-3 col-md-12 col-form-label">Email</label>
+          <div class="col-lg-9 col-md-12">
+            <input type="email" class="form-control" name="regEmail" id="regEmail" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="regUpGroup" class="col-lg-3 col-md-12 col-form-label">Up Group</label>
+          <div class="col-lg-9 col-md-12">
+            <input type="number" class="form-control" name="regUpGroup" id="regUpGroup" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-primary btn-form">Register</button>
+          </div>
+        </div>
+      </form>
+      <!--Change Role Form-->
+      <form id="change-role-form" class="mx-auto hide">
+        <div class="gap-20"></div>
+        <h3 class="text-center">Role Change</h3>
+        <br>
+        <div class="form-group row">
+          <label for="changeEmployeeId" class="col-lg-3 col-md-12 col-form-label">Employee ID</label>
+          <div class="col-lg-9 col-md-12">
+            <input type="number" class="form-control" name="changeEmployeeId" id="changeEmployeeId" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="changeUpGroup" class="col-lg-3 col-md-12 col-form-label">Up Group</label>
+          <div class="col-lg-9 col-md-12">
+            <input type="number" class="form-control" name="changeUpGroup" id="changeUpGroup" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="changeDownGroup" class="col-lg-3 col-md-12 col-form-label">Down Group</label>
+          <div class="col-lg-9 col-md-12">
+            <input type="number" class="form-control" name="changeDownGroup" id="changeDownGroup" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="changeAccessLevel" class="col-lg-3 col-md-12 col-form-label">Access Level</label>
+          <div class="col-lg-9 col-md-12">
+            <select class="form-control" name="changeAccessLevel" id="changeAccessLevel" required>
+              <option value="" selected>Choose One</option>
+              <option value="1">1: Associate</option>
+              <option value="2">2: Manager</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-12">
+            <button type="submit" class="btn btn-mat-purple btn-form">Change</button>
+          </div>
+        </div>
+      </form>
+      <div class="gap-20"></div>
+    </div>
     <!--Manage Request Buttons-->
     <div class="btn-group-man hide">
       <div class="row">
         <div class="col-lg-4 col-md-12"><button id="resolve" class="btn btn-mat-pink-a4 px-3 py-2"><i class="fas fa-bolt"></i>
             <span class="space-5"></span> Resolve Requests</button></div>
         <div class="col-lg-4 col-md-12"><button id="inspect" class="btn btn-info px-3 py-2"><i class="fas fa-search"></i>
-            <span class="space-5"></span> View Requests</button></div>
+            <span class="space-5"></span> Request History</button></div>
       </div>
       <div class="gap-20"></div>
+    </div>
+    <!--Resolve Request-->
+    <div id="resolve-request" class="hide">
+      <h2 class="text-center"><i class="fas fa-marker"></i><span class="space-5"></span> Pending Reimbursement Requests</h2>
+      <br>
+      <!--Pending Request Table-->
+      <table id="pending-table" class="table table-stiped">
+        <thead class="bg-mat-pink-a4 text-white">
+          <tr>
+            <th>Request ID</th>
+            <th>Employee ID</th>
+            <th>Employee Name</th>
+            <th>Date</th>
+            <th>Reason</th>
+            <th>Amount</th>
+            <th>Details</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="pending-body"></tbody>
+      </table>
+    </div>
+    <!--Inspect Request-->
+    <div id="inspect-request" class="hide">
+      <h2 class="text-center"><i class="fas fa-eye"></i><span class="space-5"></span> All Resolved Requests</h2>
+      <br>
+      <!--Inspect Table-->
+      <table id="inspect-table" class="table table-striped">
+        <thead class="bg-info text-white">
+          <tr>
+            <th>Employee ID</th>
+            <th>Employee Name</th>
+            <th>Reason</th>
+            <th>Date Submitted</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Resolved By</th>
+            <th>Date Resolved</th>
+          </tr>
+        </thead>
+        <tbody id="inspect-body"></tbody>
+      </table>
     </div>
     <!--Logout Button-->
     <div class="gap-20"></div>
     <form action="logout" method="post">
       <div class="row">
         <div class="col-12"><button type="submit" class="btn btn-warning btn-logout px-3 py-2">Logout<span class="space-3"></span>
-            <i class="fas fa-door-open"></i></button></div>
+            <i class="fas fa-sign-out-alt"></i></button></div>
       </div>
     </form>
+    <div class="gap-15"></div>
   </section>
   <br>
-  <!--Lower Level Employee Section-->
-  <section id="lower-employee-section" class="hide">
-    <!--Employee Information Part-->
-    <h3 class="text-center">Employee Management</h3>
-    <table id="employee-table" style="margin: auto;">
-      <thead>
-        <tr>
-          <th>Employee ID</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Up Group</th>
-          <th>Down Group</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="employee-information"></tbody>
-    </table>
-    <div><button id="register" class="btn btn-dark">Register New Employee</button></div>
-    <br>
-    <div class="hide"><button id="change-role" class="btn btn-dark">Change Employee Role</button></div>
-    <br>
-    <!--Registration Part-->
-    <form id="register-form" action="manage" method="post" class="hide">
-      <h3>Register a new employee under your management</h3>
-      <div>First Name<input type="text" name="regFirstName" id="regFirstName" required></div>
-      <div>Last Name<input type="text" name="regLastName" id="regLastName" required></div>
-      <div>Email<input type="email" name="regEmail" id="regEmail" required></div>
-      <div>Up Group<input type="number" name="regUpGroup" id="regUpGroup" required></div>
-      <fieldset>
-        <input type="submit" value="Register">
-      </fieldset>
-    </form>
-    <br>
-    <!--Change Role Part-->
-    <form id="change-role-form" class="hide">
-      <div>Employee ID<input type="number" name="changeEmployeeId" id="changeEmployeeId" required min="1000"></div>
-      <div>Up Group<input type="number" name="changeUpGroup" id="changeUpGroup" required min="-1" max="999"></div>
-      <div>Down Group<input type="number" name="changeDownGroup" id="changeDownGroup" required min="-1" max="999"></div>
-      <div>Access Level<select name="changeAccessLevel" id="changeAccessLevel" required>
-          <option value="" selected>Choose One</option>
-          <option value="1">1: Associate</option>
-          <option value="2">2: Manager</option>
-        </select></div>
-      <div><input type="submit" value="Confirm" class="btn btn-warning"></div>
-    </form>
-  </section>
-  <!--Own Request Section-->
-  <section id="own-request-section" class="container hide">
-    <h3>Your Reimbursement Requests</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Request ID</th>
-          <th>Date Submitted</th>
-          <th>Reason</th>
-          <th>Amount</th>
-          <th>Status</th>
-          <th>Details</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="own-request-body"></tbody>
-    </table>
-    <br>
-    <div><button id="new-request" class="btn btn-info">New Request</button></div>
-    <div><button id="new-file" class="btn btn-info">Attach File</button></div>
-    <br>
-    <!--Submit Request Part-->
-    <form id="submit-request-form" class="hide">
-      <div>Reason<input type="text" name="reason" id="reason" required></div>
-      <div>Explanation<textarea name="message" id="message" cols="30" rows="6"></textarea></div>
-      <div>Amount $<input type="number" name="amount" id="amount" step="0.01" min="1" required></div>
-      <div><input type="submit" value="Submit Request" class="btn btn-primary"></div>
-    </form>
-    <br>
-    <!--Upload File Part-->
-    <form id="upload-form" class="hide" enctype="multipart/form-data">
-      <div>Request ID<input type="number" name="requestId" id="requestId" required></div>
-      <div>Upload File<input type="file" name="file" id="file" required></div>
-      <div><input type="submit" value="Upload File" class="btn btn-mat-purple"></div>
-    </form>
-  </section>
-  <br>
-  <!--Resolve Section-->
-  <section id="resolve-section" class="container hide">
-    <h3>Pending Requests Need to be Resolved</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Request ID</th>
-          <th>Employee ID</th>
-          <th>Employee Name</th>
-          <th>Date</th>
-          <th>Reason</th>
-          <th>Amount</th>
-          <th>Details</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="pending-table"></tbody>
-    </table>
-  </section>
-  <br>
-  <!--Inspect Request Section-->
-  <section id="inspect-section" class="container hide">
-    <h3>SETS Resolved Reimbursement Requests</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Employee ID</th>
-          <th>Employee Name</th>
-          <th>Reason</th>
-          <th>Date Submitted</th>
-          <th>Amount</th>
-          <th>Status</th>
-          <th>Resolved By</th>
-          <th>Date Resolved</th>
-        </tr>
-      </thead>
-      <tbody id="inspect-view"></tbody>
-    </table>
-  </section>
-  <!--File Panel Section-->
-  <aside id="file-panel" class="bg-mat-orange text-primary hide">
+  <!--File Panel-->
+  <aside id="file-panel" class="hide">
+    <div class="gap-15"></div>
+    <button id="panel-close" class="btn btn-mat-red-d4 float-right"><i class="far fa-times-circle"></i></button>
+    <br style="clear: both;">
+    <div class="gap-20"></div>
     <ul></ul>
   </aside>
-  <!--Image View Section-->
-  <section class="container">
-    <div class="modal fade" id="image-view" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <img id="image-spot" alt="image">
-          </div>
+  <!--Image Modal-->
+  <div class="modal fade" id="image-view" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <img id="image-spot" alt="image">
         </div>
       </div>
     </div>
-  </section>
+  </div>
   <!--Scripts-->
   <div>
     <!--jQuery-->
@@ -441,6 +572,8 @@
     <script src="resources/libraries/js/bootstrap.bundle.js"></script>
     <!--CoreUI JS-->
     <script src="resources/libraries/js/coreui.js"></script>
+    <!--MDB Datatables-->
+    <script src="resources/libraries/js/datatables.js"></script>
     <!--Custom JS-->
     <script src="resources/scripts/utilities.js"></script>
     <script src="resources/scripts/main.js"></script>

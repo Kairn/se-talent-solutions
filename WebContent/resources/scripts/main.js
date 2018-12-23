@@ -68,23 +68,20 @@ const showEmployee = function (data) {
 		$("#accessLevel").text(accessLevel);
 		if (accessLevel === 3) {
 			$("#role").text("Executive");
+			$(".btn-group-man").removeClass("hide");
 		}
 		else if (accessLevel === 2) {
-			$("#role".text("Manager"));
+			$("#role").text("Manager");
+			$(".btn-group-man").removeClass("hide");
 		}
 		else {
-			$("#role".text("Associate"));
+			$("#role").text("Associate");
+			$(".btn-group-man").addClass("hide");
 		}
 		// Bind form data
 		$("#newFirstName").val(employee["firstName"]);
 		$("#newLastName").val(employee["lastName"]);
 		$("#newEmail").val(employee["email"]);
-		if (parseInt(employee["accessLevel"]) > 1) {
-			$(".btn-group-man").removeClass("hide");
-		}
-		else {
-			$(".btn-group-man").addClass("hide");
-		}
 	}
 	else {
 		$("#employee-section").addClass("hide");
@@ -187,8 +184,9 @@ const getJuniorEmployees = function () {
 				showJuniorEmployees(JSON.parse(data["content"]), true);
 			}
 			else if (parseInt(data["status"]) === 404) {
-				$("#employee-table").html("<h3>You are not managing anyone</h3>");
-				$("#lower-employee-section").slideDown(1000);
+				$("#employee-table").html("<h3>No One is under Your Management</h3>");
+				$("#employee-table").find("h3").addClass("text-center");
+				$("#manage-employee").slideDown(1000);
 			}
 			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
@@ -209,14 +207,14 @@ const showJuniorEmployees = function (data, exe) {
 	data.sort((a, b) => parseInt(a["accessLevel"]) - parseInt(b["accessLevel"]));
 	for (let i in data) {
 		let $newEmpRow = $("<tr></tr>");
-		let $employeeId = $("<td></td>");
+		let $employeeId = $("<th></th>");
 		let $firstName = $("<td></td>");
 		let $lastName = $("<td></td>");
 		let $upGroup = $("<td></td>");
 		let $downGroup = $("<td></td>");
 		let $action = $("<td></td>");
 		let $button = $("<button>Fire</button>");
-		$button.addClass("btn").addClass("btn-warning").addClass("fire");
+		$button.addClass("btn").addClass("btn-mat-red").addClass("fire").attr("data-toggle", "modal").attr("data-target", "#fire-modal");
 		$action.append($button);
 		$newEmpRow.append($employeeId).append($firstName).append($lastName).append($upGroup).append($downGroup).append($action);
 		// Bind Data
@@ -238,20 +236,29 @@ const showJuniorEmployees = function (data, exe) {
 		$button.attr("data-id", data[i]["employeeId"]);
 		if (!exe) {
 			$button.addClass("disabled");
+			$("#fire-modal").remove();
 		}
 		$empInfo.prepend($newEmpRow);
 	}
 	if (exe) {
 		$("#change-role").closest("div").removeClass("hide");
 	}
-	$("#lower-employee-section").slideDown(3000);
+	$empInfo.find("th").addClass("align-middle");
+	$empInfo.find("td").addClass("align-middle");
+	$("#manage-employee").slideDown(2000);
 	// Fire Employee Trigger
 	$(".fire").on("click", function () {
 		if ($(this).hasClass("disabled")) {
 			return;
 		}
+		$("#confirm-fire").attr("data-id", parseInt($(this).attr("data-id")));
+	})
+	// Confirm Fire Trigger
+	$("#confirm-fire").on("click", function () {
 		fireEmployee(parseInt($(this).attr("data-id")));
 	})
+	$('#employee-table').DataTable();
+	$('.dataTables_length').addClass('bs-select');
 };
 
 // Register Employee
@@ -346,7 +353,9 @@ const getOwnRequests = function () {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else if (parseInt(data["status"]) === 404) {
-				$("#own-request-body").closest("table").html("<h3>You have no requests</h3>").closest("section").slideDown(1000);
+				$("#reimbursement-table").html("<h3>No Request Submitted</h3>");
+				$("#reimbursement-table").find("h3").addClass("text-center");
+				$("#reimbursement-request").slideDown(1000);
 			}
 			else {
 				displayMessage(false, "Error: Invalid Request", false);
@@ -359,12 +368,12 @@ const getOwnRequests = function () {
 
 // Show Request Information
 const showOwnRequests = function (data) {
-	var $reqInfo = $("#own-request-body");
+	var $reqInfo = $("#request-body-self");
 	$reqInfo.empty();
 	data.sort((a, b) => parseInt(a["requestId"]) - parseInt(b["requestId"]));
 	for (let i in data) {
 		let $newReqRow = $("<tr></tr>");
-		let $reqId = $("<td></td>");
+		let $reqId = $("<th></th>");
 		let $date = $("<td></td>");
 		let $reason = $("<td></td>");
 		let $amount = $("<td></td>");
@@ -402,7 +411,9 @@ const showOwnRequests = function (data) {
 	$(".view").popover({
 		container: "body"
 	});
-	$reqInfo.closest("section").slideDown(2000);
+	$reqInfo.find("th").addClass("align-middle");
+	$reqInfo.find("td").addClass("align-middle");
+	$("#reimbursement-request").slideDown(2000);
 	// Image List Trigger
 	$(".view").on("click", function () {
 		getAttachedFiles(parseInt($(this).attr("data-id")));
@@ -414,6 +425,8 @@ const showOwnRequests = function (data) {
 		}
 		recallReimbursementRequest(parseInt($(this).attr("data-id")));
 	})
+	$('#reimbursement-table').DataTable();
+	$('.dataTables_length').addClass('bs-select');
 };
 
 // Submit Request
@@ -477,8 +490,9 @@ const fetchJuniorPendingRequests = function () {
 				showPendingRequests(JSON.parse(data["content"]));
 			}
 			else if (parseInt(data["status"]) === 404) {
-				$("#pending-table").closest("table").html("<h3>You have no pending request to resolve</h3>");
-				$("#resolve-section").slideDown(1000);
+				$("#pending-table").html("<h3>No Pending Request</h3>");
+				$("#pending-table").find("h3").addClass("text-center");
+				$("#resolve-request").slideDown(1000);
 			}
 			else if (parseInt(data["status"]) === 401) {
 				displayMessage(false, "Error: Unauthorized Access", false);
@@ -497,12 +511,12 @@ const fetchJuniorPendingRequests = function () {
 
 // Display Pending Request Information
 const showPendingRequests = function (data) {
-	$pendInfo = $("#pending-table");
+	$pendInfo = $("#pending-body");
 	$pendInfo.empty();
 	data.sort((a, b) => parseInt(a["requestId"]) - parseInt(b["requestId"]));
 	for (let i in data) {
 		let $newReqRow = $("<tr></tr>");
-		let $reqId = $("<td></td>");
+		let $reqId = $("<th></th>");
 		let $empId = $("<td></td>");
 		let $empName = $("<td></td>");
 		let $date = $("<td></td>");
@@ -530,24 +544,28 @@ const showPendingRequests = function (data) {
 		$action.append($approve).append($deny);
 		$newReqRow.append($reqId).append($empId).append($empName).append($date).append($reason).append($amount).append($detail).append($action);
 		$pendInfo.append($newReqRow);
-		$(".view").popover({
-			container: "body"
-		});
-		$("#resolve-section").slideDown(2000);
-		// Image List Trigger
-		$(".view").on("click", function () {
-			getAttachedFiles(parseInt($(this).attr("data-id")));
-		});
-		// Resolve Request Trigger
-		$(".resolve").on("click", function () {
-			if ($(this).hasClass("btn-success")) {
-				resolveReimbursementRequest($(this).attr("data-id"), "approve");
-			}
-			else {
-				resolveReimbursementRequest($(this).attr("data-id"), "deny");
-			}
-		});
 	}
+	$(".view").popover({
+		container: "body"
+	});
+	$pendInfo.find("th").addClass("align-middle");
+	$pendInfo.find("td").addClass("align-middle");
+	$("#resolve-request").slideDown(2000);
+	// Image List Trigger
+	$(".view").on("click", function () {
+		getAttachedFiles(parseInt($(this).attr("data-id")));
+	});
+	// Resolve Request Trigger
+	$(".resolve").on("click", function () {
+		if ($(this).hasClass("btn-success")) {
+			resolveReimbursementRequest($(this).attr("data-id"), "approve");
+		}
+		else {
+			resolveReimbursementRequest($(this).attr("data-id"), "deny");
+		}
+	});
+	$('#pending-table').DataTable();
+	$('.dataTables_length').addClass('bs-select');
 };
 
 // Resolve Request
@@ -606,6 +624,7 @@ const uploadImageFile = function () {
 
 // Get File List
 const getAttachedFiles = function (id) {
+	$("#file-panel").fadeOut(500);
 	fetch(FILE_URL_WRAPPER("r", id), GET_HEADER_JSON)
 		.then(function (response) {
 			return response.json();
@@ -613,6 +632,9 @@ const getAttachedFiles = function (id) {
 		.then(function (data) {
 			if (parseInt(data["status"]) === 200) {
 				showFilesList(JSON.parse(data["content"]));
+			}
+			else {
+				displayMessage(false, "Oops: No File Found", false);
 			}
 		})
 		.catch(function (error) {
@@ -628,15 +650,16 @@ const showFilesList = function (data) {
 		fileId = parseInt(data[i]["fileId"]);
 		$newLi = $("<li></li>");
 		$newBtn = $("<button></button>");
-		$newBtn.html("File# " + fileId).addClass("btn").addClass("btn-info").addClass("image");
+		$newBtn.html("<i class=\"fas fa-images\"></i>").addClass("btn").addClass("btn-mat-amber").addClass("image");
 		$newBtn.attr("data-id", fileId).attr("data-type", data[i]["fileType"]);
 		$newBtn.attr("type", "button").attr("data-toggle", "modal").attr("data-target", "#image-view");
 		$newLi.append($newBtn);
 		$fileUl.append($newLi);
 	}
-	$fileUl.closest("aside").slideDown(1000);
+	$("#file-panel").fadeIn(500);
 	// Show Image Trigger
 	$(".image").on("click", function () {
+		$("#image-spot").attr("src", "https://loading.io/spinners/microsoft/lg.rotating-balls-spinner.gif");
 		fetchImageFile($(this).attr("data-type"), $(this).attr("data-id"));
 	})
 };
@@ -666,8 +689,9 @@ const getResolvedRequests = function () {
 				showRequestsWithResolution(JSON.parse(data["content"]));
 			}
 			else if ((parseInt(data["status"])) === 404) {
-				$("#inspect-view").closest("table").html("<h3>No Requests to Show</h3>");
-				$("#inspect-section").slideDown(1000);
+				$("#inspect-table").html("<h3>No History Available</h3>");
+				$("#inspect-table").addClass("text-center");
+				$("#inspect-request").slideDown(1000);
 			}
 			else if (parseInt(data["status"]) === 401) {
 				displayMessage(false, "Error: Unauthorized Access", false);
@@ -686,11 +710,11 @@ const getResolvedRequests = function () {
 
 // Display Resolution Information
 const showRequestsWithResolution = function (data) {
-	$inspectTableBody = $("#inspect-view");
+	$inspectTableBody = $("#inspect-body");
 	$inspectTableBody.empty();
 	for (let i in data) {
 		$newInsRow = $("<tr></tr>");
-		$empId = $("<td></td>");
+		$empId = $("<th></th>");
 		$empName = $("<td></td>");
 		$reason = $("<td></td>");
 		$sDate = $("<td></td>");
@@ -715,12 +739,14 @@ const showRequestsWithResolution = function (data) {
 		$newInsRow.append($empId).append($empName).append($reason).append($sDate).append($amount).append($status).append($manName).append($rDate);
 		$inspectTableBody.append($newInsRow);
 	}
-	$("#inspect-section").slideDown(2500);
+	$inspectTableBody.find("th").addClass("align-middle");
+	$inspectTableBody.find("td").addClass("align-middle");
+	$("#inspect-request").slideDown(2000);
+	$('#inspect-table').DataTable();
+	$('.dataTables_length').addClass('bs-select');
 };
 
 $(function () {
-	// Unhide Everything
-	// $(".hide").removeClass("hide");
 	// Login on Startup
 	loginWithSession();
 	// Login with credentials
@@ -757,7 +783,7 @@ $(function () {
 	});
 	// Toggle Registration Form
 	$("#register").on("click", function () {
-		$("#register-form").slideDown(1000);
+		$("#register-form").slideToggle(1000);
 	});
 	// Submit Registration Form
 	$("#register-form").on("submit", function (e) {
@@ -766,7 +792,7 @@ $(function () {
 	});
 	// Toggle Change Role Form
 	$("#change-role").on("click", function () {
-		$("#change-role-form").slideDown(1000);
+		$("#change-role-form").slideToggle(1000);
 	});
 	// Submit Change Role Form
 	$("#change-role-form").on("submit", function (e) {
@@ -803,4 +829,16 @@ $(function () {
 	$("#inspect").on("click", function () {
 		getResolvedRequests();
 	})
+	// Close File Panel
+	$("#panel-close").on("click", function () {
+		$("#file-panel").fadeOut();
+	})
+	// Resize File Modal
+	$('#image-view').on('show.bs.modal', function () {
+		$(this).find('.modal-body').css({
+			width: "auto",
+			height: "auto",
+			'max-height': '100%'
+		});
+	});
 });
