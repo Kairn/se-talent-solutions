@@ -1,21 +1,21 @@
-// Display transaction message
+// Display Message
 const displayMessage = function (success, message, reload) {
 	var $target;
 	if (success) {
-		$target = $("#success-message");
+		$target = $(".alert-success");
 	}
 	else {
-		$target = $("#error-message");
+		$target = $(".alert-danger");
 	}
 	$target.html(message);
-	$target.slideDown(1000).delay(3000).slideUp(1000, function () {
+	$target.slideDown(500).delay(1500).slideUp(500, function () {
 		if (reload) {
 			location.reload();
 		}
 	})
 };
 
-// Login with an active session
+// Login with Session
 const loginWithSession = function () {
 	fetch("login", GET_HEADER_JSON)
 		.then(function (response) {
@@ -29,7 +29,7 @@ const loginWithSession = function () {
 		});
 };
 
-// Submit login form to login with credentials
+// Login with Credentials
 const loginWithCredentials = function () {
 	var credentials = {};
 	credentials["username"] = $("#username").val().trim();
@@ -46,34 +46,44 @@ const loginWithCredentials = function () {
 		});
 };
 
-// Display employee information based on fetch response
+// Display Employee Information
 const showEmployee = function (data) {
-	if (parseInt(data["status"]) == 400 || parseInt(data["status"]) == 401) {
+	if (parseInt(data["status"]) === 400 || parseInt(data["status"]) === 401) {
 		$("#employee-section").addClass("hide");
 		$("#login-section").removeClass("hide");
 		displayMessage(false, "Error: Invalid Credentials", false);
 	}
-	else if (parseInt(data["status"]) == 200) {
+	else if (parseInt(data["status"]) === 200) {
 		var employee = JSON.parse(data["content"]);
 		$("#employee-section").removeClass("hide");
 		$("#login-section").addClass("hide");
+		// Bind Data
 		$("#firstName").text(employee["firstName"]);
 		$("#lastName").text(employee["lastName"]);
+		$("#employeeId").text(employee["employeeId"]);
 		$("#email").text(employee["email"]);
-		$("#accessLevel").text(employee["accessLevel"]);
-		// Update the update form
+		$("#upGroup").text(parseInt(employee["upGroup"]) === -1 ? "None" : employee["upGroup"]);
+		$("#downGroup").text(parseInt(employee["downGroup"]) === -1 ? "None" : employee["downGroup"]);
+		let accessLevel = parseInt(employee["accessLevel"]);
+		$("#accessLevel").text(accessLevel);
+		if (accessLevel === 3) {
+			$("#role").text("Executive");
+		}
+		else if (accessLevel === 2) {
+			$("#role".text("Manager"));
+		}
+		else {
+			$("#role".text("Associate"));
+		}
+		// Bind form data
 		$("#newFirstName").val(employee["firstName"]);
 		$("#newLastName").val(employee["lastName"]);
 		$("#newEmail").val(employee["email"]);
 		if (parseInt(employee["accessLevel"]) > 1) {
-			$("#manage").removeClass("hide");
-			$("#resolve").removeClass("hide");
-			$("#inspect").removeClass("hide");
+			$(".btn-group-man").removeClass("hide");
 		}
 		else {
-			$("#manage").addClass("hide");
-			$("#resolve").addClass("hide");
-			$("#inspect").addClass("hide");
+			$(".btn-group-man").addClass("hide");
 		}
 	}
 	else {
@@ -82,7 +92,7 @@ const showEmployee = function (data) {
 	}
 };
 
-// Send an request to update the employee's information
+// Update Employee Information
 const updateEmployeeInformation = function () {
 	var newInformation = {};
 	newInformation["newFirstName"] = $("#newFirstName").val().trim();
@@ -93,10 +103,10 @@ const updateEmployeeInformation = function () {
 			return response.json();
 		})
 		.then(function (data) {
-			if (parseInt(data["status"]) == 200) {
+			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: Information Updated", true);
 			}
-			else if (parseInt(data["status"]) == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else {
@@ -108,7 +118,7 @@ const updateEmployeeInformation = function () {
 		})
 };
 
-// Send an request to change the employee's credentials
+// Change Credentials
 const changeEmployeeCredentials = function () {
 	var newCredentials = {};
 	newCredentials["oldPassword"] = $("#oldPassword").val().trim();
@@ -125,10 +135,10 @@ const changeEmployeeCredentials = function () {
 				return response.json();
 			})
 			.then(function (data) {
-				if (parseInt(data["status"]) == 200) {
+				if (parseInt(data["status"]) === 200) {
 					displayMessage(true, "Success: Your Credentials Have Been Changed", true);
 				}
-				else if (parseInt(data["status"]) == 440) {
+				else if (parseInt(data["status"]) === 440) {
 					displayMessage(false, "Error: Invalid Session or Session Expired", true);
 				}
 				else {
@@ -141,7 +151,7 @@ const changeEmployeeCredentials = function () {
 	}
 };
 
-// Send a request to receive new credentials if the employee forgets their password
+// Recover Credentials
 const obtainNewCredentials = function () {
 	var employeeInformation = {};
 	employeeInformation["username"] = $("#rusername").val().trim();
@@ -151,7 +161,7 @@ const obtainNewCredentials = function () {
 			return response.json();
 		})
 		.then(function (data) {
-			if (parseInt(data["status"]) == 200) {
+			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: New Credentials Have Been Sent to Your Email", false);
 			}
 			else {
@@ -163,24 +173,24 @@ const obtainNewCredentials = function () {
 		})
 };
 
-// Send a request to fetch all employees that a high level person manages
+// Get Employees under Management
 const getJuniorEmployees = function () {
 	fetch("manage", GET_HEADER_JSON)
 		.then(function (response) {
 			return response.json();
 		})
 		.then(function (data) {
-			if (parseInt(data["status"]) == 200) {
+			if (parseInt(data["status"]) === 200) {
 				showJuniorEmployees(JSON.parse(data["content"]), false);
 			}
-			else if (parseInt(data["status"]) == 201) {
+			else if (parseInt(data["status"]) === 201) {
 				showJuniorEmployees(JSON.parse(data["content"]), true);
 			}
-			else if (parseInt(data["status"]) == 404) {
+			else if (parseInt(data["status"]) === 404) {
 				$("#employee-table").html("<h3>You are not managing anyone</h3>");
 				$("#lower-employee-section").slideDown(1000);
 			}
-			else if (parseInt(data["status"]) == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else {
@@ -192,7 +202,7 @@ const getJuniorEmployees = function () {
 		})
 };
 
-// Display all junior employee information
+// Display Employees under Management
 const showJuniorEmployees = function (data, exe) {
 	var $empInfo = $("#employee-information");
 	$empInfo.empty();
@@ -209,17 +219,17 @@ const showJuniorEmployees = function (data, exe) {
 		$button.addClass("btn").addClass("btn-warning").addClass("fire");
 		$action.append($button);
 		$newEmpRow.append($employeeId).append($firstName).append($lastName).append($upGroup).append($downGroup).append($action);
-		// Load information
+		// Bind Data
 		$employeeId.html(data[i]["employeeId"]);
 		$firstName.html(data[i]["firstName"]);
 		$lastName.html(data[i]["lastName"]);
-		if (parseInt(data[i]["upGroup"]) == -1) {
+		if (parseInt(data[i]["upGroup"]) === -1) {
 			$upGroup.html("None");
 		}
 		else {
 			$upGroup.html(data[i]["upGroup"]);
 		}
-		if (parseInt(data[i]["downGroup"]) == -1) {
+		if (parseInt(data[i]["downGroup"]) === -1) {
 			$downGroup.html("None");
 		}
 		else {
@@ -235,7 +245,7 @@ const showJuniorEmployees = function (data, exe) {
 		$("#change-role").closest("div").removeClass("hide");
 	}
 	$("#lower-employee-section").slideDown(3000);
-	// When an executive fires an employee
+	// Fire Employee Trigger
 	$(".fire").on("click", function () {
 		if ($(this).hasClass("disabled")) {
 			return;
@@ -244,7 +254,7 @@ const showJuniorEmployees = function (data, exe) {
 	})
 };
 
-// Send an request to register a new employee
+// Register Employee
 const registerEmployee = function () {
 	var regEmployee = {};
 	regEmployee["firstName"] = $("#regFirstName").val().trim();
@@ -256,10 +266,10 @@ const registerEmployee = function () {
 			return response.json();
 		})
 		.then(function (data) {
-			if (data["status"] == 200) {
+			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: New Employee Registered", true);
 			}
-			else if (data["status"] == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else {
@@ -271,7 +281,7 @@ const registerEmployee = function () {
 		})
 };
 
-// Send a put request to change the role of an employee
+// Change Employee Role
 const changeEmployeeRole = function () {
 	var newRole = {};
 	newRole["employeeId"] = $("#changeEmployeeId").val();
@@ -283,10 +293,10 @@ const changeEmployeeRole = function () {
 			return response.json();
 		})
 		.then(function (data) {
-			if (data["status"] == 200) {
+			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: Employee Role Changed", true);
 			}
-			else if (data["status"] == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else {
@@ -298,7 +308,7 @@ const changeEmployeeRole = function () {
 		})
 };
 
-// Send a delete request to fire an employee
+// Fire Employee
 const fireEmployee = function (id) {
 	var firing = {};
 	firing["employeeId"] = id;
@@ -307,10 +317,10 @@ const fireEmployee = function (id) {
 			return response.json();
 		})
 		.then(function (data) {
-			if (data["status"] == 200) {
+			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: Employee Fired", true);
 			}
-			else if (data["status"] == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else {
@@ -322,20 +332,20 @@ const fireEmployee = function (id) {
 		})
 };
 
-// Fetch all submitted reimbursement requests of an employee
+// Get Employee's Requests
 const getOwnRequests = function () {
 	fetch("reimbursement", GET_HEADER_JSON)
 		.then(function (response) {
 			return response.json();
 		})
 		.then(function (data) {
-			if (data["status"] == 200) {
+			if (parseInt(data["status"]) === 200) {
 				showOwnRequests(JSON.parse(data["content"]));
 			}
-			else if (data["status"] == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
-			else if (data["status"] == 404) {
+			else if (parseInt(data["status"]) === 404) {
 				$("#own-request-body").closest("table").html("<h3>You have no requests</h3>").closest("section").slideDown(1000);
 			}
 			else {
@@ -347,7 +357,7 @@ const getOwnRequests = function () {
 		})
 };
 
-// Populate the submitted request table 
+// Show Request Information
 const showOwnRequests = function (data) {
 	var $reqInfo = $("#own-request-body");
 	$reqInfo.empty();
@@ -363,7 +373,7 @@ const showOwnRequests = function (data) {
 		let $action = $("<td></td>");
 		let $view = $("<button>View</button>");
 		let $recall = $("<button>Recall</button>");
-		// Load information
+		// Bind Data
 		let requestId = parseInt(data[i]["requestId"]);
 		$reqId.html(requestId);
 		$view.attr("data-id", requestId).addClass("btn").addClass("btn-primary").addClass("view");
@@ -384,7 +394,6 @@ const showOwnRequests = function (data) {
 		}
 		$view.attr("data-toggle", "popover").attr("title", "Explanation").attr("data-content", data[i]["message"]);
 		$view.attr("data-trigger", "hover").attr("data-id", requestId);
-		// Attach elements
 		$detail.append($view);
 		$action.append($recall);
 		$newReqRow.append($reqId).append($date).append($reason).append($amount).append($status).append($detail).append($action);
@@ -394,10 +403,11 @@ const showOwnRequests = function (data) {
 		container: "body"
 	});
 	$reqInfo.closest("section").slideDown(2000);
-	// Add event listeners to buttons
+	// Image List Trigger
 	$(".view").on("click", function () {
 		getAttachedFiles(parseInt($(this).attr("data-id")));
 	});
+	// Recall Request Trigger
 	$(".recall").on("click", function () {
 		if ($(this).hasClass("disabled")) {
 			return;
@@ -406,7 +416,7 @@ const showOwnRequests = function (data) {
 	})
 };
 
-// Submit a new reimbursement request
+// Submit Request
 const submitNewRequest = function () {
 	var reqContent = {};
 	reqContent["reason"] = $("#reason").val().trim();
@@ -417,10 +427,10 @@ const submitNewRequest = function () {
 			return response.json();
 		})
 		.then(function (data) {
-			if (data["status"] == 200) {
+			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: New Request Submitted", true);
 			}
-			else if (data["status"] == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else {
@@ -432,7 +442,7 @@ const submitNewRequest = function () {
 		})
 };
 
-// Send a delete request to recall a reimbursement request
+// Recall Request
 const recallReimbursementRequest = function (id) {
 	var recalling = {};
 	recalling["requestId"] = parseInt(id);
@@ -441,10 +451,10 @@ const recallReimbursementRequest = function (id) {
 			return response.json();
 		})
 		.then(function (data) {
-			if (data["status"] == 200) {
+			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: Reimbursement Request Recalled", true);
 			}
-			else if (data["status"] == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else {
@@ -456,24 +466,24 @@ const recallReimbursementRequest = function (id) {
 		})
 };
 
-// Fetch all pending requests submitted under a manager
+// Get Managed Requests
 const fetchJuniorPendingRequests = function () {
 	fetch("resolve", GET_HEADER_JSON)
 		.then(function (response) {
 			return response.json();
 		})
 		.then(function (data) {
-			if (data["status"] == 200) {
+			if (parseInt(data["status"]) === 200) {
 				showPendingRequests(JSON.parse(data["content"]));
 			}
-			else if (data["status"] == 404) {
+			else if (parseInt(data["status"]) === 404) {
 				$("#pending-table").closest("table").html("<h3>You have no pending request to resolve</h3>");
 				$("#resolve-section").slideDown(1000);
 			}
-			else if (data["status"] == 401) {
+			else if (parseInt(data["status"]) === 401) {
 				displayMessage(false, "Error: Unauthorized Access", false);
 			}
-			else if (data["status"] == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else {
@@ -485,7 +495,7 @@ const fetchJuniorPendingRequests = function () {
 		})
 };
 
-// Display all pending requests to be resolved
+// Display Pending Request Information
 const showPendingRequests = function (data) {
 	$pendInfo = $("#pending-table");
 	$pendInfo.empty();
@@ -503,7 +513,7 @@ const showPendingRequests = function (data) {
 		let $view = $("<button>View</button>");
 		let $approve = $("<button>Approve</button>");
 		let $deny = $("<button>Deny</button>");
-		// Load information
+		// Bind data
 		let requestId = parseInt(data[i]["requestId"]);
 		$reqId.html(requestId);
 		$view.attr("data-id", requestId).addClass("btn").addClass("btn-primary").addClass("view");
@@ -516,7 +526,6 @@ const showPendingRequests = function (data) {
 		$amount.html("$" + parseFloat(data[i]["amount"]).toFixed(2));
 		$view.attr("data-toggle", "popover").attr("title", "Explanation").attr("data-content", data[i]["message"]);
 		$view.attr("data-trigger", "hover").attr("data-id", requestId);
-		// Attach elements
 		$detail.append($view);
 		$action.append($approve).append($deny);
 		$newReqRow.append($reqId).append($empId).append($empName).append($date).append($reason).append($amount).append($detail).append($action);
@@ -525,10 +534,11 @@ const showPendingRequests = function (data) {
 			container: "body"
 		});
 		$("#resolve-section").slideDown(2000);
-		// Add event listeners
+		// Image List Trigger
 		$(".view").on("click", function () {
 			getAttachedFiles(parseInt($(this).attr("data-id")));
 		});
+		// Resolve Request Trigger
 		$(".resolve").on("click", function () {
 			if ($(this).hasClass("btn-success")) {
 				resolveReimbursementRequest($(this).attr("data-id"), "approve");
@@ -540,7 +550,7 @@ const showPendingRequests = function (data) {
 	}
 };
 
-// Send a put request to resolve an reimbursement
+// Resolve Request
 const resolveReimbursementRequest = function (requestId, action) {
 	var acting = {};
 	acting["requestId"] = parseInt(requestId);
@@ -550,13 +560,13 @@ const resolveReimbursementRequest = function (requestId, action) {
 			return response.json();
 		})
 		.then(function (data) {
-			if (data["status"] == 200) {
+			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: Reimbursement Request Resolved", true);
 			}
-			else if (data["status"] == 401) {
+			else if (parseInt(data["status"]) === 401) {
 				displayMessage(false, "Error: Unauthorized Access", false);
 			}
-			else if (data["status"] == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else {
@@ -568,7 +578,7 @@ const resolveReimbursementRequest = function (requestId, action) {
 		})
 };
 
-// Send the file form data to the servlet
+// Send Image Form
 const uploadImageFile = function () {
 	fetch("file", POST_HEADER_FORM_WRAPPER(document.querySelector("#upload-form")))
 		.then(function (response) {
@@ -576,13 +586,13 @@ const uploadImageFile = function () {
 			return response.json();
 		})
 		.then(function (data) {
-			if (data["status"] == 200) {
+			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: File Uploaded", true);
 			}
-			else if (data["status"] == 401) {
+			else if (parseInt(data["status"]) === 401) {
 				displayMessage(false, "Error: Unauthorized Access", false);
 			}
-			else if (data["status"] == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else {
@@ -594,14 +604,14 @@ const uploadImageFile = function () {
 		})
 };
 
-// Get a list of available files of a request
+// Get File List
 const getAttachedFiles = function (id) {
 	fetch(FILE_URL_WRAPPER("r", id), GET_HEADER_JSON)
 		.then(function (response) {
 			return response.json();
 		})
 		.then(function (data) {
-			if (data["status"] == 200) {
+			if (parseInt(data["status"]) === 200) {
 				showFilesList(JSON.parse(data["content"]));
 			}
 		})
@@ -610,7 +620,7 @@ const getAttachedFiles = function (id) {
 		})
 };
 
-// Populate the files panel
+// Display File Panel
 const showFilesList = function (data) {
 	$fileUl = $("#file-panel").find("ul");
 	$fileUl.empty();
@@ -625,13 +635,13 @@ const showFilesList = function (data) {
 		$fileUl.append($newLi);
 	}
 	$fileUl.closest("aside").slideDown(1000);
-	// Add event listeners
+	// Show Image Trigger
 	$(".image").on("click", function () {
 		fetchImageFile($(this).attr("data-type"), $(this).attr("data-id"));
 	})
 };
 
-// Fetch the image file of a given id
+// Get Image by ID
 const fetchImageFile = function (type, id) {
 	fetch(FILE_URL_WRAPPER("i_" + type + "_", id), GET_HEADER)
 		.then(function (response) {
@@ -645,7 +655,7 @@ const fetchImageFile = function (type, id) {
 		})
 };
 
-// Fetch all resolved requests for a manager level or up
+// Get Resolved Requests
 const getResolvedRequests = function () {
 	fetch("inspect", GET_HEADER_JSON)
 		.then(function (response) {
@@ -659,10 +669,10 @@ const getResolvedRequests = function () {
 				$("#inspect-view").closest("table").html("<h3>No Requests to Show</h3>");
 				$("#inspect-section").slideDown(1000);
 			}
-			else if (data["status"] == 401) {
+			else if (parseInt(data["status"]) === 401) {
 				displayMessage(false, "Error: Unauthorized Access", false);
 			}
-			else if (data["status"] == 440) {
+			else if (parseInt(data["status"]) === 440) {
 				displayMessage(false, "Error: Invalid Session or Session Expired", true);
 			}
 			else {
@@ -674,7 +684,7 @@ const getResolvedRequests = function () {
 		})
 };
 
-// Populate inspect table body
+// Display Resolution Information
 const showRequestsWithResolution = function (data) {
 	$inspectTableBody = $("#inspect-view");
 	$inspectTableBody.empty();
@@ -709,85 +719,87 @@ const showRequestsWithResolution = function (data) {
 };
 
 $(function () {
-	// Try to login with a valid session
+	// Unhide Everything
+	// $(".hide").removeClass("hide");
+	// Login on Startup
 	loginWithSession();
 	// Login with credentials
 	$("#login-form").on("submit", function (e) {
 		e.preventDefault();
 		loginWithCredentials();
 	});
-	// When employee wants to update their information
+	// Submit Login Form
 	$("#update").on("click", function () {
-		$("#update-form").removeClass("hide");
+		$("#update-form").slideToggle(1000);
 	});
-	// When employee confirms an update
+	// Submit Update Form
 	$("#update-form").on("submit", function (e) {
 		e.preventDefault();
 		updateEmployeeInformation();
 	});
-	// When employee wants to change their credentials
+	// Forgot Credentials
 	$("#security").on("click", function () {
-		$("#security-form").slideDown();
+		$("#security-form").slideToggle(1000);
 	});
-	// When employee confirms password change
+	// Reset Credentials
 	$("#security-form").on("submit", function (e) {
 		e.preventDefault();
 		changeEmployeeCredentials();
 	});
-	// When employee tries to recover their credentials
+	// Submit Recover Form
 	$("#recover-form").on("submit", function (e) {
 		e.preventDefault();
 		obtainNewCredentials();
 	});
-	// When a manager level or up tries to get employee information
+	// Manage Employees
 	$("#manage").on("click", function () {
 		getJuniorEmployees();
 	});
-	// When a manager toggle registration form
+	// Toggle Registration Form
 	$("#register").on("click", function () {
 		$("#register-form").slideDown(1000);
 	});
-	// When a manager level or up tries to register a new junior employee
+	// Submit Registration Form
 	$("#register-form").on("submit", function (e) {
 		e.preventDefault();
 		registerEmployee();
 	});
-	// When an executive wants to change the role of an employee
+	// Toggle Change Role Form
 	$("#change-role").on("click", function () {
 		$("#change-role-form").slideDown(1000);
 	});
-	// When an executive confirms a role change
+	// Submit Change Role Form
 	$("#change-role-form").on("submit", function (e) {
 		e.preventDefault();
 		changeEmployeeRole();
 	});
-	// When an employee wants to view his reimbursement requests
+	// View Requests
 	$("#request").on("click", function () {
 		getOwnRequests();
 	});
-	// When an employee wants to submit a new request
+	// Toggle Submit Request Form
 	$("#new-request").on("click", function () {
 		$("#submit-request-form").slideDown(1000);
 	});
-	// When an employee wants to upload a file to a request
+	// Toggle File Upload Form
 	$("#new-file").on("click", function () {
 		$("#upload-form").slideDown(1000);
 	});
-	// When an employee confirms a request submission
+	// Submit New Request Form
 	$("#submit-request-form").on("submit", function (e) {
 		e.preventDefault();
 		submitNewRequest();
 	});
-	// When a manager level or up wants to resolve requests
+	// Resolve Requests
 	$("#resolve").on("click", function () {
 		fetchJuniorPendingRequests();
 	});
-	// When an employee uploads a file
+	// Submit File Upload Form
 	$("#upload-form").on("submit", function (e) {
 		e.preventDefault();
 		uploadImageFile();
 	});
-	// When a manager wants to view resolved requests
+	// View Resolved Requests
 	$("#inspect").on("click", function () {
 		getResolvedRequests();
 	})

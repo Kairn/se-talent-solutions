@@ -6,8 +6,8 @@ const URL_WRAPPER = function (endpoint) {
 	return "/" + APP_NAME + "/" + endpoint;
 };
 
-// Fetch Header
-// Get General (Blob Accepted)
+// Fetch Headers
+// Get General
 const GET_HEADER = {
 	method: "GET"
 };
@@ -30,7 +30,7 @@ const POST_HEADER_WRAPPER = function (data) {
 	return header;
 };
 
-// Post Form Data with File
+// Post Form Data
 const POST_HEADER_FORM_WRAPPER = function (form) {
 	var formData = new FormData(form);
 	var header = {
@@ -64,7 +64,7 @@ const DELETE_HEADER_WRAPPER = function (data) {
 	return header;
 };
 
-// File Url Maker
+// File URL Maker
 const FILE_URL_WRAPPER = function (type, id) {
 	return "image/" + type + id;
 }

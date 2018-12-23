@@ -15,80 +15,283 @@
   <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Exo+2" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <!--Favicon-->
   <link rel="shortcut icon" href="resources/images/favicon.png" type="image/x-icon">
   <!--Style Sheets-->
   <!--Bootstrap CSS-->
   <link rel="stylesheet" href="resources/libraries/css/bootstrap.css">
+  <!--CoreUI CSS-->
+  <link rel="stylesheet" href="resources/libraries/css/coreui.css">
   <!--Custom CSS-->
   <link rel="stylesheet" href="resources/styles/main.css">
 </head>
 
 <body>
   <!--Popup Message-->
-  <div id="success-message" class="bg-success hide"></div>
-  <div id="error-message" class="bg-danger hide"></div>
-  <section class="jumbotron">
-    <h1>This is SETS employee page</h1>
+  <div class="alert alert-banner alert-success text-center hide">Example Message</div>
+  <div class="alert alert-banner alert-danger text-center hide">Example Message</div>
+  <!--Hero Section-->
+  <section class="container">
+    <div id="hero" class="jumbotron" style="padding: 0 2rem;">
+      <div class="row">
+        <div class="col-lg-5 col-md-12"><img width="256" height="256" src="resources/images/logo.png" alt="logo"></div>
+        <div class="col-lg-7 col-md-12">
+          <h1>Where Innovation Begins</h1>
+          <h2 style="font-size: 40px;">Build Your Future Here</h2>
+        </div>
+      </div>
+    </div>
   </section>
+  <div class="gap-15"></div>
   <!--Login Section-->
-  <section id="login-section" class="container hide">
-    <form id="login-form">
-      <fieldset>
-        Username<input type="text" name="username" id="username" required>
-      </fieldset>
-      <fieldset>
-        Password<input type="password" name="password" id="password" required>
-      </fieldset>
-      <fieldset>
-        <input type="submit" value="Login" class="btn btn-primary">
-      </fieldset>
-    </form>
-    <br>
-    <h3>Forgot Password? Use Username and Email to Recover</h3>
-    <form id="recover-form">
-      <div>Username<input type="text" name="rusername" id="rusername" required></div>
-      <div>Your Email<input type="email" name="remail" id="remail" required></div>
-      <input type="submit" value="Recover" class="btn btn-danger">
-    </form>
+  <section id="login-section" class="hide">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h1 class="text-left">Employee Login</h1>
+          <!--Login Form-->
+          <form id="login-form">
+            <div class="form-group">
+              <label for="username" class="text-uppercase">Username*</label>
+              <input type="text" class="form-control" name="username" id="username" required>
+            </div>
+            <div class="form-group">
+              <label for="password" class="text-uppercase">Password*</label>
+              <input type="password" class="form-control" name="password" id="password" required>
+            </div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="remember">
+              <label class="custom-control-label" for="remember">Remember Me</label>
+            </div>
+            <div class="form-check">
+              <button type="submit" class="btn btn-mat-deep-purple float-right px-3 py-2">Login<i class="fas fa-sign-in-alt"></i></button>
+            </div>
+          </form>
+        </div>
+        <div class="col md-1"></div>
+        <div class="col-md-7">
+          <div id="login-carousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+              <li data-target="#login-carousel" data-slide-to="0" class="active"></li>
+              <li data-target="#login-carousel" data-slide-to="1"></li>
+              <li data-target="#login-carousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+              <div class="carousel-item active">
+                <img class="d-block img-fluid w-100" src="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(2).jpg">
+                <div class="carousel-caption d-none d-md-block">
+                  <div class="banner-text">
+                    <h2>Leading Technology</h2>
+                    <p>Atque incidunt natus facere odit provident non ab iste illo repudiandae veritatis eaque autem
+                      rerum quidem necessitatibus explicabo, dolores voluptatibus doloribus tempore.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img class="d-block img-fluid w-100" src="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(7).jpg">
+                <div class="carousel-caption d-none d-md-block">
+                  <div class="banner-text">
+                    <h2>Smart Reimbursement System</h2>
+                    <p>Quibusdam impedit accusantium veritatis numquam officia minima perspiciatis blanditiis atque
+                      qui, ipsum nulla? Temporibus nostrum dolorum impedit ducimus vitae cum unde mollitia!</p>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img class="d-block img-fluid w-100" src="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(6).jpg">
+                <div class="carousel-caption d-none d-md-block">
+                  <div class="banner-text">
+                    <h2>User Friendly</h2>
+                    <p>Eligendi omnis officiis doloremque neque nulla reprehenderit, quasi quis blanditiis repellendus
+                      odit earum pariatur eaque ab sequi ullam veritatis cum error. Ipsa.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-4">
+          <!--Recover Form-->
+          <h3>Forgot Password?</h3>
+          <form id="recover-form">
+            <div class="form-group">
+              <label for="rusername" class="text-uppercase">Username*</label>
+              <input type="text" class="form-control" name="rusername" id="rusername" required>
+            </div>
+            <div class="form-group">
+              <label for="remail" class="text-uppercase">Email*</label>
+              <input type="email" class="form-control" name="remail" id="remail" required>
+            </div>
+            <div class="form-check">
+              <button type="submit" class="btn btn-mat-deep-orange float-right px-3 py-2">Recover<i class="fas fa-key"></i></button>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-7 text-center">
+          <br>
+          <div>
+            <h3>Contact Our Specialist</h3>
+            <h4>Phone: 888-850-3267</h4>
+            <h4>Email: help@sets.com</h4>
+            <br>
+            <p>Maxime veniam minus, nobis earum harum ex. Sit dolor perspiciatis accusantium quisquam dicta veniam,
+              voluptatem officia, eveniet, accusamus autem qui nesciunt cupiditate!</p>
+            <p><i class="far fa-copyright"></i> 2018 SE Talent Solutions, INC.</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
   <!--Employee Section-->
   <section id="employee-section" class="container hide">
-    <h1 class="text-center">Welcome to Employee Home</h1>
-    <div class="row">
-      <div id="firstName" class="col-sm-12"></div>
-      <div id="lastName" class="col-sm-12"></div>
-      <div id="email" class="col-sm-12"></div>
-      <div id="accessLevel" class="col-sm-12"></div>
-    </div>
-    <div id="manage" class="hide"><button class="btn btn-secondary">Manage Employees</button></div>
-    <div id="request"><button class="btn btn-secondary">View Reimbursement Requests</button></div>
-    <div id="resolve" class="hide"><button class="btn btn-danger">Resolve Requests</button></div>
-    <div id="inspect" class="hide"><button class="btn btn-info">View Resolved Requests</button></div>
-    <div>
-      <button id="update" class="btn btn-dark">Update Information</button>
-      <button id="security" class="btn btn-dark">Change Credentials</button>
-      <!--Logout Part-->
-      <form action="logout" method="post">
-        <input type="submit" value="Logout" class="btn btn-warning">
-      </form>
-    </div>
+    <h1 class="text-center"><i class="fas fa-home space-10"></i> Welcome Back, <span class="space-10"></span><span id="firstName">John</span>
+      <span id="lastName">Doe</span></h1>
+    <div class="gap-20"></div>
+    <h3><i class="fas fa-user-alt"></i><span class="space-10"></span>Your Profile</h3>
     <br>
-    <!--Update Part-->
+    <!--Employee Profile-->
+    <div class="row profile-row">
+      <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-fingerprint"></i> <span class="space-5"></span>
+        Employee ID:</div>
+      <div id="employeeId" class="col-lg-9 col-md-12 profile-col">1000</div>
+    </div>
+    <div class="row profile-row">
+      <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-envelope"></i> <span class="space-5"></span>
+        Email:</div>
+      <div id="email" class="col-lg-9 col-md-12 profile-col">john.doe@mailinator.com</div>
+    </div>
+    <div class="row profile-row">
+      <div class="col-lg-3 col-md-6 profile-col"><i class="far fa-address-card"></i> <span class="space-5"></span>
+        Role:</div>
+      <div id="role" class="col-lg-6 col-md-12 profile-col">Associate</div>
+    </div>
+    <div class="row profile-row">
+      <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-arrow-up"></i> <span class="space-5"></span>
+        Up Group:</div>
+      <div id="upGroup" class="col-lg-6 col-md-12 profile-col">101</div>
+    </div>
+    <div class="row profile-row">
+      <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-arrow-down"></i> <span class="space-5"></span>
+        Down Group:</div>
+      <div id="downGroup" class="col-lg-6 col-md-12 profile-col">None</div>
+    </div>
+    <div class="row profile-row">
+      <div class="col-lg-3 col-md-6 profile-col"><i class="fas fa-unlock-alt"></i> <span class="space-5"></span>
+        Access Level:</div>
+      <div id="accessLevel" class="col-lg-6 col-md-12 profile-col">1</div>
+    </div>
+    <div class="gap-20"></div>
+    <!--Employee Buttons-->
+    <div class="row">
+      <div class="col-lg-4 col-md-12"><button id="update" class="btn btn-primary px-3 py-2"><i class="fas fa-info"></i>
+          <span class="space-5"></span> Update Information</button></div>
+      <div class="col-lg-4 col-md-12"><button id="security" class="btn btn-mat-red px-3 py-2"><i class="fas fa-book"></i>
+          <span class="space-5"></span> Change Credentials</button></div>
+    </div>
+    <div class="gap-20"></div>
+    <!--Update Form-->
     <form id="update-form" class="hide">
-      <div>First Name<input type="text" name="newFirstName" id="newFirstName" required></div>
-      <div>Last Name<input type="text" name="newLastName" id="newLastName" required></div>
-      <div>Email<input type="email" name="newEmail" id="newEmail" required></div>
-      <input class="btn btn-warning" type="submit" value="Update">
+      <h3>Update Your Information</h3>
+      <br>
+      <div class="form-group row">
+        <label for="newFirstName" class="col-lg-3 col-md-12 col-form-label">First Name</label>
+        <div class="col-lg-9 col-md-12">
+          <input type="text" class="form-control" name="newFirstName" id="newFirstName" required>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="newLastName" class="col-lg-3 col-md-12 col-form-label">Last Name</label>
+        <div class="col-lg-9 col-md-12">
+          <input type="text" class="form-control" name="newLastName" id="newLastName" required>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="newEmail" class="col-lg-3 col-md-12 col-form-label">Email</label>
+        <div class="col-lg-9 col-md-12">
+          <input type="email" class="form-control" name="newEmail" id="newEmail" required>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-12">
+          <button type="submit" class="btn btn-mat-orange btn-form">Update</button>
+        </div>
+      </div>
+      <div class="gap-20"></div>
     </form>
-    <!--Security Part-->
+    <!--Change Credentials Form-->
     <form id="security-form" class="hide">
-      <div>Old Password<input type="password" name="oldPassword" id="oldPassword" required></div>
-      <div>New Username<input type="text" name="newUsername" id="newUsername" required></div>
-      <div>New Password<input type="password" name="newPassword1" id="newPassword1" required></div>
-      <div>Confirm Password<input type="password" name="newPassword2" id="newPassword2" required></div>
-      <input type="submit" value="Confirm" class="btn btn-warning">
-      <div id="password-mismatch" class="hide text-danger">The passwords do not match</div>
+      <h3>Change Your Credentials</h3>
+      <br>
+      <div class="form-group row">
+        <label for="oldPassword" class="col-lg-3 col-md-12 col-form-label">Old Password</label>
+        <div class="col-lg-9 col-md-12">
+          <input type="password" class="form-control" name="oldPassword" id="oldPassword" required>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="newUsername" class="col-lg-3 col-md-12 col-form-label">New Username</label>
+        <div class="col-lg-9 col-md-12">
+          <input type="text" class="form-control" name="newUsername" id="newUsername" required>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="newPassword1" class="col-lg-3 col-md-12 col-form-label">New Password</label>
+        <div class="col-lg-9 col-md-12">
+          <input type="password" class="form-control" name="newPassword1" id="newPassword1" required>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="newPassword2" class="col-lg-3 col-md-12 col-form-label">Confirm Password</label>
+        <div class="col-lg-9 col-md-12">
+          <input type="password" class="form-control" name="newPassword2" id="newPassword2" required>
+        </div>
+      </div>
+      <div id="password-mismatch" class="hide text-danger"><em>Error: The Passwords Don't Match</em></div>
+      <div class="form-group row">
+        <div class="col-sm-12">
+          <button type="submit" class="btn btn-danger btn-form">Confirm</button>
+        </div>
+      </div>
+      <div class="gap-20"></div>
+    </form>
+    <!--Reimbursement Button-->
+    <div class="row">
+      <div class="col-12"><button id="request" class="btn btn-mat-teal px-3 py-2"><i class="fas fa-file-invoice-dollar"></i><span
+            class="space-5"></span> Reimbursement Requests</button></div>
+    </div>
+    <div class="gap-20"></div>
+    <!--Reimbursement Table-->
+    <!--Manage Employee Button-->
+    <div class="btn-group-man hide">
+      <div class="row">
+        <div class="col-12"><button id="manage" class="btn btn-mat-indigo px-3 py-2"><i class="fas fa-chalkboard-teacher"></i><span
+              class="space-5"></span> Manage Employees</button></div>
+      </div>
+      <div class="gap-20"></div>
+    </div>
+    <!--Employee Table-->
+    <!--Manage Request Buttons-->
+    <div class="btn-group-man hide">
+      <div class="row">
+        <div class="col-lg-4 col-md-12"><button id="resolve" class="btn btn-mat-pink-a4 px-3 py-2"><i class="fas fa-bolt"></i>
+            <span class="space-5"></span> Resolve Requests</button></div>
+        <div class="col-lg-4 col-md-12"><button id="inspect" class="btn btn-info px-3 py-2"><i class="fas fa-search"></i>
+            <span class="space-5"></span> View Requests</button></div>
+      </div>
+      <div class="gap-20"></div>
+    </div>
+    <!--Logout Button-->
+    <div class="gap-20"></div>
+    <form action="logout" method="post">
+      <div class="row">
+        <div class="col-12"><button type="submit" class="btn btn-warning btn-logout px-3 py-2">Logout<span class="space-3"></span>
+            <i class="fas fa-door-open"></i></button></div>
+      </div>
     </form>
   </section>
   <br>
@@ -236,6 +439,8 @@
     <script src="resources/libraries/js/jquery-3.3.1.js"></script>
     <!--Bootstrap JS-->
     <script src="resources/libraries/js/bootstrap.bundle.js"></script>
+    <!--CoreUI JS-->
+    <script src="resources/libraries/js/coreui.js"></script>
     <!--Custom JS-->
     <script src="resources/scripts/utilities.js"></script>
     <script src="resources/scripts/main.js"></script>
