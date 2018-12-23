@@ -381,22 +381,6 @@
           </tr>
         </thead>
         <tbody id="employee-information"></tbody>
-        <tfoot>
-          <div class="modal fade" id="fire-modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Confirm Firing</h5>
-                </div>
-                <div class="modal-body">Are Your Sure?</div>
-                <div class="modal-footer">
-                  <button style="width: 100px;" type="button" class="btn btn-secondary btn-modal" data-dismiss="modal">No</button>
-                  <button id="confirm-fire" type="button" class="btn btn-danger btn-modal" data-dismiss="modal">Yes</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </tfoot>
       </table>
       <br>
       <!--Manager Actions-->
@@ -404,7 +388,7 @@
           Register Employee</button></div>
       <br style="clear: both">
       <div class="gap-15"></div>
-      <div><button id="change-role" class="btn btn-mat-purple float-right hide"><i class="fas fa-exchange-alt"></i><span
+      <div class="hide"><button id="change-role" class="btn btn-mat-purple float-right"><i class="fas fa-exchange-alt"></i><span
             class="space-3"></span> Change Employee Role</button></div>
       <br style="clear: both">
       <!--Register Form-->
@@ -554,6 +538,21 @@
     <div class="gap-20"></div>
     <ul></ul>
   </aside>
+  <!--Fire Modal-->
+  <div class="modal fade" id="fire-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Firing</h5>
+        </div>
+        <div class="modal-body">Are Your Sure?</div>
+        <div class="modal-footer">
+          <button style="width: 100px;" type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          <button style="width: 100px;" id="confirm-fire" type="button" class="btn btn-danger" data-dismiss="modal">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!--Image Modal-->
   <div class="modal fade" id="image-view" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

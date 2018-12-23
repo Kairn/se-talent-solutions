@@ -69,6 +69,7 @@ const showEmployee = function (data) {
 		if (accessLevel === 3) {
 			$("#role").text("Executive");
 			$(".btn-group-man").removeClass("hide");
+			$("#change-role").closest("div").removeClass("hide");
 		}
 		else if (accessLevel === 2) {
 			$("#role").text("Manager");
