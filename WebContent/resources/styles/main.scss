@@ -24,6 +24,8 @@ $theme-colors: (
 	"mat-yellow": #ffeb3b,
 	"mat-amber": #ffc107,
 	"mat-orange": #ff9800,
+	"mat-orange-d4": #e65100,
+	"mat-deep-orange-d4": #bf360c,
 	"mat-deep-orange": #ff5722,
 	"mat-brown": #795548,
 	"mat-grey": #9e9e9e,
@@ -43,20 +45,17 @@ a:hover {
 }
 
 aside {
-	width: 10%;
+	color: white;
+	opacity: 0.7;
+	height: 100%;
+	width: 5%;
 	position: fixed;
 	right: 0;
 	top: 0;
-	ul {
-		list-style: none;
-		li {
-			margin: 20px 0;
-			float: right;
-			clear: both;
-		}
-	}
-	#panel-close {
-		border-radius: 50%;
+	h2 {
+		font-size: 30px;
+		margin: 40px auto;
+		cursor: pointer;
 	}
 }
 

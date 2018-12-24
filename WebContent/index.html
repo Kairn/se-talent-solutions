@@ -21,8 +21,6 @@
   <!--Style Sheets-->
   <!--Bootstrap CSS-->
   <link rel="stylesheet" href="resources/libraries/css/bootstrap.css">
-  <!--CoreUI CSS-->
-  <link rel="stylesheet" href="resources/libraries/css/coreui.css">
   <!--MDB Datatables-->
   <link rel="stylesheet" href="resources/libraries/css/datatables.css">
   <!--Custom CSS-->
@@ -497,6 +495,7 @@
         </thead>
         <tbody id="pending-body"></tbody>
       </table>
+      <div class="gap-20"></div>
     </div>
     <!--Inspect Request-->
     <div id="inspect-request" class="hide">
@@ -531,12 +530,11 @@
   </section>
   <br>
   <!--File Panel-->
-  <aside id="file-panel" class="hide">
+  <aside id="file-panel" class="bg-mat-deep-orange-d4 hide">
     <div class="gap-15"></div>
-    <button id="panel-close" class="btn btn-mat-red-d4 float-right"><i class="far fa-times-circle"></i></button>
-    <br style="clear: both;">
+    <h2 id="panel-close" class="text-center"><i class="fas fa-arrow-right"></i></h2>
     <div class="gap-20"></div>
-    <ul></ul>
+    <div id="file-list"></div>
   </aside>
   <!--Fire Modal-->
   <div class="modal fade" id="fire-modal" tabindex="-1" role="dialog">
@@ -569,8 +567,6 @@
     <script src="resources/libraries/js/jquery-3.3.1.js"></script>
     <!--Bootstrap JS-->
     <script src="resources/libraries/js/bootstrap.bundle.js"></script>
-    <!--CoreUI JS-->
-    <script src="resources/libraries/js/coreui.js"></script>
     <!--MDB Datatables-->
     <script src="resources/libraries/js/datatables.js"></script>
     <!--Custom JS-->

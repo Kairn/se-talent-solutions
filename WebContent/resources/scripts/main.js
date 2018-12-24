@@ -645,17 +645,15 @@ const getAttachedFiles = function (id) {
 
 // Display File Panel
 const showFilesList = function (data) {
-	$fileUl = $("#file-panel").find("ul");
+	$fileUl = $("#file-list");
 	$fileUl.empty();
 	for (let i in data) {
 		fileId = parseInt(data[i]["fileId"]);
-		$newLi = $("<li></li>");
-		$newBtn = $("<button></button>");
-		$newBtn.html("<i class=\"fas fa-images\"></i>").addClass("btn").addClass("btn-mat-amber").addClass("image");
+		$newBtn = $("<h2></h2>");
+		$newBtn.html("<i class=\"fas fa-images\"></i>").addClass("image").addClass("text-center");
 		$newBtn.attr("data-id", fileId).attr("data-type", data[i]["fileType"]);
-		$newBtn.attr("type", "button").attr("data-toggle", "modal").attr("data-target", "#image-view");
-		$newLi.append($newBtn);
-		$fileUl.append($newLi);
+		$newBtn.attr("data-toggle", "modal").attr("data-target", "#image-view");
+		$fileUl.append($newBtn);
 	}
 	$("#file-panel").fadeIn(500);
 	// Show Image Trigger
