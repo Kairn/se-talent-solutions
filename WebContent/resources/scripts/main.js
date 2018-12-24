@@ -512,7 +512,7 @@ const fetchJuniorPendingRequests = function () {
 
 // Display Pending Request Information
 const showPendingRequests = function (data) {
-	$pendInfo = $("#pending-body");
+	var $pendInfo = $("#pending-body");
 	$pendInfo.empty();
 	data.sort((a, b) => parseInt(a["requestId"]) - parseInt(b["requestId"]));
 	for (let i in data) {
@@ -645,11 +645,11 @@ const getAttachedFiles = function (id) {
 
 // Display File Panel
 const showFilesList = function (data) {
-	$fileUl = $("#file-list");
+	var $fileUl = $("#file-list");
 	$fileUl.empty();
 	for (let i in data) {
-		fileId = parseInt(data[i]["fileId"]);
-		$newBtn = $("<h2></h2>");
+		let fileId = parseInt(data[i]["fileId"]);
+		let $newBtn = $("<h2></h2>");
 		$newBtn.html("<i class=\"fas fa-images\"></i>").addClass("image").addClass("text-center");
 		$newBtn.attr("data-id", fileId).attr("data-type", data[i]["fileType"]);
 		$newBtn.attr("data-toggle", "modal").attr("data-target", "#image-view");
@@ -709,18 +709,18 @@ const getResolvedRequests = function () {
 
 // Display Resolution Information
 const showRequestsWithResolution = function (data) {
-	$inspectTableBody = $("#inspect-body");
+	var $inspectTableBody = $("#inspect-body");
 	$inspectTableBody.empty();
 	for (let i in data) {
-		$newInsRow = $("<tr></tr>");
-		$empId = $("<th></th>");
-		$empName = $("<td></td>");
-		$reason = $("<td></td>");
-		$sDate = $("<td></td>");
-		$amount = $("<td></td>");
-		$status = $("<td></td>");
-		$manName = $("<td></td>");
-		$rDate = $("<td></td>");
+		let $newInsRow = $("<tr></tr>");
+		let $empId = $("<th></th>");
+		let $empName = $("<td></td>");
+		let $reason = $("<td></td>");
+		let $sDate = $("<td></td>");
+		let $amount = $("<td></td>");
+		let $status = $("<td></td>");
+		let $manName = $("<td></td>");
+		let $rDate = $("<td></td>");
 		// Bind data
 		$empId.html(data[i]["employeeId"]);
 		$empName.html(data[i]["employeeName"]);
