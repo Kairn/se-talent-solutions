@@ -2,7 +2,7 @@
 const APP_NAME = "se-talent-solutions";
 
 // API Endpoint
-const URL_WRAPPER = function (endpoint) {
+const URL_WRAPPER = function(endpoint) {
 	return "/" + APP_NAME + "/" + endpoint;
 };
 
@@ -19,7 +19,7 @@ const GET_HEADER_JSON = {
 };
 
 // Post JSON
-const POST_HEADER_WRAPPER = function (data) {
+const POST_HEADER_WRAPPER = function(data) {
 	var header = {
 		method: "POST",
 		headers: {
@@ -31,7 +31,7 @@ const POST_HEADER_WRAPPER = function (data) {
 };
 
 // Post Form Data
-const POST_HEADER_FORM_WRAPPER = function (form) {
+const POST_HEADER_FORM_WRAPPER = function(form) {
 	var formData = new FormData(form);
 	var header = {
 		method: "POST",
@@ -41,7 +41,7 @@ const POST_HEADER_FORM_WRAPPER = function (form) {
 };
 
 // Put JSON
-const PUT_HEADER_WRAPPER = function (data) {
+const PUT_HEADER_WRAPPER = function(data) {
 	var header = {
 		method: "PUT",
 		headers: {
@@ -53,7 +53,7 @@ const PUT_HEADER_WRAPPER = function (data) {
 };
 
 // Delete JSON
-const DELETE_HEADER_WRAPPER = function (data) {
+const DELETE_HEADER_WRAPPER = function(data) {
 	var header = {
 		method: "DELETE",
 		headers: {
@@ -65,6 +65,6 @@ const DELETE_HEADER_WRAPPER = function (data) {
 };
 
 // File URL Maker
-const FILE_URL_WRAPPER = function (type, id) {
+const FILE_URL_WRAPPER = function(type, id) {
 	return "image/" + type + id;
 }

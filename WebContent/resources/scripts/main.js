@@ -1,5 +1,5 @@
 // Display Message
-const displayMessage = function (success, message, reload) {
+const displayMessage = function(success, message, reload) {
 	var $target;
 	if (success) {
 		$target = $(".alert-success");
@@ -8,7 +8,7 @@ const displayMessage = function (success, message, reload) {
 		$target = $(".alert-danger");
 	}
 	$target.html(message);
-	$target.slideDown(500).delay(1500).slideUp(500, function () {
+	$target.slideDown(500).delay(1500).slideUp(500, function() {
 		if (reload) {
 			location.reload();
 		}
@@ -16,38 +16,38 @@ const displayMessage = function (success, message, reload) {
 };
 
 // Login with Session
-const loginWithSession = function () {
+const loginWithSession = function() {
 	fetch("login", GET_HEADER_JSON)
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			showEmployee(data);
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		});
 };
 
 // Login with Credentials
-const loginWithCredentials = function () {
+const loginWithCredentials = function() {
 	var credentials = {};
 	credentials["username"] = $("#username").val().trim();
 	credentials["password"] = $("#password").val().trim();
 	fetch("login", POST_HEADER_WRAPPER(credentials))
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			showEmployee(data);
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		});
 };
 
 // Display Employee Information
-const showEmployee = function (data) {
+const showEmployee = function(data) {
 	if (parseInt(data["status"]) === 400 || parseInt(data["status"]) === 401) {
 		$("#employee-section").addClass("hide");
 		$("#login-section").removeClass("hide");
@@ -91,16 +91,16 @@ const showEmployee = function (data) {
 };
 
 // Update Employee Information
-const updateEmployeeInformation = function () {
+const updateEmployeeInformation = function() {
 	var newInformation = {};
 	newInformation["newFirstName"] = $("#newFirstName").val().trim();
 	newInformation["newLastName"] = $("#newLastName").val().trim();
 	newInformation["newEmail"] = $("#newEmail").val().trim();
 	fetch("update", POST_HEADER_WRAPPER(newInformation))
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: Information Updated", true);
 			}
@@ -111,13 +111,13 @@ const updateEmployeeInformation = function () {
 				displayMessage(false, "Error: Invalid Information", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Change Credentials
-const changeEmployeeCredentials = function () {
+const changeEmployeeCredentials = function() {
 	var newCredentials = {};
 	newCredentials["oldPassword"] = $("#oldPassword").val().trim();
 	newCredentials["newUsername"] = $("#newUsername").val().trim();
@@ -129,10 +129,10 @@ const changeEmployeeCredentials = function () {
 	else {
 		$("#password-mismatch").addClass("hide");
 		fetch("security", POST_HEADER_WRAPPER(newCredentials))
-			.then(function (response) {
+			.then(function(response) {
 				return response.json();
 			})
-			.then(function (data) {
+			.then(function(data) {
 				if (parseInt(data["status"]) === 200) {
 					displayMessage(true, "Success: Your Credentials Have Been Changed", true);
 				}
@@ -143,22 +143,22 @@ const changeEmployeeCredentials = function () {
 					displayMessage(false, "Error: Invalid Credentials or Information", false);
 				}
 			})
-			.catch(function (error) {
+			.catch(function(error) {
 				console.log(error);
 			})
 	}
 };
 
 // Recover Credentials
-const obtainNewCredentials = function () {
+const obtainNewCredentials = function() {
 	var employeeInformation = {};
 	employeeInformation["username"] = $("#rusername").val().trim();
 	employeeInformation["email"] = $("#remail").val().trim();
 	fetch("recover", POST_HEADER_WRAPPER(employeeInformation))
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: New Credentials Have Been Sent to Your Email", false);
 			}
@@ -166,18 +166,18 @@ const obtainNewCredentials = function () {
 				displayMessage(false, "Error: Invalid Information", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Get Employees under Management
-const getJuniorEmployees = function () {
+const getJuniorEmployees = function() {
 	fetch("manage", GET_HEADER_JSON)
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				showJuniorEmployees(JSON.parse(data["content"]), false);
 			}
@@ -196,13 +196,13 @@ const getJuniorEmployees = function () {
 				displayMessage(false, "Error: Invalid Request", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Display Employees under Management
-const showJuniorEmployees = function (data, exe) {
+const showJuniorEmployees = function(data, exe) {
 	var $empInfo = $("#employee-information");
 	$empInfo.empty();
 	data.sort((a, b) => parseInt(a["accessLevel"]) - parseInt(b["accessLevel"]));
@@ -248,14 +248,14 @@ const showJuniorEmployees = function (data, exe) {
 	$empInfo.find("td").addClass("align-middle");
 	$("#manage-employee").slideDown(2000);
 	// Fire Employee Trigger
-	$(".fire").on("click", function () {
+	$(".fire").on("click", function() {
 		if ($(this).hasClass("disabled")) {
 			return;
 		}
 		$("#confirm-fire").attr("data-id", parseInt($(this).attr("data-id")));
 	})
 	// Confirm Fire Trigger
-	$("#confirm-fire").on("click", function () {
+	$("#confirm-fire").on("click", function() {
 		fireEmployee(parseInt($(this).attr("data-id")));
 	})
 	$('#employee-table').DataTable();
@@ -263,17 +263,17 @@ const showJuniorEmployees = function (data, exe) {
 };
 
 // Register Employee
-const registerEmployee = function () {
+const registerEmployee = function() {
 	var regEmployee = {};
 	regEmployee["firstName"] = $("#regFirstName").val().trim();
 	regEmployee["lastName"] = $("#regLastName").val().trim();
 	regEmployee["email"] = $("#regEmail").val().trim();
 	regEmployee["upGroup"] = $("#regUpGroup").val().trim();
 	fetch("manage", POST_HEADER_WRAPPER(regEmployee))
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: New Employee Registered", true);
 			}
@@ -284,23 +284,23 @@ const registerEmployee = function () {
 				displayMessage(false, "Error: Invalid Request", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Change Employee Role
-const changeEmployeeRole = function () {
+const changeEmployeeRole = function() {
 	var newRole = {};
 	newRole["employeeId"] = $("#changeEmployeeId").val();
 	newRole["upGroup"] = $("#changeUpGroup").val();
 	newRole["downGroup"] = $("#changeDownGroup").val();
 	newRole["accessLevel"] = $("#changeAccessLevel").val();
 	fetch("manage", PUT_HEADER_WRAPPER(newRole))
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: Employee Role Changed", true);
 			}
@@ -311,20 +311,20 @@ const changeEmployeeRole = function () {
 				displayMessage(false, "Error: Invalid Request", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Fire Employee
-const fireEmployee = function (id) {
+const fireEmployee = function(id) {
 	var firing = {};
 	firing["employeeId"] = id;
 	fetch("manage", DELETE_HEADER_WRAPPER(firing))
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: Employee Fired", true);
 			}
@@ -335,18 +335,18 @@ const fireEmployee = function (id) {
 				displayMessage(false, "Error: Invalid Request", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Get Employee's Requests
-const getOwnRequests = function () {
+const getOwnRequests = function() {
 	fetch("reimbursement", GET_HEADER_JSON)
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				showOwnRequests(JSON.parse(data["content"]));
 			}
@@ -362,13 +362,13 @@ const getOwnRequests = function () {
 				displayMessage(false, "Error: Invalid Request", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Show Request Information
-const showOwnRequests = function (data) {
+const showOwnRequests = function(data) {
 	var $reqInfo = $("#request-body-self");
 	$reqInfo.empty();
 	data.sort((a, b) => parseInt(a["requestId"]) - parseInt(b["requestId"]));
@@ -416,11 +416,11 @@ const showOwnRequests = function (data) {
 	$reqInfo.find("td").addClass("align-middle");
 	$("#reimbursement-request").slideDown(2000);
 	// Image List Trigger
-	$(".view").on("click", function () {
+	$(".view").on("click", function() {
 		getAttachedFiles(parseInt($(this).attr("data-id")));
 	});
 	// Recall Request Trigger
-	$(".recall").on("click", function () {
+	$(".recall").on("click", function() {
 		if ($(this).hasClass("disabled")) {
 			return;
 		}
@@ -431,16 +431,16 @@ const showOwnRequests = function (data) {
 };
 
 // Submit Request
-const submitNewRequest = function () {
+const submitNewRequest = function() {
 	var reqContent = {};
 	reqContent["reason"] = $("#reason").val().trim();
 	reqContent["message"] = $("#message").val().trim();
 	reqContent["amount"] = parseFloat($("#amount").val().trim());
 	fetch("reimbursement", POST_HEADER_WRAPPER(reqContent))
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: New Request Submitted", true);
 			}
@@ -451,20 +451,20 @@ const submitNewRequest = function () {
 				displayMessage(false, "Error: Invalid Request", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Recall Request
-const recallReimbursementRequest = function (id) {
+const recallReimbursementRequest = function(id) {
 	var recalling = {};
 	recalling["requestId"] = parseInt(id);
 	fetch("reimbursement", DELETE_HEADER_WRAPPER(recalling))
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: Reimbursement Request Recalled", true);
 			}
@@ -475,18 +475,18 @@ const recallReimbursementRequest = function (id) {
 				displayMessage(false, "Error: Invalid Request", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Get Managed Requests
-const fetchJuniorPendingRequests = function () {
+const fetchJuniorPendingRequests = function() {
 	fetch("resolve", GET_HEADER_JSON)
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				showPendingRequests(JSON.parse(data["content"]));
 			}
@@ -505,13 +505,13 @@ const fetchJuniorPendingRequests = function () {
 				displayMessage(false, "Error: Invalid Request", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Display Pending Request Information
-const showPendingRequests = function (data) {
+const showPendingRequests = function(data) {
 	var $pendInfo = $("#pending-body");
 	$pendInfo.empty();
 	data.sort((a, b) => parseInt(a["requestId"]) - parseInt(b["requestId"]));
@@ -553,11 +553,11 @@ const showPendingRequests = function (data) {
 	$pendInfo.find("td").addClass("align-middle");
 	$("#resolve-request").slideDown(2000);
 	// Image List Trigger
-	$(".view").on("click", function () {
+	$(".view").on("click", function() {
 		getAttachedFiles(parseInt($(this).attr("data-id")));
 	});
 	// Resolve Request Trigger
-	$(".resolve").on("click", function () {
+	$(".resolve").on("click", function() {
 		if ($(this).hasClass("btn-success")) {
 			resolveReimbursementRequest($(this).attr("data-id"), "approve");
 		}
@@ -570,15 +570,15 @@ const showPendingRequests = function (data) {
 };
 
 // Resolve Request
-const resolveReimbursementRequest = function (requestId, action) {
+const resolveReimbursementRequest = function(requestId, action) {
 	var acting = {};
 	acting["requestId"] = parseInt(requestId);
 	acting["action"] = action;
 	fetch("resolve", PUT_HEADER_WRAPPER(acting))
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: Reimbursement Request Resolved", true);
 			}
@@ -592,19 +592,19 @@ const resolveReimbursementRequest = function (requestId, action) {
 				displayMessage(false, "Error: Invalid Request", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Send Image Form
-const uploadImageFile = function () {
+const uploadImageFile = function() {
 	fetch("file", POST_HEADER_FORM_WRAPPER(document.querySelector("#upload-form")))
-		.then(function (response) {
+		.then(function(response) {
 			console.log(response);
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				displayMessage(true, "Success: File Uploaded", true);
 			}
@@ -618,19 +618,19 @@ const uploadImageFile = function () {
 				displayMessage(false, "Error: Invalid Request", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Get File List
-const getAttachedFiles = function (id) {
+const getAttachedFiles = function(id) {
 	$("#file-panel").fadeOut(500);
 	fetch(FILE_URL_WRAPPER("r", id), GET_HEADER_JSON)
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				showFilesList(JSON.parse(data["content"]));
 			}
@@ -638,13 +638,13 @@ const getAttachedFiles = function (id) {
 				displayMessage(false, "Oops: No File Found", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Display File Panel
-const showFilesList = function (data) {
+const showFilesList = function(data) {
 	var $fileUl = $("#file-list");
 	$fileUl.empty();
 	for (let i in data) {
@@ -657,33 +657,33 @@ const showFilesList = function (data) {
 	}
 	$("#file-panel").fadeIn(500);
 	// Show Image Trigger
-	$(".image").on("click", function () {
+	$(".image").on("click", function() {
 		$("#image-spot").attr("src", "https://loading.io/spinners/microsoft/lg.rotating-balls-spinner.gif");
 		fetchImageFile($(this).attr("data-type"), $(this).attr("data-id"));
 	})
 };
 
 // Get Image by ID
-const fetchImageFile = function (type, id) {
+const fetchImageFile = function(type, id) {
 	fetch(FILE_URL_WRAPPER("i_" + type + "_", id), GET_HEADER)
-		.then(function (response) {
+		.then(function(response) {
 			return response.blob();
 		})
-		.then(function (blob) {
+		.then(function(blob) {
 			$("#image-spot").attr("src", URL.createObjectURL(blob));
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Get Resolved Requests
-const getResolvedRequests = function () {
+const getResolvedRequests = function() {
 	fetch("inspect", GET_HEADER_JSON)
-		.then(function (response) {
+		.then(function(response) {
 			return response.json();
 		})
-		.then(function (data) {
+		.then(function(data) {
 			if (parseInt(data["status"]) === 200) {
 				showRequestsWithResolution(JSON.parse(data["content"]));
 			}
@@ -702,13 +702,13 @@ const getResolvedRequests = function () {
 				displayMessage(false, "Error: Invalid Request", false);
 			}
 		})
-		.catch(function (error) {
+		.catch(function(error) {
 			console.log(error);
 		})
 };
 
 // Display Resolution Information
-const showRequestsWithResolution = function (data) {
+const showRequestsWithResolution = function(data) {
 	var $inspectTableBody = $("#inspect-body");
 	$inspectTableBody.empty();
 	for (let i in data) {
@@ -745,95 +745,102 @@ const showRequestsWithResolution = function (data) {
 	$('.dataTables_length').addClass('bs-select');
 };
 
-$(function () {
+$(function() {
 	// Login on Startup
 	loginWithSession();
 	// Login with credentials
-	$("#login-form").on("submit", function (e) {
+	$("#login-form").on("submit", function(e) {
 		e.preventDefault();
 		loginWithCredentials();
 	});
+	$("#logout-form").on("submit", function(e) {
+		e.preventDefault();
+		fetch("logout", POST_HEADER_WRAPPER(null))
+			.then(() => {
+				displayMessage(true, "Successfully logged out", true);
+			})
+	})
 	// Submit Login Form
-	$("#update").on("click", function () {
+	$("#update").on("click", function() {
 		$("#update-form").slideToggle(1000);
 	});
 	// Submit Update Form
-	$("#update-form").on("submit", function (e) {
+	$("#update-form").on("submit", function(e) {
 		e.preventDefault();
 		updateEmployeeInformation();
 	});
 	// Forgot Credentials
-	$("#security").on("click", function () {
+	$("#security").on("click", function() {
 		$("#security-form").slideToggle(1000);
 	});
 	// Reset Credentials
-	$("#security-form").on("submit", function (e) {
+	$("#security-form").on("submit", function(e) {
 		e.preventDefault();
 		changeEmployeeCredentials();
 	});
 	// Submit Recover Form
-	$("#recover-form").on("submit", function (e) {
+	$("#recover-form").on("submit", function(e) {
 		e.preventDefault();
 		obtainNewCredentials();
 	});
 	// Manage Employees
-	$("#manage").on("click", function () {
+	$("#manage").on("click", function() {
 		getJuniorEmployees();
 	});
 	// Toggle Registration Form
-	$("#register").on("click", function () {
+	$("#register").on("click", function() {
 		$("#register-form").slideToggle(1000);
 	});
 	// Submit Registration Form
-	$("#register-form").on("submit", function (e) {
+	$("#register-form").on("submit", function(e) {
 		e.preventDefault();
 		registerEmployee();
 	});
 	// Toggle Change Role Form
-	$("#change-role").on("click", function () {
+	$("#change-role").on("click", function() {
 		$("#change-role-form").slideToggle(1000);
 	});
 	// Submit Change Role Form
-	$("#change-role-form").on("submit", function (e) {
+	$("#change-role-form").on("submit", function(e) {
 		e.preventDefault();
 		changeEmployeeRole();
 	});
 	// View Requests
-	$("#request").on("click", function () {
+	$("#request").on("click", function() {
 		getOwnRequests();
 	});
 	// Toggle Submit Request Form
-	$("#new-request").on("click", function () {
+	$("#new-request").on("click", function() {
 		$("#submit-request-form").slideDown(1000);
 	});
 	// Toggle File Upload Form
-	$("#new-file").on("click", function () {
+	$("#new-file").on("click", function() {
 		$("#upload-form").slideDown(1000);
 	});
 	// Submit New Request Form
-	$("#submit-request-form").on("submit", function (e) {
+	$("#submit-request-form").on("submit", function(e) {
 		e.preventDefault();
 		submitNewRequest();
 	});
 	// Resolve Requests
-	$("#resolve").on("click", function () {
+	$("#resolve").on("click", function() {
 		fetchJuniorPendingRequests();
 	});
 	// Submit File Upload Form
-	$("#upload-form").on("submit", function (e) {
+	$("#upload-form").on("submit", function(e) {
 		e.preventDefault();
 		uploadImageFile();
 	});
 	// View Resolved Requests
-	$("#inspect").on("click", function () {
+	$("#inspect").on("click", function() {
 		getResolvedRequests();
 	})
 	// Close File Panel
-	$("#panel-close").on("click", function () {
+	$("#panel-close").on("click", function() {
 		$("#file-panel").fadeOut();
 	})
 	// Resize File Modal
-	$('#image-view').on('show.bs.modal', function () {
+	$('#image-view').on('show.bs.modal', function() {
 		$(this).find('.modal-body').css({
 			width: "auto",
 			height: "auto",
