@@ -110,6 +110,7 @@ buildNumber.properties
 
 ### Custom ###
 properties/
+*.properties
 libraries/
 *.css
 .*/
