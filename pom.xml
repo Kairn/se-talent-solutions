@@ -6,10 +6,17 @@
 	<artifactId>se-talent-solutions</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
+
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+
+		<sonar.exclusions>**/WebContent/**</sonar.exclusions>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>Kairn_se-talent-solutions</sonar.projectKey>
+		<sonar.organization>kairn-github</sonar.organization>
 	</properties>
+
 	<dependencies>
 		<!--OJDBC -->
 		<dependency>
@@ -72,7 +79,17 @@
 			<version>20180813</version>
 		</dependency>
 	</dependencies>
+
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.6.0.1398</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
@@ -112,4 +129,5 @@
 			</plugin>
 		</plugins>
 	</build>
+
 </project>
