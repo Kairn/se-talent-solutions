@@ -1,4 +1,7 @@
 # SE Talent Solutions
+[![Apache license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Website naereen.github.io](https://img.shields.io/website-up-down-green-red/https/naereen.github.io.svg)](http://ec2-13-59-150-21.us-east-2.compute.amazonaws.com:8080/se-talent-solutions/)  
+
 SE Talent Solutions (SETS) is an online human resources management system which facilitates an ERS (Expense Reimbursement System) for its employees.  
 
 *This is a Full Stack Java web application created during the Revature training program.*
