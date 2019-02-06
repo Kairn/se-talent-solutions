@@ -68,3 +68,10 @@ const DELETE_HEADER_WRAPPER = function(data) {
 const FILE_URL_WRAPPER = function(type, id) {
 	return "image/" + type + id;
 }
+
+// Convert UNIX Epoch to local date
+const epochToDate = function(epoch) {
+	let localDate = new Date(0);
+	localDate.setUTCMilliseconds(parseInt(epoch));
+	return localDate.toJSON().split("T")[0];
+}

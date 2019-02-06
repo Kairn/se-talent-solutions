@@ -23,6 +23,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class UtilityManager {
 
+	static {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	// Get JDBC connection
 	public static Connection getConnection() {
 
@@ -66,7 +74,7 @@ public class UtilityManager {
 				return new PasswordAuthentication(username, password);
 			}
 		});
-		
+
 		MimeMessage message = new MimeMessage(session);
 		try {
 			message.setFrom(new InternetAddress(username));
@@ -74,8 +82,7 @@ public class UtilityManager {
 			message.setSubject(subject);
 			message.setText(content);
 			Transport.send(message);
-		}
-		catch (MessagingException e) {
+		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
 
@@ -101,44 +108,41 @@ public class UtilityManager {
 		return new String(digest);
 
 	}
-	
+
 	// Convert a POJO to a JSON string
 	public static String toJsonStringJackson(Object pojo) {
-		
+
 		ObjectMapper jacksonMapper = new ObjectMapper();
 		try {
 			return jacksonMapper.writeValueAsString(pojo);
-		}
-		catch (JsonProcessingException e) {
+		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
-		
+
 	}
-	
+
 	// Consume a Http request body and turn it into a string
 	public static String readRequest(BufferedReader br) {
-		
+
 		StringBuilder requestBody = new StringBuilder("");
 		String buffer = null;
-		
+
 		try {
 			while ((buffer = br.readLine()) != null) {
 				requestBody.append(buffer);
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		if (requestBody.length() == 0) {
 			return null;
-		}
-		else {
+		} else {
 			return new String(requestBody);
 		}
-		
+
 	}
 
 }

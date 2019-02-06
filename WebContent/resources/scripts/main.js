@@ -388,7 +388,7 @@ const showOwnRequests = function(data) {
 		$reqId.html(requestId);
 		$view.attr("data-id", requestId).addClass("btn").addClass("btn-primary").addClass("view");
 		$recall.attr("data-id", requestId).addClass("btn").addClass("btn-danger").addClass("recall");
-		$date.html(data[i]["requestDate"]);
+		$date.html(epochToDate(data[i]["requestDate"]));
 		$reason.html(data[i]["reason"]);
 		$amount.html("$" + parseFloat(data[i]["amount"]).toFixed(2));
 		if (data[i]["resolution"] == null) {
@@ -536,7 +536,7 @@ const showPendingRequests = function(data) {
 		$deny.attr("data-id", requestId).addClass("btn").addClass("btn-danger").addClass("resolve");
 		$empId.html(data[i]["employeeId"]);
 		$empName.html(data[i]["employeeName"]);
-		$date.html(data[i]["requestDate"]);
+		$date.html(epochToDate(data[i]["requestDate"]));
 		$reason.html(data[i]["reason"]);
 		$amount.html("$" + parseFloat(data[i]["amount"]).toFixed(2));
 		$view.attr("data-toggle", "popover").attr("title", "Explanation").attr("data-content", data[i]["message"]);
@@ -725,7 +725,7 @@ const showRequestsWithResolution = function(data) {
 		$empId.html(data[i]["employeeId"]);
 		$empName.html(data[i]["employeeName"]);
 		$reason.html(data[i]["reason"]);
-		$sDate.html(data[i]["requestDate"]);
+		$sDate.html(epochToDate(data[i]["requestDate"]));
 		$amount.html("$" + parseFloat(data[i]["amount"]).toFixed(2));
 		if (parseInt(data[i]["resolution"]["status"]) === -1) {
 			$status.html("Denied").addClass("text-danger");
@@ -734,7 +734,7 @@ const showRequestsWithResolution = function(data) {
 			$status.html("Approved").addClass("text-success");
 		}
 		$manName.html(data[i]["resolution"]["employeeName"]);
-		$rDate.html(data[i]["resolution"]["resolutionDate"]);
+		$rDate.html(epochToDate(data[i]["resolution"]["resolutionDate"]));
 		$newInsRow.append($empId).append($empName).append($reason).append($sDate).append($amount).append($status).append($manName).append($rDate);
 		$inspectTableBody.append($newInsRow);
 	}
