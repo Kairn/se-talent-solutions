@@ -17,7 +17,7 @@
 		<sonar.organization>kairn-github</sonar.organization>
 
 		<!-- Jackson Version -->
-		<com.fasterxml.jackson.version>2.10.0.pr1</com.fasterxml.jackson.version>
+		<com.fasterxml.jackson.version>2.12.6.1</com.fasterxml.jackson.version>
 	</properties>
 
 	<dependencies>
